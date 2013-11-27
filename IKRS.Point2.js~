@@ -1,0 +1,19 @@
+/**
+ * @author Ikaros Kappler
+ * @date 2013-11-27
+ * @version 1.0.0
+ **/
+
+
+IKRS.Point2 = function( x, y ) {
+    
+    IKRS.Object.call( this );
+    
+    this.x = x;
+    this.y = y;
+
+};
+
+
+IKRS.Point2.prototype.constructor = IKRS.Point2;
+
