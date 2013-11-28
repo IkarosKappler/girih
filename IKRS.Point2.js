@@ -25,6 +25,10 @@ IKRS.Point2.prototype.sub = function( amount ) {
     this.y -= amount.y;
 }
 
+IKRS.Point2.prototype.set = function( position ) {
+    this.x = position.x;
+    this.y = position.y;
+}
 
 IKRS.Point2.prototype.clone = function() {
     return new IKRS.Point2( this.x, this.y );
@@ -51,3 +55,4 @@ IKRS.Point2.prototype.rotate = function( origin,
 
 IKRS.Point2.prototype.constructor = IKRS.Point2;
 
+IKRS.Point2.ZERO_POINT            = new IKRS.Point2( 0, 0 );

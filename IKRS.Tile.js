@@ -5,14 +5,25 @@
  **/
 
 
-IKRS.Tile = function( size ) {
+IKRS.Tile = function( size, 
+		      position, 
+		      angle ) {
     
     IKRS.Object.call( this );
+
+    if( typeof angle == "undefined" )
+	angle = 0.0;
     
-    this.size = size;
+    this.size     = size;
+    this.position = position;
+    this.angle    = angle;
     this.vertices = [];
 
 };
+
+IKRS.Tile.prototype.computeBounds = function() {
+    return IKRS.BoundingBox2.computeFromPoints( this.vertices );
+}
 
 IKRS.Tile.prototype._addVertex = function( vertex ) {
     this.vertices.push( vertex );

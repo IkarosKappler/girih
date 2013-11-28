@@ -15,7 +15,7 @@ IKRS.Girih = function() {
 
 };
 
-//IKRS.Girih.prototype.addTile
+IKRS.Girih.MINIMAL_ANGLE = 18.0 * (Math.PI/180.0);
 
 IKRS.Girih.prototype.constructor = IKRS.Girih;
 

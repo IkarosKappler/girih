@@ -1,0 +1,35 @@
+/**
+ * @author Ikaros Kappler
+ * @date 2013-11-27
+ * @version 1.0.0
+ **/
+
+
+IKRS.Tile.Pentagon = function( size, position ) {
+    
+    IKRS.Tile.call( this, size, position );
+    
+    // Init the actual decahedron shape with the passed size
+    var pointA = new IKRS.Point2(0,0);
+    var pointB = pointA;
+    this._addVertex( pointB );
+
+    //var theta = Math.PI*2 * (90.0 / 108.0);
+    var theta = (Math.PI*2) / 5;
+    for( var i = 1; i <= 4; i++ ) {
+	pointA = pointB; // center of rotation
+	pointB = pointB.clone();
+	pointB.x += size;
+	pointB.rotate( pointA, i*theta );
+	this._addVertex( pointB );
+    }
+
+};
+
+// This is totally shitty. Why object inheritance when I still
+// have to inherit object methods manually??!
+IKRS.Tile.Pentagon.prototype._addVertex  = IKRS.Tile.prototype._addVertex;
+
+
+IKRS.Tile.Pentagon.prototype.constructor = IKRS.Tile.Pentagon;
+

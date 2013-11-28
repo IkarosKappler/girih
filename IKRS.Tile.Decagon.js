@@ -5,16 +5,16 @@
  **/
 
 
-IKRS.Tile.Decagon = function( size ) {
+IKRS.Tile.Decagon = function( size, position, angle ) {
     
-    IKRS.Tile.call( this, size );
+    IKRS.Tile.call( this, size, position, angle );
     
-    // Init the actual decahedron shape with the passed size
+    // Init the actual decahedron shape with the passed size   
     var pointA = new IKRS.Point2(0,0);
     var pointB = pointA;
     this._addVertex( pointB );
 
-    var theta = Math.PI * (144.0 / 180.0);
+    var theta = Math.PI/2 * (144.0 / 360.0);
     for( var i = 1; i <= 9; i++ ) {
 	pointA = pointB; // center of rotation
 	pointB = pointB.clone();
@@ -23,12 +23,24 @@ IKRS.Tile.Decagon = function( size ) {
 	this._addVertex( pointB );
     }
 
+    // Move to center
+    var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
+    var move   = new IKRS.Point2( bounds.getWidth()/2.0 - size*1.1,   // ???
+				  -bounds.getHeight()/2.0
+				);
+    for( var i = 0; i < this.vertices.length; i++ ) {
+	
+	this.vertices[i].add( move );
+		
+    }
+    
 };
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.Decagon.prototype._addVertex = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Decagon.prototype.computeBounds = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.Decagon.prototype._addVertex    = IKRS.Tile.prototype._addVertex;
 
 
-IKRS.Tile.Decagon.prototype.constructor = IKRS.Tile.Decagon;
+IKRS.Tile.Decagon.prototype.constructor   = IKRS.Tile.Decagon;
 
