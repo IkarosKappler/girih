@@ -14,10 +14,11 @@ IKRS.Tile = function( size,
     if( typeof angle == "undefined" )
 	angle = 0.0;
     
-    this.size     = size;
-    this.position = position;
-    this.angle    = angle;
-    this.vertices = [];
+    this.size            = size;
+    this.position        = position;
+    this.angle           = angle;
+    this.vertices        = [];
+    this.imageProperties = null;
 
 };
 
