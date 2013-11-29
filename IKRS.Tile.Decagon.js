@@ -34,15 +34,14 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 		
     }
     
-    /*
+    
     this.imageProperties = {
 	x:      169,
 	y:      140,
 	width:  313,
-	height: 297,
-	angle:  0.0
+	height: 297
     };
-    */
+    
 };
 
 // This is totally shitty. Why object inheritance when I still

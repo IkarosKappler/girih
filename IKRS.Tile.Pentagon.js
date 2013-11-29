@@ -39,6 +39,13 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
 		
     }
 
+    this.imageProperties = {
+	x:      7,
+	y:      303,
+	width:  156,
+	height: 150
+    };
+
 };
 
 // This is totally shitty. Why object inheritance when I still

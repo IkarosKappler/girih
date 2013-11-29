@@ -44,6 +44,14 @@ IKRS.Tile.Rhombus = function( size, position, angle ) {
 	this.vertices[i].add( move );
 		
     }
+
+
+    this.imageProperties = {
+	x:      32,
+	y:      188,
+	width:  127,
+	height: 92
+    };
     
 };
 

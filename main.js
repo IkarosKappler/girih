@@ -21,34 +21,36 @@ function onLoad() {
 	var tileSize = 50;
 	// Make a test decagon
 	var deca = new IKRS.Tile.Decagon( tileSize, 
-					  new IKRS.Point2(-50,-60)  // position				      
+					  new IKRS.Point2(-50,-60),  // position
+					  0.0
 					);
 	//this._drawTile( deca );
 
 	// Make a test pentagon
 	var penta = new IKRS.Tile.Pentagon( tileSize,
 					    new IKRS.Point2(-166, -18),  // position
-					    0 // -4.0 * IKRS.Girih.MINIMAL_ANGLE
+					    0.0
 					  );
 	//this._drawTile( penta );
 
 	// Make a test irregular hexagon
 	var irHex = new IKRS.Tile.IrregularHexagon( tileSize,
 						    new IKRS.Point2(-120, -160),  // position
-						    0.0 // -2.0 * IKRS.Girih.MINIMAL_ANGLE
+						    0.0 
 						  );
 	//this._drawTile( irHex );
 
 	// Make a test rhombus
 	var rhomb = new IKRS.Tile.Rhombus( tileSize,
-					   new IKRS.Point2(-160, -88)  // position
+					   new IKRS.Point2(-160, -88),  // position
+					   0.0
 					 );
 	//this._drawTile( rhomb );
 
 	// Make a test bow-tie
 	var tie = new IKRS.Tile.BowTie( tileSize,
 					new IKRS.Point2(-16, -160),  // position
-					-IKRS.Girih.MINIMAL_ANGLE     // 18.0 * (Math.PI/180.0)
+					0.0
 				      );
 	//this._drawTile( tie );
 
