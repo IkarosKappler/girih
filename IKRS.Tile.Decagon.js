@@ -46,9 +46,12 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.Decagon.prototype.computeBounds = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.Decagon.prototype._addVertex    = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Decagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.Decagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Decagon.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.Decagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.Decagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
 
 
-IKRS.Tile.Decagon.prototype.constructor   = IKRS.Tile.Decagon;
+IKRS.Tile.Decagon.prototype.constructor         = IKRS.Tile.Decagon;
 

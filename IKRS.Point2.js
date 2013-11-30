@@ -17,17 +17,36 @@ IKRS.Point2 = function( x, y ) {
 IKRS.Point2.prototype.add = function( amount ) {
     this.x += amount.x;
     this.y += amount.y;
+    return this;  // For operator concatenation
 }
 
 
 IKRS.Point2.prototype.sub = function( amount ) {
     this.x -= amount.x;
     this.y -= amount.y;
+    return this;  // For operator concatenation
 }
 
 IKRS.Point2.prototype.set = function( position ) {
     this.x = position.x;
     this.y = position.y;
+    return this;  // For operator concatenation
+}
+
+/*
+IKRS.Point2.prototype.setX = function( x ) {
+    return this.x = x;
+}
+
+IKRS.Point2.prototype.setX = function( y ) {
+    return this.y = y;
+}
+*/
+
+IKRS.Point2.prototype.distanceTo = function( point ) {
+
+    return Math.sqrt( Math.pow(point.x-this.x,2) + Math.pow(point.y-this.y,2) );
+
 }
 
 IKRS.Point2.prototype.clone = function() {
@@ -49,9 +68,13 @@ IKRS.Point2.prototype.rotate = function( origin,
 
     this.x = cosT * dX - sinT * dY + origin.x;
     this.y = sinT * dX + cosT * dY + origin.y;
-
+    
+    return this;  // For operator concatenation
 }
 
+IKRS.Point2.prototype.toString = function() {
+    return "(" + this.x + ", " + this.y + ")";
+}
 
 IKRS.Point2.prototype.constructor = IKRS.Point2;
 

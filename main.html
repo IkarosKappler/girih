@@ -24,14 +24,22 @@
 <canvas id="girih_canvas" width="800" height="600"></canvas>
 <br/>
 
-<button onclick="increaseZoom()">zoom(+)</button>
 <button onclick="decreaseZoom()">zoom(-)</button>
+<button onclick="increaseZoom()">zoom(+)</button>
 <br/>
 
 <button onclick="rotateLeft()">rotate L</button>
-<button onclick="rotateRight()">ritate R</button>
+<button onclick="rotateRight()">rotate R</button>
+
 <div id="debug"></div>
+
 <br/>
+
+<form name="girih_form">
+<input type="checkbox" name="draw_boxes" onclick="redrawGirih()" /> Draw Boxes<br/>
+<input type="checkbox" name="draw_outlines" onclick="redrawGirih()" checked="checked" /> Draw Outlines</br>
+<input type="checkbox" name="draw_textures" onclick="redrawGirih()" checked="checked" /> Draw Textures</br>
+</form>
 
 
 </p>

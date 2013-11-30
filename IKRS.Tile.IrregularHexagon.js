@@ -62,8 +62,11 @@ IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.IrregularHexagon.prototype.computeBounds = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.IrregularHexagon.prototype._addVertex    = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.IrregularHexagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.IrregularHexagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.IrregularHexagon.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.IrregularHexagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.IrregularHexagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
 
-IKRS.Tile.IrregularHexagon.prototype.constructor   = IKRS.Tile.IrregularHexagon;
+IKRS.Tile.IrregularHexagon.prototype.constructor         = IKRS.Tile.IrregularHexagon;
 

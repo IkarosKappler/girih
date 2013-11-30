@@ -96,8 +96,11 @@ IKRS.Tile.BowTie = function( size, position, angle ) {
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.BowTie.prototype.computeBounds = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.BowTie.prototype._addVertex    = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.BowTie.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.BowTie.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.BowTie.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.BowTie.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.BowTie.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
 
-IKRS.Tile.BowTie.prototype.constructor   = IKRS.Tile.BowTie;
+IKRS.Tile.BowTie.prototype.constructor         = IKRS.Tile.BowTie;
 

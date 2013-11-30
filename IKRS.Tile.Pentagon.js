@@ -50,8 +50,11 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.Pentagon.prototype.computeBounds = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.Pentagon.prototype._addVertex    = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Pentagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.Pentagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Pentagon.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.Pentagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.Pentagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
 
-IKRS.Tile.Pentagon.prototype.constructor   = IKRS.Tile.Pentagon;
+IKRS.Tile.Pentagon.prototype.constructor         = IKRS.Tile.Pentagon;
 

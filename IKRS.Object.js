@@ -10,6 +10,9 @@ IKRS.Object = function() {
 
 };
 
+IKRS.Object.inherit = function() {
+
+}
 
 IKRS.Object.prototype = {
 
