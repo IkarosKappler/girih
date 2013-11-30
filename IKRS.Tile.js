@@ -77,6 +77,7 @@ IKRS.Tile.prototype.locateEdgeAtPoint = function( point,
 		      "m.x=" + (vertI.x + (vertJ.x - vertI.x)/2.0) );
 	*/
 	tmpDistance = middle.distanceTo(point);
+	// console.log( "tmpDistance=" + tmpDistance );
 	if( tmpDistance <= tolerance && (resultIndex == -1 || tmpDistance < resultDistance) )
 	    resultIndex = i;
 

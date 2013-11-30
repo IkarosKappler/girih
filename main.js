@@ -49,11 +49,10 @@ function onLoad() {
 	
 	
 	girihCanvasHandler.addTile( deca );
-	/*girihCanvasHandler.addTile( penta );
+	girihCanvasHandler.addTile( penta );
 	girihCanvasHandler.addTile( irHex );
 	girihCanvasHandler.addTile( rhomb );
-	girihCanvasHandler.addTile( tie );
-	*/
+	girihCanvasHandler.addTile( tie );	
 	
 	redrawGirih();
     };

@@ -20,8 +20,8 @@ IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
 		   72.0,
 		   144.0,
 		   144.0,
-		   72.0,
-		   144.0
+		   72.0
+		   // 144.0
 		 ];
     
     var theta = 0.0;

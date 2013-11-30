@@ -16,8 +16,8 @@ IKRS.Tile.Rhombus = function( size, position, angle ) {
 
     var angles = [ 0.0,
 		   72.0,
-		   108.0,
-		   72.0
+		   108.0
+		   // 72.0
 		 ];
     
     var theta = 0.0;
