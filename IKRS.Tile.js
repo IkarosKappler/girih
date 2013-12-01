@@ -78,22 +78,12 @@ IKRS.Tile.prototype.locateEdgeAtPoint = function( point,
 	*/
 	tmpDistance = middle.distanceTo(point);
 	// console.log( "tmpDistance=" + tmpDistance );
-	if( tmpDistance <= tolerance && (resultIndex == -1 || tmpDistance < resultDistance) )
-	    resultIndex = i;
+	if( tmpDistance <= tolerance && (resultIndex == -1 || tmpDistance < resultDistance) ) {
+	    resultDistance = tmpDistance;
+	    resultIndex    = i;
+	}
 
     }
-    
-    /*
-    // Do the same check with the last edge that connects with 
-    // the first vertex to close the polygon
-    var vertI = this._getTranslatedPoint( this.vertices.length-1 ); // this.vertices[this.vertices.length-1].clone();
-    var vertJ = this._getTranslatedPoint( 0 ); // this.vertices[0].clone();
-    middle.set( vertI.x + (vertJ.x - vertI.x)/2.0,
-		vertI.y + (vertJ.y - vertI.y)/2.0
-	      );
-    if( middle.distanceTo(point) <= tolerance )
-	return this.vertices.length-1;
-	*/
 
     return resultIndex;
 

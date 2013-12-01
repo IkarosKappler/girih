@@ -133,42 +133,6 @@ IKRS.GirihCanvasHandler.prototype.mouseUpHandler = function( e ) {
     
 }
 
-/*
-IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
-
-    // Find selected tile
-    var selectedTileIndex = this.girihCanvasHandler._locateSelectedTile();
-    if( selectedTileIndex == -1 )
-	return;
-
-    var tile      = this.girihCanvasHandler.tiles[ selectedTileIndex ];
-    
-    // Locate the edge the mouse hovers over
-    var point     = this.girihCanvasHandler._translateMouseEventToRelativePosition( this, e );
-
-    // Only continue if the mouse is over the currently selected tile?
-    if( !tile.containsPoint(point) ) {
-	DEBUG( "[mouseMoved] mouse not over any tile." );
-	return;
-    }
-
-    // Try to find the point from the center of the edge, with
-    // a radius of half the edge's length
-    var highlightedEdgeIndex = tile.locateEdgeAtPoint( point, 
-						       tile.size/2.0 * this.girihCanvasHandler.zoomFactor
-						     );
-    
-    DEBUG( "[mouseMoved] selectedTileIndex=" + selectedTileIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex );
-    
-    if( highlightedEdgeIndex == tile._props.highlightedEdgeIndex ) 
-    	return;
-
-    tile._props.highlightedEdgeIndex = highlightedEdgeIndex;
-    //DEBUG( "[mouseMoved] _props=" + JSON.stringify(tile._props) );
-    this.girihCanvasHandler.redraw();
-}
-*/
-
 IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 
     // Find old hovered tile  
@@ -194,11 +158,7 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
     }
     var hoverTile      = this.girihCanvasHandler.tiles[ hoverTileIndex ];
  
-    //if( hoverTile.containsPoint(point) ) {
-    //DEBUG( "[mouseMoved] mouse not over any tile." );
-    // tile._props.selected = false;
     hoverTile._props.hovered = true;  // may be the same object
-    // tile = hoverTile;
 
     // Try to find the point from the center of the edge, with
     // a radius of half the edge's length
@@ -211,16 +171,12 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
     // Redraw really required?
     if( oldHoverTileIndex == hoverTileIndex && 
 	highlightedEdgeIndex == oldHighlightedEdgeIndex ) {
-	//((oldHoverTile && highlightedEdgeIndex == oldHoverTile._props.highlightedEdgeIndex) || !oldHoverTile) )
-    	return;
+	return;
     }
-    //DEBUG( "X" );
-    //window.alert( "A" );
+
     
     
     hoverTile._props.highlightedEdgeIndex = highlightedEdgeIndex;
-    //window.alert( "B" );
-    //DEBUG( "[mouseMoved] _props=" + JSON.stringify(tile._props) );
     this.girihCanvasHandler.redraw();
 }
 
@@ -279,7 +235,7 @@ IKRS.GirihCanvasHandler.prototype._locateTileAtPoint = function( point ) {
 }
 
 IKRS.GirihCanvasHandler.prototype._drawTile = function( tile ) {  
-    //window.alert( "Y" );
+
     var tileBounds = tile.computeBounds();
     if( this.drawProperties.drawBoxes ) {
 	this._drawBoundingBox( tile.position,
@@ -287,9 +243,6 @@ IKRS.GirihCanvasHandler.prototype._drawTile = function( tile ) {
 			       tile.angle 
 			     );
     }
-    //this.context.strokeStyle = "#000000";
-    //window.alert( JSON.stringify(tile._props) );
-    //window.alert( "hightlightedEdgeIndex=" + tile._props.highlightedEdgeIndex );
     this._drawPolygonFromPoints( tile.vertices, 
 				 tile.position, 
 				 tile.angle,
@@ -302,24 +255,8 @@ IKRS.GirihCanvasHandler.prototype._drawTile = function( tile ) {
 				 tile._props.highlightedEdgeIndex,
 				 this.drawProperties.drawOutlines
 			       );
-    
-    /*if( tile._props.hovered ) {
-	this._drawHighlightedPolygonEdge( tile.vertices, 
-					  tile.position, 
-					  tile.angle,
-					  tileBounds,
-					  { unselectedEdgeColor: "#000000",
-					    selectedEdgeColor:   "#FF0000"
-				      },
-					  tile.imageProperties,
-					  this.imageObject,
-					  tile._props.highlightedEdgeIndex,
-					  this.drawProperties.drawOutlines
-					);
-    }
-    */
-    
-    this._drawCrosshairAt( tile.position, tile._props.selected );
+    if( this.drawProperties.drawOutlines )
+	this._drawCrosshairAt( tile.position, tile._props.selected );
 
 }
 
@@ -337,13 +274,9 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
     if( !points )
 	return;
 
-    //window.alert( "highlightedEdgeIndex=" + highlightedEdgeIndex );
-    //DEBUG( "highlightedEdgeIndex=" + highlightedEdgeIndex );
-
     this.context.save();
     
     this.context.beginPath();
-    //var lastPoint  = new IKRS.Point2(0,0);
     var point      = points[0].clone();
     point.rotate( IKRS.Point2.ZERO_POINT, angle );
     var startPoint = point.clone();
