@@ -33,6 +33,11 @@ IKRS.Point2.prototype.set = function( position ) {
     return this;  // For operator concatenation
 }
 
+IKRS.Point2.prototype.setXY = function( x, y ) {
+    this.x = x;
+    this.y = y;
+}
+
 /*
 IKRS.Point2.prototype.setX = function( x ) {
     return this.x = x;

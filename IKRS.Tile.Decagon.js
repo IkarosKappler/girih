@@ -7,7 +7,7 @@
 
 IKRS.Tile.Decagon = function( size, position, angle ) {
     
-    IKRS.Tile.call( this, size, position, angle );
+    IKRS.Tile.call( this, size, position, angle, IKRS.Girih.TILE_TYPE_DECAGON );
     
     // Init the actual decahedron shape with the passed size   
     var pointA = new IKRS.Point2(0,0);
@@ -33,7 +33,6 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 	this.vertices[i].add( move );
 		
     }
-    
     
     this.imageProperties = {
 	x:      169,

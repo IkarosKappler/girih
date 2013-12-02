@@ -7,7 +7,7 @@
 
 IKRS.Tile.BowTie = function( size, position, angle ) {
     
-    IKRS.Tile.call( this, size, position, angle );
+    IKRS.Tile.call( this, size, position, angle, IKRS.Girih.TILE_TYPE_BOW_TIE );
     
     // Init the actual decahedron shape with the passed size
     var pointA          = new IKRS.Point2(0,0);

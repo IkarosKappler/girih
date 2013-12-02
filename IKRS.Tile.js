@@ -7,12 +7,16 @@
 
 IKRS.Tile = function( size, 
 		      position, 
-		      angle ) {
+		      angle, 
+		      tileType
+		    ) {
     
     IKRS.Object.call( this );
 
     if( typeof angle == "undefined" )
 	angle = 0.0;
+    if( typeof tileType == "unknown" )
+	tileType = IKRS.Girih.TILE_TYPE_UNKNOWN;
     
     this.size            = size;
     this.position        = position;
@@ -20,12 +24,17 @@ IKRS.Tile = function( size,
     this.vertices        = [];
     this.imageProperties = null;
 
+    this.tileType        = tileType;
+
 };
 
 IKRS.Tile.prototype._getTranslatedPoint = function( index ) {
 
-    return this.vertices[index].clone().rotate( this.position, this.angle ).add( this.position );
-
+    //return this.vertices[index].clone().rotate( this.position, this.angle ).add( this.position );
+    // Rotate around the absolut center!
+    // (the position is applied later)
+    return this.vertices[index].clone().rotate( IKRS.Point2.ZERO_POINT, this.angle ).add( this.position );
+    
 }
 
 IKRS.Tile.prototype.containsPoint = function( point ) {
@@ -39,6 +48,8 @@ IKRS.Tile.prototype.containsPoint = function( point ) {
     for (i = 0, j = this.vertices.length-1; i < this.vertices.length; j = i++) {
 	vertI = this._getTranslatedPoint( i ); // this.vertices[i].clone().add( this.position );
 	vertJ = this._getTranslatedPoint( j ); // this.vertices[j].clone().add( this.position );
+	//if( this.angle )
+	//window.alert( "vertI=" + vertI.toString() );
     	if ( ((vertI.y>point.y) != (vertJ.y>point.y)) &&
     	     (point.x < (vertJ.x-vertI.x) * (point.y-vertI.y) / (vertJ.y-vertI.y) + vertI.x) )
     	    c = !c;

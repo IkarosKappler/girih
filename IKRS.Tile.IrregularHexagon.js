@@ -7,7 +7,7 @@
 
 IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
     
-    IKRS.Tile.call( this, size, position, angle );
+    IKRS.Tile.call( this, size, position, angle, IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON );
     
     // Init the actual decahedron shape with the passed size
     var pointA        = new IKRS.Point2(0,0);

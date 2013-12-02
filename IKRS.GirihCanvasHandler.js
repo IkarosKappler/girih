@@ -11,15 +11,15 @@ IKRS.GirihCanvasHandler = function( imageObject ) {
     
     this.imageObject               = imageObject;
 
-    this.canvasWidth               = 800;
-    this.canvasHeight              = 600;
+    this.canvasWidth               = 1024;
+    this.canvasHeight              = 768;
     
     this.canvas                    = document.getElementById("girih_canvas");
     // Make a back-reference for event handling
     this.canvas.girihCanvasHandler = this; 
     this.context                   = this.canvas.getContext( "2d" );    
     
-    this.drawOffset                = new IKRS.Point2( 400, 300 );
+    this.drawOffset                = new IKRS.Point2( 512, 384 );
     this.zoomFactor                = 1.0;
     
     this.tiles                     = [];  
@@ -28,6 +28,8 @@ IKRS.GirihCanvasHandler = function( imageObject ) {
 				       drawOutlines: true,
 				       drawTexture:  true
 				     };
+    
+    this.adjacentTileOptionPointer = 0;
     
     this.canvas.onmousedown        = this.mouseDownHandler;
     this.canvas.onmouseup          = this.mouseUpHandler;
@@ -44,22 +46,7 @@ IKRS.GirihCanvasHandler = function( imageObject ) {
     }
    
     window.addEventListener( "keydown",   this.keyDownHandler,   false );
-    /*
-    window.addEventListener( "mousedown", this.mouseDownHandler, false );
-    window.addEventListener( "mouseup",   this.mouseUpHandler,   false );
-    window.addEventListener( "mousemove", this.mouseMoveHandler, false );
-    */
 };
-
-/*
-IKRS.GirihCanvasHandler.prototype._translateClickPoint = function( point ) {
-
-    point.x = point.x/this.zoomFactor - this.drawOffset.x;
-    point.y = point.y/this.zoomFactor - this.drawOffset.y;
-
-    return point;
-}
-*/
 
 IKRS.GirihCanvasHandler.prototype._translateMouseEventToRelativePosition = function( parent,
 										     e ) {
@@ -79,14 +66,12 @@ IKRS.GirihCanvasHandler.prototype._translateMouseEventToRelativePosition = funct
 
 IKRS.GirihCanvasHandler.prototype.mouseWheelHandler = function( e ) {
 
-    // window.alert( "X" );
-
     var delta = 0;
-    if (!e) // For IE.
+    if (!e)                 // For IE.
 	e = window.event;
-    if (e.wheelDelta) { // IE/Opera.
+    if (e.wheelDelta) {     // IE/Opera.
 	delta = e.wheelDelta/120;
-    } else if (e.detail) { // Mozilla case. 
+    } else if (e.detail) {  // Mozilla case. 
 	// In Mozilla, sign of delta is different than in IE.
 	// Also, delta is multiple of 3.
 	delta = -e.detail/3;
@@ -146,6 +131,7 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 
     // Locate the edge the mouse hovers over
     var point     = this.girihCanvasHandler._translateMouseEventToRelativePosition( this, e );
+    //window.alert( "[mouseMoved] translated point: " + point.toString() );
     
     this.girihCanvasHandler._clearHovered();
 
@@ -180,6 +166,36 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
     this.girihCanvasHandler.redraw();
 }
 
+IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
+
+    // window.alert( e.keyCode );
+
+    // The key code for 'delete' is 46
+    //if( e.keyCode != 46 ) 
+    //	return;
+
+    // right=39
+    // left=37
+    // enter=13
+    // delete=46
+    // space=32
+    //if( e.keyCode != 39 && e.keyCode != 37 & e.keyCode != 13 && e.keyCode != 46)
+//	return;
+
+    if( e.keyCode == 39 ) {
+	this.girihCanvasHandler.adjacentTileOptionPointer++;
+	this.girihCanvasHandler.redraw();
+    } else if( e.keyCode == 37 ) {
+	this.girihCanvasHandler.adjacentTileOptionPointer--;
+	this.girihCanvasHandler.redraw();
+    } else if( e.keyCode == 13 || e.keyCode == 32 ) {
+	this.girihCanvasHandler._performAddCurrentAdjacentPresetTile();
+    } else if( e.keyCode == 46 ) {
+	this.girihCanvasHandler._performDeleteSelectedTile();
+    }
+  
+}
+
 IKRS.GirihCanvasHandler.prototype._locateSelectedTile = function() {
     for( var i = 0; i < this.tiles.length; i++ ) {
 	if( this.tiles[i]._props.selected )
@@ -210,6 +226,72 @@ IKRS.GirihCanvasHandler.prototype._clearHovered = function() {
     }
 }
 
+IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = function() {
+    
+    var hoveredTileIndex = this._locateHoveredTile();
+    if( hoveredTileIndex == -1 ) 
+	return;
+    
+    var tile = this.tiles[ hoveredTileIndex ]; 
+    var tileBounds       = tile.computeBounds();
+    /*
+    this._drawPreviewTileAtHighlightedPolygonEdge( tile.tileType,
+						   tile.vertices, 
+						   tile.position, 
+						   tile.angle,
+						   tileBounds, // tile.computeBounds(),  // tileBounds,
+						   { unselectedEdgeColor: "#000000",
+						     selectedEdgeColor:   "#FF0000"
+						   },
+						   tile.imageProperties,
+						   this.imageObject,
+						   tile._props.highlightedEdgeIndex,
+						   this.drawProperties.drawOutlines
+						 );
+    */
+
+    var adjacentTile = this._resolveCurrentAdjacentTilePreset(   tile.tileType,
+								 tile.vertices, 
+								 tile.position, 
+								 tile.angle,
+								 tileBounds, // tile.computeBounds(),  // tileBounds,
+								 { unselectedEdgeColor: "#000000",
+								   selectedEdgeColor:   "#FF0000"
+								 },
+								 tile.imageProperties,
+								 this.imageObject,
+								 tile._props.highlightedEdgeIndex,
+								 this.drawProperties.drawOutlines
+								 
+								 /*tileType,
+								   points,
+								   position, 
+								   angle,
+								   originalBounds,
+								   colors,
+								   imgProperties,
+								   imageObject,
+								   highlightedEdgeIndex,
+								   drawOutlines
+								 */
+							     );
+    if( !adjacentTile )
+	return;
+
+    this.addTile( adjacentTile );
+    this.redraw();
+}
+
+IKRS.GirihCanvasHandler.prototype._performDeleteSelectedTile = function() {
+
+    var selectedTileIndex = this._locateSelectedTile();
+    if( selectedTileIndex == -1 )
+	return;
+
+    this.tiles.splice( selectedTileIndex, 1 );
+    this.redraw();
+}
+
 IKRS.GirihCanvasHandler.prototype.addTile = function( tile ) {
 
     // Add internal properties to the tile
@@ -224,6 +306,7 @@ IKRS.GirihCanvasHandler.prototype._locateTileAtPoint = function( point ) {
 
     for( var i = 0; i < this.tiles.length; i++ ) {
 
+	// window.alert( "[_locateTileAtPoint] tile[" + i + "].containsPoint(...)=" + this.tiles[i].containsPoint(point) );
 	if( this.tiles[i].containsPoint(point) )
 	    return i;
 	
@@ -324,11 +407,10 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 				imageY + imageH/2.0 
 			      );
 	
-	//this.context.translate( );
-	this.context.rotate( angle ); //-imgProperties.angle );
+	this.context.rotate( angle ); 
 	
-	var drawStartX = (-originalBounds.getWidth()/2.0) * this.zoomFactor; // -bounds.getWidth()/2.0;  // -imageW/2.0;
-	var drawStartY = (-originalBounds.getHeight()/2.0) * this.zoomFactor; // -bounds.getHeight()/2.0; // -imageH/2.0;
+	var drawStartX = (-originalBounds.getWidth()/2.0) * this.zoomFactor; 
+	var drawStartY = (-originalBounds.getHeight()/2.0) * this.zoomFactor; 
 	this.context.drawImage( imageObject,
 				imgProperties.x, // 0,             // source x
 				imgProperties.y, // 0,             // source y
@@ -339,7 +421,6 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 				imageW,        // destination width
 				imageH         // destination height
 			      );
-	//this.context.strokeStyle = "#ff8888;";
 	this.context.rect( drawStartX,
 			   drawStartY,
 			   imageW,
@@ -350,7 +431,6 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 
     // Draw outlines?
     if( drawOutlines ) {
-	//window.alert( "Drawing outline ..." );
 	this.context.lineWidth   = 1.0;
 	this.context.strokeStyle = colors.unselectedEdgeColor;
 	this.context.stroke(); 
@@ -376,17 +456,17 @@ IKRS.GirihCanvasHandler.prototype._drawHighlightedPolygonEdge = function( points
 
     this.context.save();
     
-    var pointA = points[ highlightedEdgeIndex ];
-    var pointB = points[ highlightedEdgeIndex+1 < points.length ? highlightedEdgeIndex+1 : 0 ];
+    var pointA = points[ highlightedEdgeIndex ].clone();
+    var pointB = points[ highlightedEdgeIndex+1 < points.length ? highlightedEdgeIndex+1 : 0 ].clone();
+
+    pointA.rotate( IKRS.Point2.ZERO_POINT, angle );
+    pointB.rotate( IKRS.Point2.ZERO_POINT, angle );
 
 
     this.context.beginPath();
     this.context.lineTo( pointA.x * this.zoomFactor + this.drawOffset.x + position.x * this.zoomFactor, 
 			 pointA.y * this.zoomFactor + this.drawOffset.y + position.y * this.zoomFactor
 		       );
-
-    //if( points.length-1 == highlightedEdgeIndex ) this.context.strokeStyle = colors.selectedEdgeColor;
-    //else                                          this.context.strokeStyle = colors.unselectedEdgeColor;
     this.context.lineTo( pointB.x * this.zoomFactor + this.drawOffset.x + position.x * this.zoomFactor, 
 			 pointB.y * this.zoomFactor + this.drawOffset.y + position.y * this.zoomFactor
 		       );
@@ -397,6 +477,104 @@ IKRS.GirihCanvasHandler.prototype._drawHighlightedPolygonEdge = function( points
 
     this.context.restore();
 
+}
+
+IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( tileType,
+										points,
+										position, 
+										angle,
+										originalBounds,
+										colors,
+										imgProperties,
+										imageObject,
+										highlightedEdgeIndex,
+										drawOutlines
+									      ) {  
+    
+    if( !points || highlightedEdgeIndex == -1 )
+	return;
+
+    // Choose first option by default
+    // in [0...4] (number of implemented tile types: 5)
+    //var optionIndex = adjacentTileOptionPointer; 
+    //var presetTileType = IKRS.Girih.TILE_TYPE_BOW_TIE;
+
+    // Adjacent tile presets available for this tile/edge/option?
+    //window.alert( "tileType=" + tileType + ", highlightedEdgeIndex=" + highlightedEdgeIndex );
+    if( !IKRS.Girih.TILE_ALIGN[tileType] )
+	return;
+
+    //window.alert( "IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex] );
+    if( !IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex] )
+	return;
+
+    //window.alert( JSON.stringify(IKRS.Girih.TILE_ALIGN) );
+
+    //window.alert( "IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType]=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType] + ", highlightedEdgeIndex=" + highlightedEdgeIndex + ", length=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType].length );
+    //if( !IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType] )
+	//return;
+    
+    
+    var presets = IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]; //[presetTileType];
+ 
+    
+    var optionIndex    = this.adjacentTileOptionPointer % presets.length;
+    //window.alert( "optionIndex=" + optionIndex );
+
+    var tileAlign      = presets[optionIndex]; // IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType][optionIndex];
+    
+    var tile = tileAlign.createTile();
+    // Make position relative to the hovered tile
+    tile.position.add( position ); // tileAlign.position );
+    tile.angle += angle;
+
+    //window.alert( "X" );
+
+    return tile;
+}
+
+IKRS.GirihCanvasHandler.prototype._drawPreviewTileAtHighlightedPolygonEdge = function( tileType,
+										       points,
+										       position, 
+										       angle,
+										       originalBounds,
+										       colors,
+										       imgProperties,
+										       imageObject,
+										       highlightedEdgeIndex,
+										       drawOutlines
+										     ) { 
+    
+    var tile = this._resolveCurrentAdjacentTilePreset(  tileType,
+							points,
+							position, 
+							angle,
+							originalBounds,
+							colors,
+							imgProperties,
+							imageObject,
+							highlightedEdgeIndex,
+							drawOutlines
+						     );
+    if( !tile )
+	return;
+
+    // Draw adjacent tile
+    this.context.globalAlpha = 0.5;  // 50% transparency
+    this._drawPolygonFromPoints( tile.vertices, 
+				 tile.position, 
+				 tile.angle,
+				 tile.computeBounds(), // originalBounds,
+				 { unselectedEdgeColor: "#000000",
+				   selectedEdgeColor:   "#FF0000"
+				 },
+				 tile.imageProperties,
+				 this.imageObject,
+				 -1,  // tile._props.highlightedEdgeIndex,
+				 this.drawProperties.drawOutlines
+			       );
+    this.context.globalAlpha = 1.0;  // opaque
+    
 }
 
 IKRS.GirihCanvasHandler.prototype._drawCrosshairAt = function( position,
@@ -459,12 +637,6 @@ IKRS.GirihCanvasHandler.prototype._drawBoundingBox = function( position,
 				 true    // drawOutlines
 			       );
       
-    /*
-    this.context.rect( position.x * this.zoomFactor + bounds.getXMin() * this.zoomFactor + this.drawOffset.x, 
-		       position.y * this.zoomFactor + bounds.getYMin() * this.zoomFactor + this.drawOffset.y, 
-		       bounds.getWidth() * this.zoomFactor, 
-		       bounds.getHeight() * this.zoomFactor );
-    */
     this.context.stroke(); 
 }
 
@@ -474,18 +646,18 @@ IKRS.GirihCanvasHandler.prototype._drawCoordinateSystem = function() {
     this.context.strokeStyle = "#c8c8c8";
     this.context.beginPath();
 
-    this.context.moveTo( this.canvasWidth/2.0,
+    this.context.moveTo( this.drawOffset.x,
 			 0
 		       );
-    this.context.lineTo( this.canvasWidth/2.0,
+    this.context.lineTo( this.drawOffset.x,
 			 this.canvasHeight
 		       );
 
     this.context.moveTo( 0,
-			 this.canvasHeight/2.0
+			 this.drawOffset.y
 		       );
     this.context.lineTo( this.canvasWidth,
-			 this.canvasHeight/2.0
+			 this.drawOffset.y
 		       );
 
     this.context.stroke(); 
@@ -499,13 +671,14 @@ IKRS.GirihCanvasHandler.prototype._drawTiles = function() {
     }
 
     // Finally draw the selected tile's hovering edge
-    var hoveredTileIndex = this._locateHoveredTile();
+    var hoveredTileIndex = this._locateHoveredTile();;
     if( hoveredTileIndex != -1 ) {
 	var tile = this.tiles[ hoveredTileIndex ]; 
+	var tileBounds       = tile.computeBounds()
 	this._drawHighlightedPolygonEdge( tile.vertices, 
 					  tile.position, 
 					  tile.angle,
-					  tile.computeBounds(),  // tileBounds,
+					  tileBounds, // tile.computeBounds(),  // tileBounds,
 					  { unselectedEdgeColor: "#000000",
 					    selectedEdgeColor:   "#FF0000"
 					  },
@@ -514,6 +687,19 @@ IKRS.GirihCanvasHandler.prototype._drawTiles = function() {
 					  tile._props.highlightedEdgeIndex,
 					  this.drawProperties.drawOutlines
 					);
+	this._drawPreviewTileAtHighlightedPolygonEdge( tile.tileType,
+						       tile.vertices, 
+						       tile.position, 
+						       tile.angle,
+						       tileBounds, // tile.computeBounds(),  // tileBounds,
+						       { unselectedEdgeColor: "#000000",
+							 selectedEdgeColor:   "#FF0000"
+						       },
+						       tile.imageProperties,
+						       this.imageObject,
+						       tile._props.highlightedEdgeIndex,
+						       this.drawProperties.drawOutlines
+						     );
     }
 }
 
