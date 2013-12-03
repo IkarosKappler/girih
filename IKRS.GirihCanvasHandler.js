@@ -152,7 +152,7 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 							    hoverTile.size/2.0 * this.girihCanvasHandler.zoomFactor
 							  );
     
-    DEBUG( "[mouseMoved] hoverTileIndex=" + hoverTileIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex );
+    DEBUG( "[mouseMoved] hoverTileIndex=" + hoverTileIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex + ", hoverTile.position=" + hoverTile.position.toString() );
     
     // Redraw really required?
     if( oldHoverTileIndex == hoverTileIndex && 
@@ -396,15 +396,32 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 	imgProperties && 
 	imageObject ) { 
 
+	/*
+	var imgBounds = new IKRS.BoundingBox2( imgProperties.source.x,
+					       imgProperties.source.y,
+					       imgProperties.source.x + imgProperties.source.width,
+					       imgProperties.source.y + imgProperties.source.height
+					     );
+					     */
+	var imgBounds = new IKRS.BoundingBox2( imgProperties.source.x,
+					       imgProperties.source.x + imgProperties.source.width,
+					       imgProperties.source.y,
+					       imgProperties.source.y + imgProperties.source.height
+					     );
+	var polyImageRatio = new IKRS.Point2( originalBounds.getWidth() / imgBounds.getWidth(),
+					      originalBounds.getHeight() / imgBounds.getHeight()
+					    );
+	//window.alert( "polyImageRatio=" + polyImageRatio );
+
 	this.context.clip();
 	var imageX = this.drawOffset.x + position.x * this.zoomFactor + originalBounds.xMin * this.zoomFactor;
 	var imageY = this.drawOffset.y + position.y * this.zoomFactor + originalBounds.yMin * this.zoomFactor;	
-	var imageW = originalBounds.getWidth() * this.zoomFactor; 
-	var imageH = originalBounds.getHeight() * this.zoomFactor; 
+	var imageW = (originalBounds.getWidth() + imgProperties.destination.xOffset*polyImageRatio.x) * this.zoomFactor; 
+	var imageH = (originalBounds.getHeight() + imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor; 
 
 	
 	this.context.translate( imageX + imageW/2.0, 
-				imageY + imageH/2.0 //+ imgProperties.destination.yOffset
+				imageY + imageH/2.0 //+ imgProperties.destination.yOffset*polyImageRatio.y //imageY + imageH/2.0 
 			      );
 	
 	this.context.rotate( angle ); 
@@ -414,18 +431,61 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 	this.context.drawImage( imageObject,
 				imgProperties.source.x, // 0,             // source x
 				imgProperties.source.y, // 0,             // source y
+				imgProperties.source.width,             // source width
+				imgProperties.source.height,             // source height
+				drawStartX + imgProperties.destination.xOffset*polyImageRatio.x*0.5,         // destination x
+				drawStartY + imgProperties.destination.yOffset*polyImageRatio.y*0.5,         // destination y
+				(originalBounds.getWidth() - imgProperties.destination.xOffset*polyImageRatio.x) * this.zoomFactor,  // imageW,        // destination width
+				(originalBounds.getHeight() - imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor  // imageH // - imgProperties.destination.yOffset*polyImageRatio.y         // destination height
+			      );
+
+	/*
+	var imageW = originalBounds.getWidth() * this.zoomFactor; 
+	var imageH = (originalBounds.getHeight() + imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor; 
+
+	
+	this.context.translate( imageX + imageW/2.0, 
+				imageY + imageH/2.0 //+ imgProperties.destination.yOffset*polyImageRatio.y //imageY + imageH/2.0 
+			      );
+	
+	this.context.rotate( angle ); 
+	
+	var drawStartX = (-originalBounds.getWidth()/2.0) * this.zoomFactor; 
+	var drawStartY = (-originalBounds.getHeight()/2.0) * this.zoomFactor; 
+	this.context.drawImage( imageObject,
+				imgProperties.source.x, // 0,             // source x
+				imgProperties.source.y, // 0,             // source y
+				imgProperties.source.width,             // source width
+				imgProperties.source.height,             // source height
+				drawStartX,         // destination x
+				drawStartY + imgProperties.destination.yOffset*polyImageRatio.y*0.5,         // destination y
+				imageW,        // destination width
+				(originalBounds.getHeight() - imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor  // imageH // - imgProperties.destination.yOffset*polyImageRatio.y         // destination height
+			      );
+	*/
+
+
+
+	/*
+	this.context.drawImage( imageObject,
+				imgProperties.source.x, // 0,             // source x
+				imgProperties.source.y, // 0,             // source y
 				imgProperties.source.width,  // 500,           // source width
 				imgProperties.source.height, // +imgProperties.destination.yOffset, // 460,           // source height
 				drawStartX, // -imageX,        // destination x
-				drawStartY, // +imgProperties.destination.yOffset, // -imageY,        // destination y
+				drawStartY+imgProperties.destination.yOffset*0.7, // -imageY,        // destination y
 				imageW,        // destination width
-				imageH // +imgProperties.destination.yOffset         // destination height
+				imageH-imgProperties.destination.yOffset*0.7         // destination height
 			      );
+			      */
+
+	/*
 	this.context.rect( drawStartX,
 			   drawStartY,
 			   imageW,
 			   imageH
 			     );
+			     */
     }
     
 
@@ -522,10 +582,13 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
     //window.alert( "optionIndex=" + optionIndex );
 
     var tileAlign      = presets[optionIndex]; // IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType][optionIndex];
+    //tileAlign.position.rotate( position,  // the base tile's position
+//			       angle );
     
     var tile = tileAlign.createTile();
     // Make position relative to the hovered tile
     tile.position.add( position ); // tileAlign.position );
+    tile.position.rotate( position, angle );
     tile.angle += angle;
 
     //window.alert( "X" );
@@ -545,30 +608,34 @@ IKRS.GirihCanvasHandler.prototype._drawPreviewTileAtHighlightedPolygonEdge = fun
 										       drawOutlines
 										     ) { 
     
-    var tile = this._resolveCurrentAdjacentTilePreset(  tileType,
-							points,
-							position, 
-							angle,
-							originalBounds,
-							colors,
-							imgProperties,
-							imageObject,
-							highlightedEdgeIndex,
-							drawOutlines
-						     );
-    if( !tile )
+    var adjacentTile = this._resolveCurrentAdjacentTilePreset(  tileType,
+								points,
+								position, 
+								angle,
+								originalBounds,
+								colors,
+								imgProperties,
+								imageObject,
+								highlightedEdgeIndex,
+								drawOutlines
+							     );
+    if( !adjacentTile )
 	return;
+
+    //var previewPosition = tileAlign.position.clone();
+    //previewPosition.rotate( position,   // the original tile position
+			    
 
     // Draw adjacent tile
     this.context.globalAlpha = 0.5;  // 50% transparency
-    this._drawPolygonFromPoints( tile.vertices, 
-				 tile.position, 
-				 tile.angle,
-				 tile.computeBounds(), // originalBounds,
+    this._drawPolygonFromPoints( adjacentTile.vertices, 
+				 adjacentTile.position, 
+				 adjacentTile.angle,
+				 adjacentTile.computeBounds(), // originalBounds,
 				 { unselectedEdgeColor: "#000000",
 				   selectedEdgeColor:   "#FF0000"
 				 },
-				 tile.imageProperties,
+				 adjacentTile.imageProperties,
 				 this.imageObject,
 				 -1,  // tile._props.highlightedEdgeIndex,
 				 this.drawProperties.drawOutlines

@@ -42,14 +42,16 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
 
     this.imageProperties = {
 	source: {	x:      7,
-			y:      303-19,
+			y:      303-16,
 			width:  157, //156,
-			height: 150+19
+			height: 150+16
 		},
 	destination: { xOffset: 0,
-		       yOffset: -19
+		       yOffset: -16
 		     }
+		     
     };
+    //this.imageProperties.source.center = new IKRS.Point2( this.imageProperties.source.x + this.imageProperties.source.x
 
 };
 

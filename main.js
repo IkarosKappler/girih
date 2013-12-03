@@ -53,10 +53,12 @@ function onLoad() {
 	girihCanvasHandler.addTile( irHex );
 	girihCanvasHandler.addTile( rhomb );
 	girihCanvasHandler.addTile( tie );
+	
 
 	_makeTest_Decagon_BowTie( tileSize );
-	
-	
+	_makeTest_Pentagon( tileSize );
+	_makeTest_IrregularHexagon( tileSize );
+			
 	girihCanvasHandler.drawOffset.setXY( 250, 250 );
 	redrawGirih();
     };
@@ -124,6 +126,24 @@ function _makeTest_Decagon_BowTie( tileSize ) {
     girihCanvasHandler.addTile( tie );
     
     _displayTileAlign( deca, tie );
+}
+
+function _makeTest_Pentagon( tileSize ) {
+    // Make a test pentagon
+    var penta = new IKRS.Tile.Pentagon( tileSize,
+					new IKRS.Point2(479, 52),   // position
+					0.0
+				      );
+    girihCanvasHandler.addTile( penta );
+}
+
+function _makeTest_IrregularHexagon( tileSize ) {
+    // Make a test pentagon
+    var hexa = new IKRS.Tile.IrregularHexagon( tileSize,
+						new IKRS.Point2(161.1, -32.2),   // position
+						0.0
+					      );
+    girihCanvasHandler.addTile( hexa );
 }
 
 function increaseZoom() {

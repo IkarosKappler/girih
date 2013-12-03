@@ -49,7 +49,7 @@ IKRS.Tile.Rhombus = function( size, position, angle ) {
     this.imageProperties = {
 	source: { x:      32,
 		  y:      188,
-		  width:  125, // 127,
+		  width:  127, // 127,
 		  height: 92
 		},
 	destination: { xOffset: 0,

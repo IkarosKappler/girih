@@ -52,10 +52,10 @@ IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
     }
 
     this.imageProperties = {
-	source: { x:      76,
+	source: { x:      75,
 		  y:      11,
-		  width:  204, // 207,
-		  height: 149
+		  width:  207, // 207,
+		  height: 150
 		},
 	destination: { xOffset: 0,
 		       yOffset: 0
