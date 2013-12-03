@@ -30,6 +30,7 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
     var r_out  = (size/10) * Math.sqrt( 50 + 10*Math.sqrt(5) );
     // Calculate the diameter of the inner circle
     var r_in   = (size/10) * Math.sqrt( 25 + 10*Math.sqrt(5) );
+    //var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
     var move   = new IKRS.Point2( size/2.0, 
 				  -r_out + (r_out-r_in)
 				);
@@ -40,10 +41,14 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
     }
 
     this.imageProperties = {
-	x:      7,
-	y:      303,
-	width:  156,
-	height: 150
+	source: {	x:      7,
+			y:      303-19,
+			width:  157, //156,
+			height: 150+19
+		},
+	destination: { xOffset: 0,
+		       yOffset: -19
+		     }
     };
 
 };

@@ -85,11 +85,15 @@ IKRS.Tile.BowTie = function( size, position, angle ) {
     */
 
     this.imageProperties = {
-	x:      287,
-	y:      7,
-	width:  206,
-	height: 150,
-	angle:  0.0   // IKRS.Girih.MINIMAL_ANGLE
+	source: { x:      287,
+		  y:      7,
+		  width:  206,
+		  height: 150,
+		  angle:  0.0   // IKRS.Girih.MINIMAL_ANGLE
+		},
+	destination: { xOffset: 0,
+		       yOffset: 0
+		     }
     };
     
 };

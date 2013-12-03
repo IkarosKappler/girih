@@ -404,7 +404,7 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 
 	
 	this.context.translate( imageX + imageW/2.0, 
-				imageY + imageH/2.0 
+				imageY + imageH/2.0 //+ imgProperties.destination.yOffset
 			      );
 	
 	this.context.rotate( angle ); 
@@ -412,14 +412,14 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 	var drawStartX = (-originalBounds.getWidth()/2.0) * this.zoomFactor; 
 	var drawStartY = (-originalBounds.getHeight()/2.0) * this.zoomFactor; 
 	this.context.drawImage( imageObject,
-				imgProperties.x, // 0,             // source x
-				imgProperties.y, // 0,             // source y
-				imgProperties.width,  // 500,           // source width
-				imgProperties.height, // 460,           // source height
+				imgProperties.source.x, // 0,             // source x
+				imgProperties.source.y, // 0,             // source y
+				imgProperties.source.width,  // 500,           // source width
+				imgProperties.source.height, // +imgProperties.destination.yOffset, // 460,           // source height
 				drawStartX, // -imageX,        // destination x
-				drawStartY, // -imageY,        // destination y
+				drawStartY, // +imgProperties.destination.yOffset, // -imageY,        // destination y
 				imageW,        // destination width
-				imageH         // destination height
+				imageH // +imgProperties.destination.yOffset         // destination height
 			      );
 	this.context.rect( drawStartX,
 			   drawStartY,

@@ -25,25 +25,25 @@ function onLoad() {
 	
 	// Make a test pentagon
 	var penta = new IKRS.Tile.Pentagon( tileSize,
-					    new IKRS.Point2(-171, -20),  // position
+					    new IKRS.Point2(-172, -20), // new IKRS.Point2(-171, -20),  // position
 					    0.0
 					  );
 
 	// Make a test irregular hexagon
 	var irHex = new IKRS.Tile.IrregularHexagon( tileSize,
-						    new IKRS.Point2(-121, -159),  // position
+						    new IKRS.Point2(-123, -159),  // position
 						    0.0 
 						  );
 
 	// Make a test rhombus
 	var rhomb = new IKRS.Tile.Rhombus( tileSize,
-					   new IKRS.Point2(-162, -87),  // position
+					   new IKRS.Point2(-164, -87),  // position
 					   0.0
 					 );
 
 	// Make a test bow-tie
 	var tie = new IKRS.Tile.BowTie( tileSize,
-					new IKRS.Point2(-17, -159),  // position
+					new IKRS.Point2(-18, -159),  // position
 					0.0
 				      );
 	

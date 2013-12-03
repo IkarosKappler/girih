@@ -25,7 +25,7 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 
     // Move to center
     var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
-    var move   = new IKRS.Point2( bounds.getWidth()/2.0 - size*1.1,   // ???
+    var move   = new IKRS.Point2( size/2.0, // bounds.getWidth()/2.0 - size, // *1.1,   // ???
 				  -bounds.getHeight()/2.0
 				);
     for( var i = 0; i < this.vertices.length; i++ ) {
@@ -35,10 +35,14 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
     }
     
     this.imageProperties = {
-	x:      169,
-	y:      140,
-	width:  313,
-	height: 297
+	source: { x:      169,
+		  y:      140,
+		  width:  313,
+		  height: 297
+		},
+	destination: { xOffset: 0,
+		       yOffset: 0
+		     }
     };
     
 };
