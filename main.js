@@ -58,6 +58,7 @@ function onLoad() {
 	_makeTest_Decagon_BowTie( tileSize );
 	_makeTest_Pentagon( tileSize );
 	_makeTest_IrregularHexagon( tileSize );
+	_makeTest_Rhombus( tileSize );
 			
 	girihCanvasHandler.drawOffset.setXY( 250, 250 );
 	redrawGirih();
@@ -119,7 +120,7 @@ function _makeTest_Decagon_BowTie( tileSize ) {
 				   );
     var tie = new IKRS.Tile.BowTie( tileSize,
 				    new IKRS.Point2(385, 184),  // position
-				    IKRS.Girih.MINIMAL_ANGLE*6
+				    0 // IKRS.Girih.MINIMAL_ANGLE*6
 				  );
     tie.position.add( new IKRS.Point2(200, 200) );
     girihCanvasHandler.addTile( deca );
@@ -144,6 +145,15 @@ function _makeTest_IrregularHexagon( tileSize ) {
 						0.0
 					      );
     girihCanvasHandler.addTile( hexa );
+}
+
+function _makeTest_Rhombus( tileSize ) {
+    // Make a test pentagon
+    var rhomb = new IKRS.Tile.Rhombus( tileSize,
+					new IKRS.Point2(18.2, 328),   // position
+					0.0
+				      );
+    girihCanvasHandler.addTile( rhomb );
 }
 
 function increaseZoom() {

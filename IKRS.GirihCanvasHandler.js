@@ -576,9 +576,20 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
     
     
     var presets = IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]; //[presetTileType];
- 
+
+    // Has any adjacent tiles at all?
+    // (should, but this prevents the script from raising unwanted exceptions)
+    if( !presets || presets.length == 0 )
+	return null;
+
     
-    var optionIndex    = this.adjacentTileOptionPointer % presets.length;
+    var optionIndex;
+    //if( optionIndex < 0 )
+//	optionIndex = Math.abs(this.adjcentTileOptionPointer);
+   // else
+	optionIndex = this.adjacentTileOptionPointer % presets.length;
+    if( optionIndex < 0 )
+	optionIndex = presets.length + optionIndex;
     //window.alert( "optionIndex=" + optionIndex );
 
     var tileAlign      = presets[optionIndex]; // IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType][optionIndex];

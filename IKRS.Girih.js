@@ -137,9 +137,14 @@ IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][0] = [
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 0.5, -88.5), 4*IKRS.Girih.MINIMAL_ANGLE ),
     // The rhombus
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 23.5, -72.5), 4*IKRS.Girih.MINIMAL_ANGLE ),
-    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 41.5, -72.5), 0*IKRS.Girih.MINIMAL_ANGLE )
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 41.5, -72.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 65, -55), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 32.5, -99), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 0.5, -55), 8*IKRS.Girih.MINIMAL_ANGLE )
+    
 ];
-IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][1] = [  
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][1] = [ 
     // The decagon 
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_DECAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 136, 10.5), 0 ),
     // The pentagon has only one possible alignment on the edge (5 times the same)
@@ -150,7 +155,11 @@ IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][1] = [
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 84.5, 27.5), -4*IKRS.Girih.MINIMAL_ANGLE ),
     // The rhombus
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 81.5, -17), 0*IKRS.Girih.MINIMAL_ANGLE ),
-    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 76, 0), -4*IKRS.Girih.MINIMAL_ANGLE )
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 76, 0), -4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 71.5, -43.5), -6*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 104, 0), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 52.5, 17), -4*IKRS.Girih.MINIMAL_ANGLE )
 ];
 IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][2] = [  
     // The decagon 
@@ -163,7 +172,11 @@ IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][2] = [
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 71, 43.5), 2*IKRS.Girih.MINIMAL_ANGLE ),
     // The rhombus
     new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 29.5, 55), -2*IKRS.Girih.MINIMAL_ANGLE ),
-    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 43, 44.5), 2*IKRS.Girih.MINIMAL_ANGLE )
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 43, 44.5), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 52.5, 17), -4*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 52.5, 71.5), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 0.5, 55), 8*IKRS.Girih.MINIMAL_ANGLE ),
 ];
 // Note that the hexagon has a 3|6-axis symmetry. All other 3 edges behave the same.
 for( var e = 3; e < 6; e++ ) {
@@ -181,10 +194,134 @@ for( var e = 3; e < 6; e++ ) {
 	IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON ][ e ].push( tileAlign );
 	
     }
-    
 }
 
-// Note that the hexagon has a 3|6-axis symmetry. All other 3 edges behave the same.
+
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ] = Array(4);
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ][0] = [  
+    // The decagon 
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_DECAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -9, 116.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The pentagon has only one possible alignment on the edge (5 times the same)
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_PENTAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -9, 67), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The irregular hexagon
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -41, 72), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -8.5, 61), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 23, 71.5), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The rhombus
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -18, 55), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 0, 55), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -41.5, 38.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -9, 82.5), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 23, 38.5), 8*IKRS.Girih.MINIMAL_ANGLE )
+];
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ][1] = [  
+    // The decagon 
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_DECAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -113.5, -27.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The pentagon has only one possible alignment on the edge (5 times the same)
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_PENTAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -66.5, -12.5), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    // The irregular hexagon
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -81, 17), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -61.5, -10.5), -2*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -61, -44.5), -4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The rhombus
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -57.5, 0), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -52.5, -17), 6*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -81, -17), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -49, 27.5), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -29, -34), 6*IKRS.Girih.MINIMAL_ANGLE )
+];
+// Note that the rhombus has a 2-axis symmetry. All other 2 edges behave the same.
+for( var e = 2; e < 4; e++ ) {
+    
+    IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ][ e ] = [];
+    for( var i = 0; i < IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ][ e-2 ].length; i++ ) {
+
+	var tileAlign = IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ][e-2][i].clone();
+	tileAlign.position.rotate( IKRS.Point2.ZERO_POINT, 10*IKRS.Girih.MINIMAL_ANGLE );
+	tileAlign.angle += 10*IKRS.Girih.MINIMAL_ANGLE;
+	//if( e == 4 )  // It's a bit unprecise
+	//    tileAlign.position.x += 2.0;
+	//else
+	//    tileAlign.position.x += 1.0;
+	IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_RHOMBUS ][ e ].push( tileAlign );
+	
+    }
+}
+
+
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ] = Array(6);
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][0] = [  
+    // The decagon 
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_DECAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 32, -99.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The pentagon has only one possible alignment on the edge (5 times the same)
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_PENTAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 32, -50.5), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    // The irregular hexagon
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 64, -55), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 32, -45), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 0, -55), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The rhombus
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 41, -38), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 23, -38), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 64, -21), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 32, -65.5), 4*IKRS.Girih.MINIMAL_ANGLE )
+];
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][1] = [
+    // The decagon 
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_DECAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 136, 44.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The pentagon has only one possible alignment on the edge (5 times the same)
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_PENTAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 90, 29), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The irregular hexagon
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 104, 0), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 84.5, 27.5), -2*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 84.5, 61.5), -4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The rhombus
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 81, 17), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 75.5, 34), -4*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 104, 34), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 72, -10.5), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 52, 51), -4*IKRS.Girih.MINIMAL_ANGLE )
+];
+IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][2] = [
+    // The decagon 
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_DECAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -32, 99.5), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    // The pentagon has only one possible alignment on the edge (5 times the same)
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_PENTAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -3.5, 59), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    // The irregular hexagon
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 20, 82), 6*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 0, 55), 4*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -32, 44.25), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    // The rhombus
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -3.5, 44.5), 2*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_RHOMBUS, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 11, 55), 6*IKRS.Girih.MINIMAL_ANGLE ),
+    // The bow tie
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( 39.5, 55), 0*IKRS.Girih.MINIMAL_ANGLE ),
+    new IKRS.TileAlign( IKRS.Girih.TILE_TYPE_BOW_TIE, IKRS.Girih.DEFAULT_EDGE_LENGTH, new IKRS.Point2( -12, 72), 6*IKRS.Girih.MINIMAL_ANGLE )
+];
+
+// Note that the bow tie has a 3|6-axis symmetry. All other 3 edges behave the same.
+for( var e = 3; e < 6; e++ ) {
+    
+    IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][ e ] = [];
+    for( var i = 0; i < IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][ e-3 ].length; i++ ) {
+
+	var tileAlign = IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][e-3][i].clone();
+	tileAlign.position.rotate( IKRS.Point2.ZERO_POINT, 10*IKRS.Girih.MINIMAL_ANGLE );
+	tileAlign.angle += 10*IKRS.Girih.MINIMAL_ANGLE;
+	//if( e == 4 )  // It's a bit unprecise
+	//    tileAlign.position.x += 2.0;
+	//else
+	//    tileAlign.position.x += 1.0;
+	IKRS.Girih.TILE_ALIGN[ IKRS.Girih.TILE_TYPE_BOW_TIE ][ e ].push( tileAlign );
+	
+    }
+}
+
+
+// Note that the bow tie has a 3|6-axis symmetry. All other 3 edges behave the same.
 /*
 for( var t = 3; t < 6; t++ ) {
     for( var e = 1; e < 6; e++ ) {
