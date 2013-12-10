@@ -63,9 +63,11 @@ IKRS.Tile.Rhombus = function( size, position, angle ) {
 // have to inherit object methods manually??!
 IKRS.Tile.Rhombus.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.Rhombus.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.Rhombus.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.Rhombus.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
 IKRS.Tile.Rhombus.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
 IKRS.Tile.Rhombus.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.Rhombus.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.Rhombus.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
 
 IKRS.Tile.Rhombus.prototype.constructor         = IKRS.Tile.Rhombus;
 

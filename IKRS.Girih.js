@@ -10,10 +10,18 @@ IKRS.Girih = function() {
     IKRS.Object.call( this );
     
     // Add tiles
-    //this.tiles = [];
+    this.tiles = [];
     //this.tiles.push( new IKRS.Tile() );
 
 };
+
+IKRS.Girih.prototype.addTile = function( tile ) {
+    this.tiles.push( tile );
+}
+
+//IKRS.Girih.protoype.x = function() {
+//    
+//}
 
 IKRS.Girih.deg2rad = function( deg ) {
     return deg * (Math.PI/180.0);
@@ -51,7 +59,8 @@ IKRS.Girih.EDGE_COUNT = [
 */
 
 
-// Prepare the tile alignment matrix
+// Prepare the tile alignment matrix:
+// [ actual_tile ] x [ edge_index ] x [ successor_index ] = tile_align
 IKRS.Girih.TILE_ALIGN                  = Array();
 
 IKRS.Girih.DEFAULT_EDGE_LENGTH         = 58;

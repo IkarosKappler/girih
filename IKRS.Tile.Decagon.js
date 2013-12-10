@@ -51,9 +51,11 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 // have to inherit object methods manually??!
 IKRS.Tile.Decagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.Decagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.Decagon.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.Decagon.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
 IKRS.Tile.Decagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
 IKRS.Tile.Decagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.Decagon.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.Decagon.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
 
 
 IKRS.Tile.Decagon.prototype.constructor         = IKRS.Tile.Decagon;

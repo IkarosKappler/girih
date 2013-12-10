@@ -68,9 +68,11 @@ IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
 // have to inherit object methods manually??!
 IKRS.Tile.IrregularHexagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.IrregularHexagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.IrregularHexagon.prototype._getTranslatedPoint = IKRS.Tile.prototype._getTranslatedPoint;
+IKRS.Tile.IrregularHexagon.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
 IKRS.Tile.IrregularHexagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
 IKRS.Tile.IrregularHexagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.IrregularHexagon.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.IrregularHexagon.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
 
 IKRS.Tile.IrregularHexagon.prototype.constructor         = IKRS.Tile.IrregularHexagon;
 

@@ -38,6 +38,16 @@ IKRS.Point2.prototype.setXY = function( x, y ) {
     this.y = y;
 }
 
+IKRS.Point2.prototype.inRange = function( point,
+					  tolerance
+					) {
+    return this.distanceTo(point) <= tolerance;
+}
+
+IKRS.Point2.prototype.distanceTo = function( point ) {
+    return Math.sqrt( Math.pow(this.x-point.x,2) + Math.pow(this.y-point.y,2) );
+}
+
 /*
 IKRS.Point2.prototype.setX = function( x ) {
     return this.x = x;

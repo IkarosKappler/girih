@@ -22,7 +22,8 @@ IKRS.GirihCanvasHandler = function( imageObject ) {
     this.drawOffset                = new IKRS.Point2( 512, 384 );
     this.zoomFactor                = 1.0;
     
-    this.tiles                     = [];  
+    //this.tiles                     = [];  
+    this.girih                     = new IKRS.Girih();
 
     this.drawProperties            = { drawBoxes:    false,
 				       drawOutlines: true,
@@ -98,10 +99,8 @@ IKRS.GirihCanvasHandler.prototype.mouseWheelHandler = function( e ) {
 IKRS.GirihCanvasHandler.prototype.mouseDownHandler = function( e ) {
 
     var point     = this.girihCanvasHandler._translateMouseEventToRelativePosition( this, e );
-    // window.alert( "point=(" + point.x + ", " + point.y + ")" );
 
     var tileIndex = this.girihCanvasHandler._locateTileAtPoint( point );
-    //window.alert( "tileIndex=" + tileIndex  );
     if( tileIndex == -1 )
 	return; // Not found
 
@@ -109,7 +108,7 @@ IKRS.GirihCanvasHandler.prototype.mouseDownHandler = function( e ) {
     this.girihCanvasHandler._clearSelection();
 
     // Set the tile's 'selected' state
-    this.girihCanvasHandler.tiles[tileIndex]._props.selected = true; 
+    this.girihCanvasHandler.girih.tiles[tileIndex]._props.selected = true; 
     // DEBUG( "[mouseDown] tileIndex=" + tileIndex + ", selected=" + his.girihCanvasHandler.tiles[tileIndex]._props.selected );
     this.girihCanvasHandler.redraw();
 }
@@ -125,7 +124,7 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
     var oldHoverTile            = null; 
     var oldHighlightedEdgeIndex = -1;
     if( oldHoverTileIndex != -1 ) {
-	oldHoverTile = this.girihCanvasHandler.tiles[ oldHoverTileIndex ];  // May be null!
+	oldHoverTile = this.girihCanvasHandler.girih.tiles[ oldHoverTileIndex ];  // May be null!
 	oldHighlightedEdgeIndex = oldHoverTile.highlightedEdgeIndex;
     }
 
@@ -142,7 +141,7 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 	this.girihCanvasHandler.redraw();
 	return;
     }
-    var hoverTile      = this.girihCanvasHandler.tiles[ hoverTileIndex ];
+    var hoverTile      = this.girihCanvasHandler.girih.tiles[ hoverTileIndex ];
  
     hoverTile._props.hovered = true;  // may be the same object
 
@@ -168,19 +167,11 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 
 IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
 
-    // window.alert( e.keyCode );
-
-    // The key code for 'delete' is 46
-    //if( e.keyCode != 46 ) 
-    //	return;
-
     // right=39
     // left=37
     // enter=13
     // delete=46
     // space=32
-    //if( e.keyCode != 39 && e.keyCode != 37 & e.keyCode != 13 && e.keyCode != 46)
-//	return;
 
     if( e.keyCode == 39 ) {
 	this.girihCanvasHandler.adjacentTileOptionPointer++;
@@ -197,8 +188,8 @@ IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
 }
 
 IKRS.GirihCanvasHandler.prototype._locateSelectedTile = function() {
-    for( var i = 0; i < this.tiles.length; i++ ) {
-	if( this.tiles[i]._props.selected )
+    for( var i = 0; i < this.girih.tiles.length; i++ ) {
+	if( this.girih.tiles[i]._props.selected )
 	    return i;
     }
     // Not found
@@ -206,23 +197,23 @@ IKRS.GirihCanvasHandler.prototype._locateSelectedTile = function() {
 }
 
 IKRS.GirihCanvasHandler.prototype._locateHoveredTile = function() {
-    for( var i = 0; i < this.tiles.length; i++ ) {
-	if( this.tiles[i]._props.hovered )
+    for( var i = 0; i < this.girih.tiles.length; i++ ) {
+	if( this.girih.tiles[i]._props.hovered )
 	    return i;
     }
     return -1;
 }
 
 IKRS.GirihCanvasHandler.prototype._clearSelection = function() {
-    for( var i = 0; i < this.tiles.length; i++ ) {
-	this.tiles[i]._props.selected             = false;
+    for( var i = 0; i < this.girih.tiles.length; i++ ) {
+	this.girih.tiles[i]._props.selected             = false;
     }
 }
 
 IKRS.GirihCanvasHandler.prototype._clearHovered = function() {
-    for( var i = 0; i < this.tiles.length; i++ ) {
-	this.tiles[i]._props.hovered = false;
-	this.tiles[i]._props.highlightedEdgeIndex = -1;
+    for( var i = 0; i < this.girih.tiles.length; i++ ) {
+	this.girih.tiles[i]._props.hovered = false;
+	this.girih.tiles[i]._props.highlightedEdgeIndex = -1;
     }
 }
 
@@ -232,23 +223,8 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
     if( hoveredTileIndex == -1 ) 
 	return;
     
-    var tile = this.tiles[ hoveredTileIndex ]; 
-    var tileBounds       = tile.computeBounds();
-    /*
-    this._drawPreviewTileAtHighlightedPolygonEdge( tile.tileType,
-						   tile.vertices, 
-						   tile.position, 
-						   tile.angle,
-						   tileBounds, // tile.computeBounds(),  // tileBounds,
-						   { unselectedEdgeColor: "#000000",
-						     selectedEdgeColor:   "#FF0000"
-						   },
-						   tile.imageProperties,
-						   this.imageObject,
-						   tile._props.highlightedEdgeIndex,
-						   this.drawProperties.drawOutlines
-						 );
-    */
+    var tile         = this.girih.tiles[ hoveredTileIndex ]; 
+    var tileBounds   = tile.computeBounds();
 
     var adjacentTile = this._resolveCurrentAdjacentTilePreset(   tile.tileType,
 								 tile.vertices, 
@@ -261,22 +237,65 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
 								 tile.imageProperties,
 								 this.imageObject,
 								 tile._props.highlightedEdgeIndex,
-								 this.drawProperties.drawOutlines
-								 
-								 /*tileType,
-								   points,
-								   position, 
-								   angle,
-								   originalBounds,
-								   colors,
-								   imgProperties,
-								   imageObject,
-								   highlightedEdgeIndex,
-								   drawOutlines
-								 */
+								 this.drawProperties.drawOutlines								 
 							     );
     if( !adjacentTile )
 	return;
+
+    // Finally: the adjacent tile position might not be acurate.
+    //          Make some fine tuning.
+    var currentEdgePointA = tile.getTranslatedVertex( tile._props.highlightedEdgeIndex );
+    var currentEdgePointB = tile.getTranslatedVertex( tile._props.highlightedEdgeIndex+1 );
+    var tolerance         = 5.0;
+    var adjacentEdgeIndex = adjacentTile.locateAdjacentEdge( currentEdgePointA, 
+							     currentEdgePointB, 
+							     tolerance 
+							   );
+    var adjacentEdgePointA;
+    var adjacentEdgePointB;
+    var pointDifferences;
+    // Swap edge points?
+    if( adjacentEdgeIndex != -1 ) {
+
+	//window.alert( "even" );
+	adjacentEdgePointA = adjacentTile.getTranslatedVertex( adjacentEdgeIndex ); // getVertexAt( adjacentEdgeIndex );
+	adjacentEdgePointB = adjacentTile.getTranslatedVertex( adjacentEdgeIndex+1 ); // getVertexAt( adjacentEdgeIndex+1 );
+
+    } else if( (adjacentEdgeIndex = adjacentTile.locateAdjacentEdge(currentEdgePointB,currentEdgePointA,tolerance)) != -1 ) {
+	// Swapped points (reverse edge)
+	//window.alert( "odd; adjacentEdgeIndex=" +  adjacentEdgeIndex );
+	adjacentEdgePointA = adjacentTile.getTranslatedVertex( adjacentEdgeIndex+1 ); // getVertexAt( adjacentEdgeIndex+1 );
+	adjacentEdgePointB = adjacentTile.getTranslatedVertex( adjacentEdgeIndex ); // getVertexAt( adjacentEdgeIndex );
+    } 
+
+    if( adjacentEdgeIndex != -1 ) {
+
+	pointDifferences = [ adjacentEdgePointA.clone().sub( currentEdgePointA ),
+			     adjacentEdgePointB.clone().sub( currentEdgePointB ) 
+			   ];
+	/*
+	window.alert( "adjacentEdgePointA=" + adjacentEdgePointA.toString() + ",\n" +
+		      "adjacentEdgePointB=" + adjacentEdgePointB.toString() + ",\n" +
+		      "currentEdgePointA=" + currentEdgePointA.toString() + ",\n" +
+		      "currentEdgePointB=" + currentEdgePointB.toString() + ",\n" +
+		      "highlightedEdgeIndex=" + tile._props.highlightedEdgeIndex + ",\n" +
+		      "adjacentEdgeIndex=" + adjacentEdgeIndex + ",\n" +
+		      "adjacentTile.angle=" + adjacentTile.angle
+		    );		      
+		    */
+
+	// Calculate average difference
+	var avgDifference = IKRS.Point2.ZERO_POINT.clone();
+	for( var i = 0; i < pointDifferences.length; i++ ) {
+	    avgDifference.add( pointDifferences[i] );
+	}
+	avgDifference.x /= pointDifferences.length;
+	avgDifference.y /= pointDifferences.length;
+	
+	//window.alert( "avgDifference=" + avgDifference.toString() );
+
+	adjacentTile.position.sub( avgDifference );
+    }
 
     this.addTile( adjacentTile );
     this.redraw();
@@ -288,7 +307,7 @@ IKRS.GirihCanvasHandler.prototype._performDeleteSelectedTile = function() {
     if( selectedTileIndex == -1 )
 	return;
 
-    this.tiles.splice( selectedTileIndex, 1 );
+    this.girih.tiles.splice( selectedTileIndex, 1 );
     this.redraw();
 }
 
@@ -299,15 +318,16 @@ IKRS.GirihCanvasHandler.prototype.addTile = function( tile ) {
 		    hovered:               false,
 		    highlightedEdgeIndex:  -1,
 		  };
-    this.tiles.push( tile );
+    // this.tiles.push( tile );
+    this.girih.addTile( tile );
 }
 
 IKRS.GirihCanvasHandler.prototype._locateTileAtPoint = function( point ) {
 
-    for( var i = 0; i < this.tiles.length; i++ ) {
+    for( var i = 0; i < this.girih.tiles.length; i++ ) {
 
 	// window.alert( "[_locateTileAtPoint] tile[" + i + "].containsPoint(...)=" + this.tiles[i].containsPoint(point) );
-	if( this.tiles[i].containsPoint(point) )
+	if( this.girih.tiles[i].containsPoint(point) )
 	    return i;
 	
     }
@@ -437,55 +457,7 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 				drawStartY + imgProperties.destination.yOffset*polyImageRatio.y*0.5,         // destination y
 				(originalBounds.getWidth() - imgProperties.destination.xOffset*polyImageRatio.x) * this.zoomFactor,  // imageW,        // destination width
 				(originalBounds.getHeight() - imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor  // imageH // - imgProperties.destination.yOffset*polyImageRatio.y         // destination height
-			      );
-
-	/*
-	var imageW = originalBounds.getWidth() * this.zoomFactor; 
-	var imageH = (originalBounds.getHeight() + imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor; 
-
-	
-	this.context.translate( imageX + imageW/2.0, 
-				imageY + imageH/2.0 //+ imgProperties.destination.yOffset*polyImageRatio.y //imageY + imageH/2.0 
-			      );
-	
-	this.context.rotate( angle ); 
-	
-	var drawStartX = (-originalBounds.getWidth()/2.0) * this.zoomFactor; 
-	var drawStartY = (-originalBounds.getHeight()/2.0) * this.zoomFactor; 
-	this.context.drawImage( imageObject,
-				imgProperties.source.x, // 0,             // source x
-				imgProperties.source.y, // 0,             // source y
-				imgProperties.source.width,             // source width
-				imgProperties.source.height,             // source height
-				drawStartX,         // destination x
-				drawStartY + imgProperties.destination.yOffset*polyImageRatio.y*0.5,         // destination y
-				imageW,        // destination width
-				(originalBounds.getHeight() - imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor  // imageH // - imgProperties.destination.yOffset*polyImageRatio.y         // destination height
-			      );
-	*/
-
-
-
-	/*
-	this.context.drawImage( imageObject,
-				imgProperties.source.x, // 0,             // source x
-				imgProperties.source.y, // 0,             // source y
-				imgProperties.source.width,  // 500,           // source width
-				imgProperties.source.height, // +imgProperties.destination.yOffset, // 460,           // source height
-				drawStartX, // -imageX,        // destination x
-				drawStartY+imgProperties.destination.yOffset*0.7, // -imageY,        // destination y
-				imageW,        // destination width
-				imageH-imgProperties.destination.yOffset*0.7         // destination height
-			      );
-			      */
-
-	/*
-	this.context.rect( drawStartX,
-			   drawStartY,
-			   imageW,
-			   imageH
-			     );
-			     */
+			      );	
     }
     
 
@@ -554,11 +526,6 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
     if( !points || highlightedEdgeIndex == -1 )
 	return;
 
-    // Choose first option by default
-    // in [0...4] (number of implemented tile types: 5)
-    //var optionIndex = adjacentTileOptionPointer; 
-    //var presetTileType = IKRS.Girih.TILE_TYPE_BOW_TIE;
-
     // Adjacent tile presets available for this tile/edge/option?
     //window.alert( "tileType=" + tileType + ", highlightedEdgeIndex=" + highlightedEdgeIndex );
     if( !IKRS.Girih.TILE_ALIGN[tileType] )
@@ -567,12 +534,6 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
     //window.alert( "IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex] );
     if( !IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex] )
 	return;
-
-    //window.alert( JSON.stringify(IKRS.Girih.TILE_ALIGN) );
-
-    //window.alert( "IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType]=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType] + ", highlightedEdgeIndex=" + highlightedEdgeIndex + ", length=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType].length );
-    //if( !IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType] )
-	//return;
     
     
     var presets = IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]; //[presetTileType];
@@ -583,26 +544,17 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
 	return null;
 
     
-    var optionIndex;
-    //if( optionIndex < 0 )
-//	optionIndex = Math.abs(this.adjcentTileOptionPointer);
-   // else
-	optionIndex = this.adjacentTileOptionPointer % presets.length;
+    var optionIndex = this.adjacentTileOptionPointer % presets.length;
     if( optionIndex < 0 )
 	optionIndex = presets.length + optionIndex;
-    //window.alert( "optionIndex=" + optionIndex );
 
-    var tileAlign      = presets[optionIndex]; // IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex][presetTileType][optionIndex];
-    //tileAlign.position.rotate( position,  // the base tile's position
-//			       angle );
+    var tileAlign      = presets[optionIndex];
     
     var tile = tileAlign.createTile();
     // Make position relative to the hovered tile
-    tile.position.add( position ); // tileAlign.position );
+    tile.position.add( position ); 
     tile.position.rotate( position, angle );
     tile.angle += angle;
-
-    //window.alert( "X" );
 
     return tile;
 }
@@ -744,14 +696,14 @@ IKRS.GirihCanvasHandler.prototype._drawCoordinateSystem = function() {
 
 IKRS.GirihCanvasHandler.prototype._drawTiles = function() { 
     
-    for( var i = 0; i < this.tiles.length; i++ ) {	
-	this._drawTile( this.tiles[i] );
+    for( var i = 0; i < this.girih.tiles.length; i++ ) {	
+	this._drawTile( this.girih.tiles[i] );
     }
 
     // Finally draw the selected tile's hovering edge
     var hoveredTileIndex = this._locateHoveredTile();;
     if( hoveredTileIndex != -1 ) {
-	var tile = this.tiles[ hoveredTileIndex ]; 
+	var tile = this.girih.tiles[ hoveredTileIndex ]; 
 	var tileBounds       = tile.computeBounds()
 	this._drawHighlightedPolygonEdge( tile.vertices, 
 					  tile.position, 
