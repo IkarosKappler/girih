@@ -8,6 +8,8 @@
 IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
     
     IKRS.Tile.call( this, size, position, angle, IKRS.Girih.TILE_TYPE_IRREGULAR_HEXAGON );
+
+    //window.alert( "[IrregularHexagon.init()] size=" + size + ", position=" + position.toString() + ", angle=" + angle );
     
     // Init the actual decahedron shape with the passed size
     var pointA        = new IKRS.Point2(0,0);
@@ -83,8 +85,16 @@ IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
     var intersection = circleA.computeIntersectionPoints( circleB );
     // One of the two points is inside the tile, the other is outside.
     // Locate the inside point.
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
-    else                                          innerTile.push(intersection.pointB);
+    if( intersection && typeof intersection != "undefined" ) {
+	// Use the point that is closer to the center
+	if( intersection.pointA.length() < intersection.pointB.length() ) innerTile.push(intersection.pointA);
+	else                                                              innerTile.push(intersection.pointB);
+	//if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
+	//else                                          innerTile.push(intersection.pointB);
+	//intersection = null;
+    } else {
+	console.log( "intersection is null!" );
+    }
     
     innerTile.push( circleB.center );
     
@@ -98,8 +108,16 @@ IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
     //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
     intersection   = circleA.computeIntersectionPoints( circleB );
     // There are two points again (one inside, one outside the tile)
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
-    else                                          innerTile.push(intersection.pointB);
+    if( intersection && typeof intersection != "undefined" ) {
+	// Use the point that is closer to the center
+	if( intersection.pointA.length() < intersection.pointB.length() ) innerTile.push(intersection.pointA);
+	else                                                              innerTile.push(intersection.pointB);
+	//if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
+	//else                                          innerTile.push(intersection.pointB);
+	//intersection = null;
+    } else {
+	console.log( "intersection is null!" );
+    }
     innerTile.push( circleB.center );
 
     innerTile.push( this.vertices[4].clone().scaleTowards( this.vertices[5], 0.5 ) );
@@ -112,8 +130,16 @@ IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
     //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
     intersection   = circleA.computeIntersectionPoints( circleB );
     // There are two points again (one inside, one outside the tile)
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
-    else                                          innerTile.push(intersection.pointB);
+    if( intersection && typeof intersection != "undefined" ) {
+	// Use the point that is closer to the center
+	if( intersection.pointA.length() < intersection.pointB.length() ) innerTile.push(intersection.pointA);
+	else                                                              innerTile.push(intersection.pointB);
+	//if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
+	//else                                          innerTile.push(intersection.pointB);
+	//intersection = null;
+    } else {
+	console.log( "intersection is null!" );
+    }
     innerTile.push( circleB.center );
   
 
@@ -125,8 +151,16 @@ IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
     //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
     intersection   = circleA.computeIntersectionPoints( circleB );
     // There are two points again (one inside, one outside the tile)
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
-    else                                          innerTile.push(intersection.pointB);
+    if( intersection ) { //  && typeof intersection != "undefined" ) {
+	// Use the point that is closer to the center
+	if( intersection.pointA.length() < intersection.pointB.length() ) innerTile.push(intersection.pointA);
+	else                                                              innerTile.push(intersection.pointB);
+	//if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
+	//else                                          innerTile.push(intersection.pointB);
+	//intersection = null;
+    } else {
+	console.log( "intersection is null!" );
+    }
     innerTile.push( circleB.center );
     
 

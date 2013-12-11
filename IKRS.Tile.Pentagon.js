@@ -8,7 +8,7 @@
 IKRS.Tile.Pentagon = function( size, position, angle ) {
     
     IKRS.Tile.call( this, size, position, angle, IKRS.Girih.TILE_TYPE_PENTAGON );
-    
+
     // Init the actual decahedron shape with the passed size
     var pointA = new IKRS.Point2(0,0);
     var pointB = pointA;

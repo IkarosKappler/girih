@@ -49,6 +49,10 @@ IKRS.Point2.prototype.inRange = function( point,
     return this.distanceTo(point) <= tolerance;
 }
 
+IKRS.Point2.prototype.length = function() {
+    return Math.sqrt( Math.pow(this.x,2) + Math.pow(this.y,2) );
+}
+
 IKRS.Point2.prototype.distanceTo = function( point ) {
     return Math.sqrt( Math.pow(this.x-point.x,2) + Math.pow(this.y-point.y,2) );
 }

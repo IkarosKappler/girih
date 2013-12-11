@@ -551,7 +551,11 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
 
     var tileAlign      = presets[optionIndex];
     
+    //if( tileAlign.tileType == 2 ) 
+//	window.alert( "A" + tileAlign.toString() );
     var tile = tileAlign.createTile();
+    //if( tileAlign.tileType == 2 ) 
+//	window.alert( "B" + tile.toString() );
     // Make position relative to the hovered tile
     tile.position.add( position ); 
     tile.position.rotate( position, angle );
