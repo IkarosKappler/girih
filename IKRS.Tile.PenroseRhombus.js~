@@ -1,6 +1,11 @@
 /**
+ * The penrose rhombus (angles 36° and 144°) is NOT part of the actual girih tile set!
+ *
+ * But it fits perfect into the girih as the angles are the same. 
+ *
+ *
  * @author Ikaros Kappler
- * @date 2013-11-28
+ * @date 2013-12-11
  * @version 1.0.0
  **/
 
@@ -74,7 +79,7 @@ IKRS.Tile.Rhombus.prototype._buildInnerPolygons = function() {
     var intersection = circleA.computeIntersectionPoints( circleB );
     // One of the two points is inside the tile, the other is outside.
     // Locate the inside point.
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
+    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
     else                                          innerTile.push(intersection.pointB);
     
     innerTile.push( circleB.center );
@@ -86,7 +91,7 @@ IKRS.Tile.Rhombus.prototype._buildInnerPolygons = function() {
     //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
     intersection   = circleA.computeIntersectionPoints( circleB );
     // There are two points again (one inside, one outside the tile)
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
+    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
     else                                          innerTile.push(intersection.pointB);
 
     this.innerTilePolygons.push( innerTile );

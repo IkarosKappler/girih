@@ -787,7 +787,7 @@ IKRS.GirihCanvasHandler.prototype.redraw = function() {
     
     this._drawTiles();
 
-    this._drawCircleTest();
+    //this._drawCircleTest();
  
 }
 

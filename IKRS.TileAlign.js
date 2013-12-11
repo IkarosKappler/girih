@@ -7,6 +7,7 @@
  *
  * @author Ikaros Kappler
  * @date 2013-12-01
+ * @modified 2013-12-11 Ikaros Kappler (Added the Penrose-Rhombus).
  * @version 1.0.0
  **/
 
@@ -39,6 +40,10 @@ IKRS.TileAlign.prototype.createTile = function() {
 	return new IKRS.Tile.Rhombus( this.edgeLength, this.position.clone(), this.angle );	
     case IKRS.Girih.TILE_TYPE_BOW_TIE:
 	return new IKRS.Tile.BowTie( this.edgeLength, this.position.clone(), this.angle );	
+
+    case IKRS.Girih.TILE_TYPE_PENROSE_RHOMBUS:
+	return new IKRS.Tile.PenroseRhombus( this.edgeLength, this.position.clone(), this.angle );	
+
     default:
 	throw "Cannot create tiles from unknown tile types (" + this.tileType + ").";
     }

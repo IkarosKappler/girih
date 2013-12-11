@@ -78,7 +78,7 @@ IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
 	// One of the two points is inside the tile, the other is outside.
 	// Locate the inside point.
 	if( intersection ) {
-	    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
+	    if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
 	    else                                          innerTile.push(intersection.pointB);
 	} else {
 	    console.log( "intersection is null!" );

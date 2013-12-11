@@ -55,6 +55,15 @@ function onLoad() {
 	girihCanvasHandler.addTile( rhomb );
 	girihCanvasHandler.addTile( tie );
 	*/
+
+	// Make a test penrose-rhombus
+	var penrose = new IKRS.Tile.PenroseRhombus( tileSize,
+						    new IKRS.Point2(332, 50),  // position
+						    0.0
+					  );
+		
+	
+	girihCanvasHandler.addTile( penrose );
 	
 
 	_makeTest_Decagon_BowTie( tileSize );
@@ -63,10 +72,10 @@ function onLoad() {
 	_makeTest_Rhombus( tileSize );
 	
 			
-	girihCanvasHandler.drawOffset.setXY( 250, 250 );
+	girihCanvasHandler.drawOffset.setXY( 200, 200 ); //332, 50 );
 	redrawGirih();
     };
-    imageObj.src = "500px-Girih_tiles.svg.png";
+    imageObj.src = "500px-Girih_tiles.Penrose_compatible.png"; // "500px-Girih_tiles.svg.png";
 
 }
 
@@ -125,7 +134,8 @@ function _makeTest_Decagon_BowTie( tileSize ) {
 				    new IKRS.Point2(385, 184),  // position
 				    0 // IKRS.Girih.MINIMAL_ANGLE*6
 				  );
-    tie.position.add( new IKRS.Point2(200, 200) );
+    //tie.position.add( new IKRS.Point2(200, 200) );
+    tie.position.setXY( 100, 150 );
     girihCanvasHandler.addTile( deca );
     girihCanvasHandler.addTile( tie );
     
@@ -166,6 +176,26 @@ function increaseZoom() {
 
 function decreaseZoom() {
     girihCanvasHandler.zoomFactor /= 1.2;
+    redrawGirih();
+}
+
+function moveLeft() {
+    girihCanvasHandler.drawOffset.x -= 50; 
+    redrawGirih();
+}
+
+function moveRight() {
+    girihCanvasHandler.drawOffset.x += 50;
+    redrawGirih();
+}
+
+function moveUp() {
+    girihCanvasHandler.drawOffset.y -= 50; 
+    redrawGirih();
+}
+
+function moveDown() {
+    girihCanvasHandler.drawOffset.y += 50;
     redrawGirih();
 }
 
