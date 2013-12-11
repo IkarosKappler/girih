@@ -52,17 +52,89 @@ IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
     }
 
     this.imageProperties = {
-	source: { x:      75,
-		  y:      11,
-		  width:  207, // 207,
-		  height: 150
+	source: { x:      77/500.0, // 75,
+		  y:      11/460.0,
+		  width:  205/500.0, // 207,
+		  height: 150/460.0  // 150
 		},
-	destination: { xOffset: 0,
-		       yOffset: 0
+	destination: { xOffset: 0.0,
+		       yOffset: 0.0
 		     }
     };
+
+    this._buildInnerPolygons();
     
 };
+
+
+IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
+
+    
+    // Connect all edges half-the-way
+    var innerTile = [];
+    innerTile.push( this.vertices[0].scaleTowards( this.vertices[1], 0.5 ) );
+    innerTile.push( this.vertices[1].scaleTowards( this.vertices[2], 0.5 ) );
+
+    // Compute the next inner polygon vertex by the intersection of two circles
+    var circleA = new IKRS.Circle( innerTile[1], innerTile[0].distanceTo(innerTile[1]) );
+    var circleB = new IKRS.Circle( this.vertices[2].clone().scaleTowards( this.vertices[3], 0.5 ), circleA.radius );
+    
+    // There is definitely an intersection
+    var intersection = circleA.computeIntersectionPoints( circleB );
+    // One of the two points is inside the tile, the other is outside.
+    // Locate the inside point.
+    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
+    else                                          innerTile.push(intersection.pointB);
+    
+    innerTile.push( circleB.center );
+    
+    //innerTile.push( this.vertices[3].scaleTowards( this.vertices[0], 0.5 ) );
+    
+    
+    var i = 3;
+    // Move circles
+    circleA.center = circleB.center; // innerTile[4];
+    circleB.center = this.vertices[3].clone().scaleTowards( this.vertices[4], 0.5 ); // innerTile[0];
+    //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
+    intersection   = circleA.computeIntersectionPoints( circleB );
+    // There are two points again (one inside, one outside the tile)
+    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
+    else                                          innerTile.push(intersection.pointB);
+    innerTile.push( circleB.center );
+
+    innerTile.push( this.vertices[4].clone().scaleTowards( this.vertices[5], 0.5 ) );
+
+
+    
+    // Move circles  
+    circleA.center = innerTile[ innerTile.length-1 ];  
+    circleB.center = this.vertices[5].clone().scaleTowards( this.vertices[0], 0.5 );  
+    //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
+    intersection   = circleA.computeIntersectionPoints( circleB );
+    // There are two points again (one inside, one outside the tile)
+    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
+    else                                          innerTile.push(intersection.pointB);
+    innerTile.push( circleB.center );
+  
+
+
+    
+    // Move circles  
+    circleA.center = innerTile[ innerTile.length-1 ];  
+    circleB.center = innerTile[ 0 ]; 
+    //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
+    intersection   = circleA.computeIntersectionPoints( circleB );
+    // There are two points again (one inside, one outside the tile)
+    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
+    else                                          innerTile.push(intersection.pointB);
+    innerTile.push( circleB.center );
+    
+
+    //window.alert( innerTile.length );
+
+    this.innerTilePolygons.push( innerTile );	
+}
+
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!

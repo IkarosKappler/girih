@@ -1,0 +1,40 @@
+http://math.stackexchange.com/questions/256100/how-can-i-find-the-points-at-which-two-circles-intersect
+
+Two circles with the center points (x1,y1), (x2,y2) and the radii r1 and r2 respective.
+(x−x1)^2+(y−y1)^2=r1^2
+(x−x2)^2+(y−y2)^2=r2^2
+
+Multiply powers
+(x^2 - 2*x*x1 + x1^2) + (y^2 - 2*y*y1 + y1^2) = r1^2
+(x^2 - 2*x*x2 + x2^2) + (y^2 - 2*y*y2 + y2^2) = r2^2
+
+
+Let k*r1 = r2
+
+Subsitute r2 by k*r1
+(x^2 - 2*x*x1 + x1^2) + (y^2 - 2*y*y1 + y1^2) = r1^2
+(x^2 - 2*x*x2 + x2^2) + (y^2 - 2*y*y2 + y2^2) = (k*r1)^2
+
+# Divide by k^2 to get the same term on the right side.
+# (x^2 - 2*x*x1 + x1^2) + (y^2 - 2*y*y1 + y1^2)       = r1^2
+# (x^2 - 2*x*x2 + x2^2) + (y^2 - 2*y*y2 + y2^2) / k^2 = r1^2
+
+
+Isolate x
+ (x^2 - 2*x*x2 + x2^2)                         =       r1^2 + (y^2 - 2*y*y1 + y1^2)
+ x^2                                           =       r1^2 + (y^2 - 2*y*y1 + y1^2) + 2*x*x2 + x2^2
+ x                                               SQRT( r1^2 + (y^2 - 2*y*y1 + y1^2) + 2*x*x2 + x2^2 )
+
+Now substitide y in the second circle equation
+# (x^2 - 2*x*x2 + x2^2) + (y^2 - 2*y*y2 + y2^2) = r2^2
+ 
+ (     SQRT( r1^2 + (y^2 - 2*y*y1 + y1^2) + 2*x*x2 + x2^2 )^2 -
+   2 * SQRT( r1^2 + (y^2 - 2*y*y1 + y1^2) + 2*x*x2 + x2^2 ) * x2 +
+   x2^2 
+ ) +
+ (y^2 - 2*y*y2 + y2^2)                          = r2^2
+
+
+
+Ehhhmmmm ...
+F**k

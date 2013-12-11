@@ -41,19 +41,57 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
     }
 
     this.imageProperties = {
-	source: {	x:      7,
-			y:      303-16,
-			width:  157, //156,
-			height: 150+16
+	source: {	x:      7/500.0,
+			y:      (303-15)/460.0, // -16
+			width:  157/500.0, 
+			height: (150+15)/460.0  // +16
 		},
-	destination: { xOffset: 0,
-		       yOffset: -16
+	destination: { xOffset: 0.0,
+		       yOffset: -18/460.0 // -16
 		     }
 		     
     };
     //this.imageProperties.source.center = new IKRS.Point2( this.imageProperties.source.x + this.imageProperties.source.x
 
+
+    this._buildInnerPolygons( size );
 };
+
+IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
+
+    
+    // Connect all edges half-the-way
+    var innerTile = [];
+    //innerTile.push( this.vertices[0].scaleTowards( this.vertices[1], 0.5 ) );
+    //innerTile.push( this.vertices[1].scaleTowards( this.vertices[2], 0.5 ) );
+
+    for( var i = 0; i < this.vertices.length; i++ ) {
+
+	innerTile.push( this.getVertexAt(i).scaleTowards( this.getVertexAt(i+1), 0.5 ) );
+	// Compute the next inner polygon vertex by the intersection of two circles
+	var circleA = new IKRS.Circle( innerTile[ innerTile.length-1 ], edgeLength*0.425 ); //*0.425 ); 
+	var circleB = new IKRS.Circle( this.getVertexAt(i+1).clone().scaleTowards( this.getVertexAt(i+2), 0.5 ), 
+				       circleA.radius );
+    
+	// There is definitely an intersection
+	var intersection = circleA.computeIntersectionPoints( circleB );
+	// One of the two points is inside the tile, the other is outside.
+	// Locate the inside point.
+	if( intersection ) {
+	    if( this.containsPoint(intersection.pointA) ) innerTile.push(interSection.pointA);
+	    else                                          innerTile.push(intersection.pointB);
+	} else {
+	    console.log( "intersection is null!" );
+	}
+	
+	//innerTile.push( circleB.center );
+
+    }
+
+    //window.alert( innerTile.length );
+
+    this.innerTilePolygons.push( innerTile );
+}
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!

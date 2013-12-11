@@ -151,7 +151,7 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 							    hoverTile.size/2.0 * this.girihCanvasHandler.zoomFactor
 							  );
     
-    DEBUG( "[mouseMoved] hoverTileIndex=" + hoverTileIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex + ", hoverTile.position=" + hoverTile.position.toString() );
+    DEBUG( "[mouseMoved] hoverTileIndex=" + hoverTileIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex + ", hoverTile.position=" + hoverTile.position.toString() + ", hoverTile.angle=" + hoverTile.angle );
     
     // Redraw really required?
     if( oldHoverTileIndex == hoverTileIndex && 
@@ -358,6 +358,7 @@ IKRS.GirihCanvasHandler.prototype._drawTile = function( tile ) {
 				 tile._props.highlightedEdgeIndex,
 				 this.drawProperties.drawOutlines
 			       );
+    this._drawInnerTilePolygons( tile );
     if( this.drawProperties.drawOutlines )
 	this._drawCrosshairAt( tile.position, tile._props.selected );
 
@@ -418,15 +419,15 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 
 	/*
 	var imgBounds = new IKRS.BoundingBox2( imgProperties.source.x,
-					       imgProperties.source.y,
 					       imgProperties.source.x + imgProperties.source.width,
+					       imgProperties.source.y,
 					       imgProperties.source.y + imgProperties.source.height
 					     );
 					     */
-	var imgBounds = new IKRS.BoundingBox2( imgProperties.source.x,
-					       imgProperties.source.x + imgProperties.source.width,
-					       imgProperties.source.y,
-					       imgProperties.source.y + imgProperties.source.height
+	var imgBounds = new IKRS.BoundingBox2( imgProperties.source.x * imageObject.width,
+					       (imgProperties.source.x + imgProperties.source.width) * imageObject.width,
+					       imgProperties.source.y * imageObject.height,
+					       (imgProperties.source.y + imgProperties.source.height) * imageObject.height
 					     );
 	var polyImageRatio = new IKRS.Point2( originalBounds.getWidth() / imgBounds.getWidth(),
 					      originalBounds.getHeight() / imgBounds.getHeight()
@@ -436,8 +437,8 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 	this.context.clip();
 	var imageX = this.drawOffset.x + position.x * this.zoomFactor + originalBounds.xMin * this.zoomFactor;
 	var imageY = this.drawOffset.y + position.y * this.zoomFactor + originalBounds.yMin * this.zoomFactor;	
-	var imageW = (originalBounds.getWidth() + imgProperties.destination.xOffset*polyImageRatio.x) * this.zoomFactor; 
-	var imageH = (originalBounds.getHeight() + imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor; 
+	var imageW = (originalBounds.getWidth() + imgProperties.destination.xOffset*imageObject.width*polyImageRatio.x) * this.zoomFactor; 
+	var imageH = (originalBounds.getHeight() + imgProperties.destination.yOffset*imageObject.height*polyImageRatio.y) * this.zoomFactor; 
 
 	
 	this.context.translate( imageX + imageW/2.0, 
@@ -449,14 +450,14 @@ IKRS.GirihCanvasHandler.prototype._drawPolygonFromPoints = function( points,
 	var drawStartX = (-originalBounds.getWidth()/2.0) * this.zoomFactor; 
 	var drawStartY = (-originalBounds.getHeight()/2.0) * this.zoomFactor; 
 	this.context.drawImage( imageObject,
-				imgProperties.source.x, // 0,             // source x
-				imgProperties.source.y, // 0,             // source y
-				imgProperties.source.width,             // source width
-				imgProperties.source.height,             // source height
-				drawStartX + imgProperties.destination.xOffset*polyImageRatio.x*0.5,         // destination x
-				drawStartY + imgProperties.destination.yOffset*polyImageRatio.y*0.5,         // destination y
-				(originalBounds.getWidth() - imgProperties.destination.xOffset*polyImageRatio.x) * this.zoomFactor,  // imageW,        // destination width
-				(originalBounds.getHeight() - imgProperties.destination.yOffset*polyImageRatio.y) * this.zoomFactor  // imageH // - imgProperties.destination.yOffset*polyImageRatio.y         // destination height
+				imgProperties.source.x*imageObject.width,                    // source x
+				imgProperties.source.y*imageObject.height,                   // source y
+				imgProperties.source.width*imageObject.width,                // source width
+				imgProperties.source.height*imageObject.height,              // source height
+				drawStartX + imgProperties.destination.xOffset*imageObject.width*polyImageRatio.x*0.5,         // destination x
+				drawStartY + imgProperties.destination.yOffset*imageObject.height*polyImageRatio.y*0.5,        // destination y
+				(originalBounds.getWidth() - imgProperties.destination.xOffset*imageObject.width*polyImageRatio.x) * this.zoomFactor,       // destination width
+				(originalBounds.getHeight() - imgProperties.destination.yOffset*imageObject.height*polyImageRatio.y) * this.zoomFactor      // destination height
 			      );	
     }
     
@@ -694,6 +695,36 @@ IKRS.GirihCanvasHandler.prototype._drawCoordinateSystem = function() {
     this.context.closePath();
 }
 
+IKRS.GirihCanvasHandler.prototype._drawInnerTilePolygons = function( tile ) {
+
+    for( var i = 0; i < tile.innerTilePolygons.length; i++ ) {
+
+	this._drawInnerTile( tile, i );
+
+    }
+
+}
+
+IKRS.GirihCanvasHandler.prototype._drawInnerTile = function( tile, index ) {
+
+    var polygon = tile.innerTilePolygons[ index ];
+    
+    this._drawPolygonFromPoints( polygon,   // points,
+				 tile.position, 
+				 tile.angle,
+				 IKRS.BoundingBox2.computeFromPoints(polygon), //originalBounds,
+				 { unselectedEdgeColor: "#ff0000",
+				   selectedEdgeColor:   "#f00000"
+				 },    // colors,
+				 null, // imgProperties,
+				 null, // imageObject,
+				 -1,   // highlightedEdgeIndex,
+				 true  // drawOutlines
+			       ); 
+    
+
+}
+
 IKRS.GirihCanvasHandler.prototype._drawTiles = function() { 
     
     for( var i = 0; i < this.girih.tiles.length; i++ ) {	
@@ -716,7 +747,7 @@ IKRS.GirihCanvasHandler.prototype._drawTiles = function() {
 					  this.imageObject,
 					  tile._props.highlightedEdgeIndex,
 					  this.drawProperties.drawOutlines
-					);
+					);;
 	this._drawPreviewTileAtHighlightedPolygonEdge( tile.tileType,
 						       tile.vertices, 
 						       tile.position, 
@@ -751,9 +782,66 @@ IKRS.GirihCanvasHandler.prototype.redraw = function() {
     this._drawCoordinateSystem();
     
     this._drawTiles();
+
+    this._drawCircleTest();
  
 }
 
+
+IKRS.GirihCanvasHandler.prototype._drawCircleTest = function() {
+
+    
+    var circleA = new IKRS.Circle( IKRS.Point2.ZERO_POINT,
+				   50
+				 );
+    var circleB = new IKRS.Circle( new IKRS.Point2( 50, 50 ),
+				   75
+				 );
+				 
+    /*
+    var circleA = new IKRS.Circle( new IKRS.Point2(-32.422985673746936, 44.62641128904119), //  IKRS.Point2.ZERO_POINT,
+				    29
+				  );
+    var circleB = new IKRS.Circle( new IKRS.Point2(-20.038507163126532, -27.58063897255945),
+				   29
+				 );
+    */
+    
+    this._drawCircleIntersections( circleA, circleB );
+}
+
+IKRS.GirihCanvasHandler.prototype._drawCircleIntersections = function( circleA, circleB ) {
+
+    var intersection = circleA.computeIntersectionPoints( circleB );
+    if( intersection ) {
+
+	this._drawCrosshairAt( intersection.pointA, false );
+	this._drawCrosshairAt( intersection.pointB, false );
+
+    }
+    
+    this._drawCircle( circleA );
+    this._drawCircle( circleB );
+
+}
+
+IKRS.GirihCanvasHandler.prototype._drawCircle = function( circle ) {
+
+    //window.alert( "circle=" + circle.toString() );
+    
+    this.context.strokeStyle = "#FF0000";
+    //this.context.line
+    this.context.beginPath();
+    this.context.arc( circle.center.x * this.zoomFactor + this.drawOffset.x,
+		      circle.center.y * this.zoomFactor + this.drawOffset.y,
+		      circle.radius * this.zoomFactor,
+		      0,
+		      Math.PI*2
+		    );
+    //this.context.endPath();
+    this.context.stroke();
+
+}
 
 
 IKRS.GirihCanvasHandler.prototype.constructor = IKRS.GirihCanvasHandler;

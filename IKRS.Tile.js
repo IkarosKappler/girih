@@ -18,13 +18,14 @@ IKRS.Tile = function( size,
     if( typeof tileType == "unknown" )
 	tileType = IKRS.Girih.TILE_TYPE_UNKNOWN;
     
-    this.size            = size;
-    this.position        = position;
-    this.angle           = angle;
-    this.vertices        = [];
-    this.imageProperties = null;
+    this.size                = size;
+    this.position            = position;
+    this.angle               = angle;
+    this.vertices            = [];
+    this.innerTilePolygons   = [];   // An array of arrays of points
+    this.imageProperties     = null;
 
-    this.tileType        = tileType;
+    this.tileType            = tileType;
 
 };
 

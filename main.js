@@ -18,6 +18,7 @@ function onLoad() {
 	girihCanvasHandler = new IKRS.GirihCanvasHandler( imageObj );
 	var tileSize = IKRS.Girih.DEFAULT_EDGE_LENGTH;
 	// Make a test decagon
+	/*
 	var deca = new IKRS.Tile.Decagon( tileSize, 
 					  new IKRS.Point2(-50,-60),  // position
 					  0.0
@@ -46,19 +47,21 @@ function onLoad() {
 					new IKRS.Point2(-18, -159),  // position
 					0.0
 				      );
-	
+		
 	
 	girihCanvasHandler.addTile( deca );
 	girihCanvasHandler.addTile( penta );
 	girihCanvasHandler.addTile( irHex );
 	girihCanvasHandler.addTile( rhomb );
 	girihCanvasHandler.addTile( tie );
+	*/
 	
 
 	_makeTest_Decagon_BowTie( tileSize );
 	_makeTest_Pentagon( tileSize );
 	_makeTest_IrregularHexagon( tileSize );
 	_makeTest_Rhombus( tileSize );
+	
 			
 	girihCanvasHandler.drawOffset.setXY( 250, 250 );
 	redrawGirih();

@@ -1,0 +1,10 @@
+/**
+ * Some mathematical/geometrical functions use circle algorighms, so I decided
+ * to implement a general circle class.
+ *
+ * @author Ikaros Kappler
+ * @date 2013-12-10
+ * @version 1.0.0
+ **/
+
+
