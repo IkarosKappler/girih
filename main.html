@@ -19,38 +19,74 @@
   <script src="IKRS.Tile.PenroseRhombus.js" type="text/javascript"></script>
   <script src="IKRS.Girih.js" type="text/javascript"></script>
   <script src="IKRS.GirihCanvasHandler.js" type="text/javascript"></script>
+  
+  <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
 <script language="Javascript" src="main.js"></script>
 <p>
-<canvas id="girih_canvas" width="1024" height="768"></canvas>
+<canvas id="girih_canvas" width="1024" height="768" class="tooltip" title="Hover over existing tiles to see possible adjacent tiles.
+
+Press [left arrow] or [right arrow] to navigate through the tile set.
+
+Press [Enter] to place new tiles onto the canvas."></canvas>
 <br/>
 
+<form name="rotation_form">
+  Rotate selected tile:
+  <button onclick="rotateLeft(); return false;" style="font-family: Arial; font-size: 1.2em;">&#x27f2;</button>
+  <button onclick="rotateRight(); return false;" style="font-family: Arial; font-size: 1.2em;">&#x27f3;</button>
+  <input type="checkbox" name="rotate_all" checked="checked" /> Rotate all
+</form>
+<br/>
+
+<div style="position: absolute; left: 1044px; top: 588px;">
+<!--
 <button onclick="decreaseZoom()">zoom(-)</button>
 <button onclick="increaseZoom()">zoom(+)</button>
+-->
 <br/>
+<table border="0">
+<tr>
+  <td><button onclick="decreaseZoom()">zoom(-)</button></td>
+  <td></td>
+  <td><button onclick="increaseZoom()">zoom(+)</button></td>
+</tr>
+<tr>
+  <td></td>
+  <td align="center"><button onclick="moveUp()" style="font-size: 1.2em;">&uarr;</button></td>
+  <td></td>
+</tr>
+<tr>
+  <td align="right"><button onclick="moveLeft()" style="font-size: 1.2em;">&larr;</button></td>
+  <td></td>
+  <td><button onclick="moveRight()" style="font-size: 1.2em;">&rarr;</button></td>
+</tr>
+<tr>
+  <td></td>
+  <td><button onclick="moveDown()" style="font-size: 1.2em;">&darr;</button></td>
+  <td></td>
+</tr>
+</table>
+</div>
 
-<button onclick="rotateLeft()">rotate L</button>
-<button onclick="rotateRight()">rotate R</button>
-<br/>
 
-<button onclick="moveLeft()">move left</button>
-<button onclick="moveRight()">move right</button>
 <br/>
-<button onclick="moveUp()">move Up</button>
-<button onclick="moveDown()">move Down</button>
-<br/>
-
 <div id="debug"></div>
 
 <br/>
 
-<form name="girih_form">
-<input type="checkbox" name="draw_boxes" onclick="redrawGirih()" /> Draw Boxes<br/>
-<input type="checkbox" name="draw_outlines" onclick="redrawGirih()" checked="checked" /> Draw Outlines</br>
-<input type="checkbox" name="draw_textures" onclick="redrawGirih()" checked="checked" /> Draw Textures</br>
-</form>
+<div style="position: absolute; left: 1044px; top: 10px;">
+  <form name="girih_form">
+    <input type="checkbox" name="draw_boxes" onclick="redrawGirih()" /> Draw Boxes<br/>
+    <input type="checkbox" name="draw_outlines" onclick="redrawGirih()" checked="checked" /> Draw Outlines</br>
+    <input type="checkbox" name="draw_textures" onclick="redrawGirih()" checked="checked" /> Draw Textures</br>
+    <input type="checkbox" name="draw_inner_polygons" onclick="redrawGirih()" checked="checked" /> Draw Inner Polygons</br>
+    <br/>
+    <input type="checkbox" name="allow_penrose_tile" onclick="redrawGirih()" checked="checked" /> Allow Penrose Tile</br>
+  </form>
+</div>
 
 
 </p>

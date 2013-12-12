@@ -1,0 +1,48 @@
+/**
+ * @author Ikaros Kappler
+ * @date 2013-12-12
+ **/
+
+body {
+   font-family: Monospace;
+   font-size: 10pt;
+   background-color: #f8f8f8;
+}
+
+button {
+   font-family: Monospace;
+   font-size: 10pt;
+}
+
+.tooltip {
+    display: inline;
+    position: relative;
+    font-size: 10pt;
+ }
+
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+    font-size: 10pt;
+}
+
+tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+    font-size: 10pt;
+}

@@ -1,5 +1,11 @@
-girih
+Girih
 =====
+
+Welcome to my girih tesselation tool.
+
+
+I added the narrow rhombus tile, which is part of the penrose set but _not_ 
+part of the original girih tile set!
 
 
 

@@ -50,9 +50,9 @@ IKRS.Tile.PenroseRhombus = function( size, position, angle ) {
 
     
     this.imageProperties = {
-	source: { x:      3/500.0,
-		  y:      9/460.0,
-		  width:  171/500.0, 
+	source: { x:      2/500.0,
+		  y:      8/460.0,
+		  width:  173/500.0, 
 		  height: 56/460.0
 		},
 	destination: { xOffset: 0.0,

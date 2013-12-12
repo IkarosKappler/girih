@@ -180,57 +180,81 @@ function decreaseZoom() {
 }
 
 function moveLeft() {
-    girihCanvasHandler.drawOffset.x -= 50; 
+    girihCanvasHandler.drawOffset.x += 50; 
     redrawGirih();
 }
 
 function moveRight() {
-    girihCanvasHandler.drawOffset.x += 50;
+    girihCanvasHandler.drawOffset.x -= 50;
     redrawGirih();
 }
 
 function moveUp() {
-    girihCanvasHandler.drawOffset.y -= 50; 
+    girihCanvasHandler.drawOffset.y += 50; 
     redrawGirih();
 }
 
 function moveDown() {
-    girihCanvasHandler.drawOffset.y += 50;
+    girihCanvasHandler.drawOffset.y -= 50;
     redrawGirih();
 }
 
 function rotateLeft() {
-    var first = true;
-    for( var i = 0; i < girihCanvasHandler.tiles.length; i++ ) {
-	if( girihCanvasHandler.tiles[i]._props.selected ) {
-	    girihCanvasHandler.tiles[i].angle += (IKRS.Girih.MINIMAL_ANGLE);	    
-	    if( first )
-		document.getElementById("debug").innerHTML = "" + IKRS.Girih.rad2deg(girihCanvasHandler.tiles[i].angle) + "&deg;";
-	    first = false;
-	}
-    }
-    redrawGirih();
+    rotateByAmount( -IKRS.Girih.MINIMAL_ANGLE );
 }
 
 function rotateRight() {
+    rotateByAmount( IKRS.Girih.MINIMAL_ANGLE );
+}
+
+function rotateByAmount( amount ) {
+
+    var index     = girihCanvasHandler._locateSelectedTile();
+    if( index == -1 ) {
+	DEBUG( "No tile selected." );
+	return;
+    }
+
+    var tile      = girihCanvasHandler.girih.tiles[ index ];
+    var rotateAll = document.forms[ "rotation_form" ].elements[ "rotate_all" ].checked; //true;
+
+    if( rotateAll ) {
+	for( var i = 0; i < girihCanvasHandler.girih.tiles.length; i++ ) {
+	    var tmpTile = girihCanvasHandler.girih.tiles[i];
+	    tmpTile.position.rotate( tile.position, amount ); 
+	    tmpTile.angle += amount; 
+	}
+    } else {
+	tile.angle += amount; 
+    } 
+    
+    DEBUG( "" + IKRS.Girih.rad2deg(tile.angle) + "&deg;" );
+	
+
+    /*
     var first = true;
-    for( var i = 0; i < girihCanvasHandler.tiles.length; i++ ) {
-	if( girihCanvasHandler.tiles[i]._props.selected ) {
-	    girihCanvasHandler.tiles[i].angle -= (IKRS.Girih.MINIMAL_ANGLE);	    
+    for( var i = 0; i < girihCanvasHandler.girih.tiles.length; i++ ) {
+	if( girihCanvasHandler.girih.tiles[i]._props.selected ) {
+	    girihCanvasHandler.gitih.tiles[i].angle += (IKRS.Girih.MINIMAL_ANGLE);	    
 	    if( first )
-		document.getElementById("debug").innerHTML = "" + IKRS.Girih.rad2deg(girihCanvasHandler.tiles[i].angle) + "&deg;";
+		document.getElementById("debug").innerHTML = "" + IKRS.Girih.rad2deg(girihCanvasHandler.girih.tiles[i].angle) + "&deg;";
 	    first = false;
 	}
     }
+    */
     redrawGirih();
 }
 
 function redrawGirih() {
     
     // Fetch the form settings and apply them to the handler's draw options
-    girihCanvasHandler.getDrawProperties().drawBoxes    = document.forms["girih_form"].elements["draw_boxes"].checked;
-    girihCanvasHandler.getDrawProperties().drawOutlines = document.forms["girih_form"].elements["draw_outlines"].checked;
-    girihCanvasHandler.getDrawProperties().drawTextures = document.forms["girih_form"].elements["draw_textures"].checked;
+    girihCanvasHandler.getDrawProperties().drawBoxes         = document.forms["girih_form"].elements["draw_boxes"].checked;
+    girihCanvasHandler.getDrawProperties().drawOutlines      = document.forms["girih_form"].elements["draw_outlines"].checked;
+    girihCanvasHandler.getDrawProperties().drawTextures      = document.forms["girih_form"].elements["draw_textures"].checked;
+    girihCanvasHandler.getDrawProperties().drawInnerPolygons = document.forms["girih_form"].elements["draw_inner_polygons"].checked;
+
+    girihCanvasHandler.getProperties().allowPenroseTile      = document.forms["girih_form"].elements["allow_penrose_tile"].checked;
+
 
     // Then trigger redraw
     girihCanvasHandler.redraw();
