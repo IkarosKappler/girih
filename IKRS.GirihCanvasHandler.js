@@ -281,7 +281,7 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
     var tileBounds   = tile.computeBounds();
 
     var adjacentTile = this._resolveCurrentAdjacentTilePreset(   tile.tileType,
-								 tile.vertices, 
+								 tile.polygon.vertices, 
 								 tile.position, 
 								 tile.angle,
 								 tileBounds, // tile.computeBounds(),  // tileBounds,
@@ -383,6 +383,10 @@ IKRS.GirihCanvasHandler.prototype.addTile = function( tile ) {
 IKRS.GirihCanvasHandler.prototype._locateTileAtPoint = function( point ) {
 
     for( var i = this.girih.tiles.length-1; i >= 0; i-- ) {
+	
+	// Ignore Penrose-Tile?
+	if( this.girih.tiles[i].tileType == IKRS.Girih.TILE_TYPE_PENROSE_RHOMBUS && !this.getProperties().allowPenroseTile ) 
+	    continue;
 
 	if( this.girih.tiles[i].containsPoint(point) )
 	    return i;
@@ -396,6 +400,12 @@ IKRS.GirihCanvasHandler.prototype._locateTileAtPoint = function( point ) {
 
 IKRS.GirihCanvasHandler.prototype._drawTile = function( tile ) {  
 
+    // Penrose tile allowed?
+    if( tile.tileType == IKRS.Girih.TILE_TYPE_PENROSE_RHOMBUS && !this.getProperties().allowPenroseTile ) {
+	return;
+    }
+
+
     var tileBounds = tile.computeBounds();
     if( this.drawProperties.drawBoxes ) {
 	this._drawBoundingBox( tile.position,
@@ -403,7 +413,7 @@ IKRS.GirihCanvasHandler.prototype._drawTile = function( tile ) {
 			       tile.angle 
 			     );
     }
-    this._drawPolygonFromPoints( tile.vertices, 
+    this._drawPolygonFromPoints( tile.polygon.vertices, 
 				 tile.position, 
 				 tile.angle,
 				 tileBounds,
@@ -605,7 +615,7 @@ IKRS.GirihCanvasHandler.prototype._drawPreviewTileAtHighlightedPolygonEdge = fun
 
     // Draw adjacent tile
     this.context.globalAlpha = 0.5;  // 50% transparency
-    this._drawPolygonFromPoints( adjacentTile.vertices, 
+    this._drawPolygonFromPoints( adjacentTile.polygon.vertices, 
 				 adjacentTile.position, 
 				 adjacentTile.angle,
 				 adjacentTile.computeBounds(), // originalBounds,
@@ -722,10 +732,10 @@ IKRS.GirihCanvasHandler.prototype._drawInnerTile = function( tile, index ) {
 
     var polygon = tile.innerTilePolygons[ index ];
     
-    this._drawPolygonFromPoints( polygon,   // points,
+    this._drawPolygonFromPoints( polygon.vertices,   // points,
 				 tile.position, 
 				 tile.angle,
-				 IKRS.BoundingBox2.computeFromPoints(polygon), //originalBounds,
+				 IKRS.BoundingBox2.computeFromPoints(polygon.vertices), //originalBounds,
 				 { unselectedEdgeColor: "#00a800",
 				   selectedEdgeColor:   "#00a800"
 				 },    // colors,
@@ -749,7 +759,7 @@ IKRS.GirihCanvasHandler.prototype._drawTiles = function() {
     if( hoveredTileIndex != -1 ) {
 	var tile = this.girih.tiles[ hoveredTileIndex ]; 
 	var tileBounds       = tile.computeBounds()
-	this._drawHighlightedPolygonEdge( tile.vertices, 
+	this._drawHighlightedPolygonEdge( tile.polygon.vertices, 
 					  tile.position, 
 					  tile.angle,
 					  tileBounds, 
@@ -762,7 +772,7 @@ IKRS.GirihCanvasHandler.prototype._drawTiles = function() {
 					  this.drawProperties.drawOutlines
 					);
 	this._drawPreviewTileAtHighlightedPolygonEdge( tile.tileType,
-						       tile.vertices, 
+						       tile.polygon.vertices, 
 						       tile.position, 
 						       tile.angle,
 						       tileBounds, // tile.computeBounds(),  // tileBounds,
@@ -801,15 +811,17 @@ IKRS.GirihCanvasHandler.prototype.redraw = function() {
     this.context.fillStyle = "#F0F0F0";
     this.context.fillRect( 0, 0, this.canvasWidth, this.canvasHeight );
     
-    //this._drawCoordinateSystem();
+    this._drawCoordinateSystem();
     
     this._drawTiles();
 
     //this._drawCircleTest();
+    
+    this._drawLineIntersectionTest();
  
 }
 
-
+// ### BEGIN TESTING ##############################################
 IKRS.GirihCanvasHandler.prototype._drawCircleTest = function() {
 
     
@@ -855,6 +867,46 @@ IKRS.GirihCanvasHandler.prototype._drawCircle = function( circle ) {
     this.context.stroke();
 
 }
+
+IKRS.GirihCanvasHandler.prototype._drawLineIntersectionTest = function() {
+
+    var lineA = new IKRS.Line2( new IKRS.Point2(10, 10),
+				new IKRS.Point2(120, 120)
+			      );
+    var lineB = new IKRS.Line2( new IKRS.Point2(100, 30),
+				new IKRS.Point2(10, 150)
+			      );
+
+
+    this._drawLine( lineA );
+    this._drawLine( lineB );
+    
+    //var intersectionPoint = lineA.computeLineIntersection( lineB );
+    var intersectionPoint = lineA.computeEdgeIntersection( lineB );
+    if( intersectionPoint )
+	this._drawCrosshairAt( intersectionPoint, false );
+    else
+	DEBUG( "No intersection found." );
+}
+
+IKRS.GirihCanvasHandler.prototype._drawLine = function( line ) {
+
+
+
+    this.context.beginPath();
+    // Draw line A
+    this.context.moveTo( line.pointA.x * this.zoomFactor + this.drawOffset.x, 
+			 line.pointA.y * this.zoomFactor + this.drawOffset.y
+		       ); 
+    this.context.lineTo( line.pointB.x * this.zoomFactor + this.drawOffset.x, 
+			 line.pointB.y * this.zoomFactor + this.drawOffset.y
+		       ); 
+
+    this.context.strokeStyle = "#0000FF";
+    this.context.stroke();
+}
+
+// ### END TESTING ################################################
 
 
 IKRS.GirihCanvasHandler.prototype.constructor = IKRS.GirihCanvasHandler;

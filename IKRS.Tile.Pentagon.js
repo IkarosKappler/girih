@@ -34,9 +34,9 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
     var move   = new IKRS.Point2( size/2.0, 
 				  -r_out + (r_out-r_in)
 				);
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 	
-	this.vertices[i].add( move );
+	this.polygon.vertices[i].add( move );
 		
     }
 
@@ -61,15 +61,15 @@ IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
 
     
     // Connect all edges half-the-way
-    var innerTile = [];
+    var innerTile = new IKRS.Polygon(); // [];
     //innerTile.push( this.vertices[0].scaleTowards( this.vertices[1], 0.5 ) );
     //innerTile.push( this.vertices[1].scaleTowards( this.vertices[2], 0.5 ) );
 
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 
-	innerTile.push( this.getVertexAt(i).scaleTowards( this.getVertexAt(i+1), 0.5 ) );
+	innerTile.addVertex( this.getVertexAt(i).scaleTowards( this.getVertexAt(i+1), 0.5 ) );
 	// Compute the next inner polygon vertex by the intersection of two circles
-	var circleA = new IKRS.Circle( innerTile[ innerTile.length-1 ], edgeLength*0.425 ); //*0.425 ); 
+	var circleA = new IKRS.Circle( innerTile.vertices[ innerTile.vertices.length-1 ], edgeLength*0.425 ); //*0.425 ); 
 	var circleB = new IKRS.Circle( this.getVertexAt(i+1).clone().scaleTowards( this.getVertexAt(i+2), 0.5 ), 
 				       circleA.radius );
     
@@ -78,8 +78,8 @@ IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
 	// One of the two points is inside the tile, the other is outside.
 	// Locate the inside point.
 	if( intersection ) {
-	    if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
-	    else                                          innerTile.push(intersection.pointB);
+	    if( this.containsPoint(intersection.pointA) ) innerTile.addVertex(intersection.pointA);
+	    else                                          innerTile.addVertex(intersection.pointB);
 	} else {
 	    console.log( "intersection is null!" );
 	}

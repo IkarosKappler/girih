@@ -21,8 +21,9 @@ IKRS.Tile = function( size,
     this.size                = size;
     this.position            = position;
     this.angle               = angle;
-    this.vertices            = [];
-    this.innerTilePolygons   = [];   // An array of arrays of points
+    //this.vertices            = [];
+    this.polygon             = new IKRS.Polygon(); // Empty vertice array
+    this.innerTilePolygons   = [];   // An array of polygons
     this.imageProperties     = null;
 
     this.tileType            = tileType;
@@ -34,7 +35,7 @@ IKRS.Tile.prototype.getTranslatedVertex = function( index ) {
     //return this.vertices[index].clone().rotate( this.position, this.angle ).add( this.position );
     // Rotate around the absolut center!
     // (the position is applied later)
-    var vertex = this.getVertexAt( index );
+    var vertex = this.polygon.getVertexAt( index ); // this.getVertexAt( index );
     return vertex.clone().rotate( IKRS.Point2.ZERO_POINT, this.angle ).add( this.position );
     
 }
@@ -51,10 +52,13 @@ IKRS.Tile.prototype.getTranslatedVertex = function( index ) {
  * So this function always returns a point for any index.
  **/
 IKRS.Tile.prototype.getVertexAt = function( index ) {
+    /*
     if( index < 0 ) 
 	return this.vertices[ this.vertices.length - (Math.abs(index)%this.vertices.length) ];
     else
 	return this.vertices[ index % this.vertices.length ];
+    */
+    return this.polygon.getVertexAt( index );
 }
 
 /**
@@ -71,7 +75,7 @@ IKRS.Tile.prototype.containsPoint = function( point ) {
     // http://stackoverflow.com/questions/2212604/javascript-check-mouse-clicked-inside-the-circle-or-polygon/2212851#2212851
     var i, j = 0;
     var c = false;
-    for (i = 0, j = this.vertices.length-1; i < this.vertices.length; j = i++) {
+    for (i = 0, j = this.polygon.vertices.length-1; i < this.polygon.vertices.length; j = i++) {
 	vertI = this.getTranslatedVertex( i ); 
 	vertJ = this.getTranslatedVertex( j ); 
     	if ( ((vertI.y>point.y) != (vertJ.y>point.y)) &&
@@ -98,7 +102,7 @@ IKRS.Tile.prototype.containsPoint = function( point ) {
 IKRS.Tile.prototype.locateEdgeAtPoint = function( point,
 						  tolerance
 						) {
-    if( this.vertices.length == 0 )
+    if( this.polygon.vertices.length == 0 )
 	return -1;
 
 
@@ -106,7 +110,7 @@ IKRS.Tile.prototype.locateEdgeAtPoint = function( point,
     var tmpDistance    = 0;
     var resultDistance = tolerance*2;   // definitely outside the tolerance :)
     var resultIndex    = -1;
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 	
 	var vertI = this.getTranslatedVertex( i ); 
 	var vertJ = this.getTranslatedVertex( i+1 ); // (i+1 < this.vertices.length ? i+1 : 0) ); 
@@ -149,13 +153,13 @@ IKRS.Tile.prototype.locateAdjacentEdge = function( pointA,
 						   tolerance
 						 ) {
     
-    if( this.vertices.length == 0 )
+    if( this.polygon.vertices.length == 0 )
 	return -1;
 
     var result = -1;
     var resultDistance = 2*tolerance+1;   // Definitely larger than the tolerance :)
     //var tmpDistance;
-    for( var i = 0; i <= this.vertices.length; i++ ) {
+    for( var i = 0; i <= this.polygon.vertices.length; i++ ) {
 
 	var vertCur = this.getTranslatedVertex( i );   // this.getVertexAt( i );
 	var vertSuc = this.getTranslatedVertex( i+1 ); // this.getVertexAt( i+1 );
@@ -177,14 +181,14 @@ IKRS.Tile.prototype.locateAdjacentEdge = function( pointA,
 
     return result;
 
-}
+};
 
 IKRS.Tile.prototype.computeBounds = function() {
-    return IKRS.BoundingBox2.computeFromPoints( this.vertices );
-}
+    return IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
+};
 
 IKRS.Tile.prototype._addVertex = function( vertex ) {
-    this.vertices.push( vertex );
+    this.polygon.vertices.push( vertex );
 };
 
 IKRS.Tile.prototype.constructor = IKRS.Tile;

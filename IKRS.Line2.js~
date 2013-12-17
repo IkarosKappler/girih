@@ -1,0 +1,35 @@
+/**
+ * There are times you need to compute the intersection of two lines.
+ * I didn't want to do that with point lists, so here is the line class.
+ *
+ * @author Ikaros Kappler
+ * @date 2013-12-13
+ * @version 1.0.0
+ **/
+
+
+
+ public static Vector3 Intersect(Vector3 line1V1, Vector3 line1V2, Vector3 line2V1, Vector3 line2V2)
+    {
+        //Line1
+        float A1 = line1V2.Y - line1V1.Y;
+        float B1 = line1V2.X - line1V1.X;
+        float C1 = A1*line1V1.X + B1*line1V1.Y;
+
+        //Line2
+        float A2 = line2V2.Y - line2V1.Y;
+        float B2 = line2V2.X - line2V1.X;
+        float C2 = A2 * line2V1.X + B2 * line2V1.Y;
+
+        float det = A1*B2 - A2*B1;
+        if (det == 0)
+        {
+            return null;//parallel lines
+        }
+        else
+        {
+            float x = (B2*C1 - B1*C2)/det;
+            float y = (A1 * C2 - A2 * C1) / det;
+            return new Vector3(x,y,0);
+        }
+    }

@@ -35,13 +35,13 @@ IKRS.Tile.Rhombus = function( size, position, angle ) {
 
     
     // Move to center    
-    var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
+    var bounds = IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
     var move   = new IKRS.Point2( bounds.getWidth()/2.0 - (bounds.getWidth()-size), 
 				  bounds.getHeight()/2.0
 				);
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 	
-	this.vertices[i].add( move );
+	this.polygon.vertices[i].add( move );
 		
     }
 
@@ -62,32 +62,32 @@ IKRS.Tile.Rhombus = function( size, position, angle ) {
 IKRS.Tile.Rhombus.prototype._buildInnerPolygons = function() {
 
        // Connect all edges half-the-way
-    var innerTile = [];
-    innerTile.push( this.vertices[0].scaleTowards( this.vertices[1], 0.5 ) );
-    innerTile.push( this.vertices[1].scaleTowards( this.vertices[2], 0.5 ) );
+    var innerTile = new IKRS.Polygon(); // [];
+    innerTile.addVertex( this.polygon.vertices[0].scaleTowards( this.polygon.vertices[1], 0.5 ) );
+    innerTile.addVertex( this.polygon.vertices[1].scaleTowards( this.polygon.vertices[2], 0.5 ) );
 
     // Compute the next inner polygon vertex by the intersection of two circles
-    var circleA = new IKRS.Circle( innerTile[1], innerTile[0].distanceTo(innerTile[1])*0.73 );
-    var circleB = new IKRS.Circle( this.vertices[2].scaleTowards( this.vertices[3], 0.5 ), circleA.radius );
+    var circleA = new IKRS.Circle( innerTile.vertices[1], innerTile.vertices[0].distanceTo(innerTile.vertices[1])*0.73 );
+    var circleB = new IKRS.Circle( this.polygon.vertices[2].scaleTowards( this.polygon.vertices[3], 0.5 ), circleA.radius );
     
     // There is definitely an intersection
     var intersection = circleA.computeIntersectionPoints( circleB );
     // One of the two points is inside the tile, the other is outside.
     // Locate the inside point.
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
-    else                                          innerTile.push(intersection.pointB);
+    if( this.containsPoint(intersection.pointA) ) innerTile.addVertex(intersection.pointA);
+    else                                          innerTile.addVertex(intersection.pointB);
     
-    innerTile.push( circleB.center );
-    innerTile.push( this.vertices[3].scaleTowards( this.vertices[0], 0.5 ) );
+    innerTile.addVertex( circleB.center );
+    innerTile.addVertex( this.polygon.vertices[3].scaleTowards( this.polygon.vertices[0], 0.5 ) );
     
     // Move circles
-    circleA.center = innerTile[4];
-    circleB.center = innerTile[0];
+    circleA.center = innerTile.vertices[4];
+    circleB.center = innerTile.vertices[0];
     //window.alert( "circleA=" + circleA + ", circleB=" + circleB );
     intersection   = circleA.computeIntersectionPoints( circleB );
     // There are two points again (one inside, one outside the tile)
-    if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
-    else                                          innerTile.push(intersection.pointB);
+    if( this.containsPoint(intersection.pointA) ) innerTile.addVertex(intersection.pointA);
+    else                                          innerTile.addVertex(intersection.pointB);
 
     this.innerTilePolygons.push( innerTile );
 

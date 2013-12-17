@@ -24,13 +24,13 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
     }
 
     // Move to center
-    var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
+    var bounds = IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
     var move   = new IKRS.Point2( size/2.0, // bounds.getWidth()/2.0 - size, // *1.1,   // ???
 				  -bounds.getHeight()/2.0
 				);
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 	
-	this.vertices[i].add( move );
+	this.polygon.vertices[i].add( move );
 		
     }
     
@@ -54,17 +54,17 @@ IKRS.Tile.Decagon.prototype._buildInnerPolygons = function( edgeLength ) {
 
     
     for( var i = 0; i < 10; i++ ) {
-	var innerTile = [];
+	var innerTile = new IKRS.Polygon(); // [];
 	// Make polygon
 	var topPoint    = this.getVertexAt( i ).clone().scaleTowards( this.getVertexAt(i+1), 0.5 );
 	var bottomPoint = topPoint.clone().multiplyScalar( 0.615 );
 	var leftPoint   = this.getVertexAt( i ).clone().multiplyScalar( 0.69 );
 	var rightPoint  = this.getVertexAt( i+1 ).clone().multiplyScalar( 0.69 );
 	
-	innerTile.push( topPoint );
-	innerTile.push( rightPoint );
-	innerTile.push( bottomPoint );
-	innerTile.push( leftPoint );
+	innerTile.addVertex( topPoint );
+	innerTile.addVertex( rightPoint );
+	innerTile.addVertex( bottomPoint );
+	innerTile.addVertex( leftPoint );
 
 	this.innerTilePolygons.push( innerTile );
     }

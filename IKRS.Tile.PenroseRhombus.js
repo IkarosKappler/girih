@@ -38,13 +38,13 @@ IKRS.Tile.PenroseRhombus = function( size, position, angle ) {
 
     
     // Move to center    
-    var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
+    var bounds = IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
     var move   = new IKRS.Point2( bounds.getWidth()/2.0 - (bounds.getWidth()-size), 
 				  bounds.getHeight()/2.0
 				);
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 	
-	this.vertices[i].add( move );
+	this.polygon.vertices[i].add( move );
 		
     }
 
@@ -69,7 +69,7 @@ IKRS.Tile.PenroseRhombus.prototype._buildInnerPolygons = function() {
     var indices = [ 0, 2 ];
     for( var i = 0; i < indices.length; i++ ) {
 
-	var innerTile = [];
+	var innerTile = new IKRS.Polygon(); // [];
 
 	var index = indices[i];
 
@@ -78,10 +78,10 @@ IKRS.Tile.PenroseRhombus.prototype._buildInnerPolygons = function() {
 	var innerA = this.getVertexAt( index+1 ).clone().multiplyScalar( 0.28 );
 	var innerB = this.getVertexAt( index+1 ).clone().multiplyScalar( 0.55 );
 
-	innerTile.push( left );
-	innerTile.push( innerA );
-	innerTile.push( right );
-	innerTile.push( innerB );
+	innerTile.addVertex( left );   // push( left );
+	innerTile.addVertex( innerA ); // push( innerA );
+	innerTile.addVertex( right );  // push( right );
+	innerTile.addVertex( innerB ); //push( innerB );
 
 	this.innerTilePolygons.push( innerTile );
     }

@@ -40,13 +40,13 @@ IKRS.Tile.BowTie = function( size, position, angle ) {
     }
 
     // Move to center    
-    var bounds = IKRS.BoundingBox2.computeFromPoints( this.vertices );
+    var bounds = IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
     var move   = new IKRS.Point2( (oppositePoint.x - startPoint.x)/2.0, // bounds.getWidth()/2.0,
 				  (oppositePoint.y - startPoint.y)/2.0  // -size/2.0
 				);
-    for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 	
-	this.vertices[i].sub( move );
+	this.polygon.vertices[i].sub( move );
 		
     }
 
@@ -95,11 +95,11 @@ IKRS.Tile.BowTie.prototype._buildInnerPolygons = function( edgeLength ) {
 	var rightPoint  = this.getVertexAt( index+1 ).clone().scaleTowards( this.getVertexAt(index+2), 0.5 );
 	var innerPoint  = middlePoint.clone().multiplyScalar( 0.38 );
 	
-	var innerTile = [];
-	innerTile.push( middlePoint );
-	innerTile.push( rightPoint );
-	innerTile.push( innerPoint );
-	innerTile.push( leftPoint );
+	var innerTile = new IKRS.Polygon(); // [];
+	innerTile.addVertex( middlePoint );
+	innerTile.addVertex( rightPoint );
+	innerTile.addVertex( innerPoint );
+	innerTile.addVertex( leftPoint );
 
 
 	this.innerTilePolygons.push( innerTile );
