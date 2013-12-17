@@ -1,10 +1,21 @@
 /**
+ * This is a general Tile superclass.
+ *
+ * All other tile classes extends this one.
+ *
+ *
  * @author Ikaros Kappler
  * @date 2013-11-27
  * @version 1.0.0
  **/
 
 
+/**
+ * @param size     number  The edge size (usually IKRS.Girih.DEFAULT_EDGE_LENGTH).
+ * @param position Point2  The position of the tile.
+ * @param angle    number  The rotation angle.
+ * @param tileType integer One of IKRS.Girih.TILE_TYPE_*.
+ **/
 IKRS.Tile = function( size, 
 		      position, 
 		      angle, 

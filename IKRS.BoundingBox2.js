@@ -66,6 +66,17 @@ IKRS.BoundingBox2.prototype.getLeftLowerPoint = function() {
     return new IKRS.Point2( this.xMin, this.yMax );
 }
 
+/**
+ * This function computes the 'super-boundingbox' of this box
+ * and the passed box.
+ **/
+IKRS.BoundingBox2.prototype.computeUnion = function( bounds ) {
+    return new IKRS.BoundingBox2( Math.min(this.xMin,bounds.xMin),
+				  Math.max(this.xMax,bounds.xMax),
+				  Math.min(this.yMin,bounds.yMin),
+				  Math.max(this.yMax,bounds.yMax)
+				  );
+}
 
 IKRS.BoundingBox2.prototype._toString = function() {
     return "[IKRS.BoundingBox2]={ xMin=" + this.xMin + ", xMax=" + this.xMax + ", yMin=" + this.yMin + ", yMax=" + this.yMax + ", width=" + this.getWidth() + ", height=" + this.getHeight() + " }";

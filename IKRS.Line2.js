@@ -28,6 +28,18 @@ IKRS.Line2.prototype.determinant = function() {
     return IKRS.Line2.determinant( this.pointA, this.pointB );
 }
 
+/**
+ * This function computes the intersection of two edges (not lines).
+ *
+ * Edges have a limited length, so if an intersection exists, it is
+ * located within the bounding box of both edges.
+ *
+ * Note that the line(!)-intersection may be located outside the
+ * bounding boxes.
+ *
+ * If the edges intersected, this function returns the intersection point,
+ * otherwise null.
+ **/
 IKRS.Line2.prototype.computeEdgeIntersection = function( edge ) {
 
     var det = IKRS.Line2.determinant( this.pointB.clone().sub( this.pointA ),

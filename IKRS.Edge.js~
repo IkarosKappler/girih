@@ -1,0 +1,5 @@
+/**
+ * Some algorithms require the edge datatype.
+ *
+ * An edge is a pair of two points
+ **/

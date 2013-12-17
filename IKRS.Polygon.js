@@ -1,6 +1,6 @@
 /**
  * As there are some polygon intersecion functions required and I don't
- * want to handle polygons as simple point arrays, here is a
+ * want to handle polygons as simple point arrays, so here is a
  * polygon class.
  *
  * Note: as polygons are generally 2-dimensional, this class is not named
@@ -80,6 +80,66 @@ IKRS.Polygon.prototype.locateContainedPolygonPoints = function( poly ) {
 
 }
 
+/**
+ * This function computes the intersecting edges of both polygons.
+ *
+ * The returned object has four components:
+ *  - extendedA          former this
+ *  - extendedB          former param
+ *  - intersectionGraph  A three dimensional n*m*k[i] matrix indicating which
+ *                       edges intersect;
+ *                         n is the edge count of this.
+ *                         m is the edge count of poly.
+ *                         k[i] are the entry length of the matrix; each entry is
+ *                              a list of pairs, containg edge index pairs.
+ *  - intersectionList   The matrix in form of a list of tuples (indices in A and B).
+ **/
+IKRS.Polygon.prototype.computeIntersectingEdgePolygons = function( poly ) {
+    
+    var extendedA         = new IKRS.Polygon();
+    var extendedB         = new IKRS.Polygon();
+    var graph             = [];
+    var list              = [];
+
+    
+    for( var a = 0; a < this.vertices.length; a++ ) {
+
+	graph[a] = [];
+	for( var b = 0; b < poly.vertices.length; b++ ) {
+	   	    
+	    // Build the extended polygons besides
+	    extendedA.addVertex( this.vertices[a] );
+	    extendedB.addVertex( poly.vertices[b] );
+
+	    // Compute intersection
+	    var edgeA             = new IKRS.Line2( this.vertices[a], this.getVertexAt(a+1) );
+	    var edgeB             = new IKRS.Line2( poly.vertices[b], poly.getVertexAt(b+1) );
+	    var intersectionPoint = edgeA.computeEdgeIntersection( edgeB );
+	    
+	    // Intersection exists?
+	    if( intersectionPoint ) {
+		graph[a][b] = new IKRS.Pair( extendedA.vertices.length, extendedB.vertices.length ); // next vertex indices
+		list.push( graph[a][b].clone() );
+		extendedA.addVertex( intersectionPoint );
+		extendedB.addVertex( intersectionPoint.clone() ); // Don't use the same instance
+	    } else {
+		graph[a][b] = false;
+	    }
+	    
+
+	}
+
+    }
+
+
+    return { extendedA: extendedA,
+	     extendedB: extendedB,
+	     intersectionGraph: graph,
+	     intersectionList: list
+	   };
+
+}
+
 // @return double
 IKRS.Polygon._crossProduct = function( pointA, pointB, pointC ) {
     return (pointB.x - pointA.x)*(pointC.y - pointA.y) - (pointB.y - pointA.y)*(pointC.x - pointA.x);
@@ -132,6 +192,10 @@ IKRS.Polygon.prototype.computePolygonIntersection = function( clipPolygon ) {
   done
   */
 
+}
+
+IKRS.Polygon.prototype.computeBoundingBox = function() {
+    return IKRS.BoundingBox2.computeFromPoints( this.vertices );
 }
 
 IKRS.Polygon.prototype.addVertex = function( vertex ) {
