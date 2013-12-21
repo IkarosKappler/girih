@@ -9,7 +9,6 @@
 
   <script src="IKRS.ArraySet.js" type="text/javascript"></script>
   <script src="IKRS.LineOrderedPointSet2.js" type="text/javascript"></script>
-  <script src="IKRS.TriangleSet.js" type="text/javascript"></script>
 
   <script src="IKRS.Pair.js" type="text/javascript"></script>
   <script src="IKRS.Triangle.js" type="text/javascript"></script>
@@ -27,7 +26,7 @@
 </head>
 
 <body>
-<script language="Javascript" src="polygon_intersection.js"></script>
+<script language="Javascript" src="polygon_intersection_TEST.js"></script>
 <script language="Javascript">
   // window.alert( IKRS.ArraySet );
 </script>
@@ -37,8 +36,9 @@
 <div style="position: absolute; top: 10px; left: 1044px;">
 <form name="poly_form">
   <input type="checkbox" name="draw_polygon_edges" checked="checked" onchange="redraw(); return false;"/> Draw Polygon Edges<br/>
+  <input type="checkbox" name="draw_single_triangulation" checked="checked" onchange="redraw(); return false;"/> Draw Single Triangulation<br/>
   <input type="checkbox" name="draw_extended_triangulation" onchange="redraw(); return false;"/> Draw Extended Triangulation<br/>
-  <input type="checkbox" name="fill_intersection" onchange="redraw(); return false;" checked="checked" /> Fill Intersection<br/>
+  <input type="checkbox" name="fill_intersection" onchange="redraw(); return false;"/> Fill Intersection<br/>
 </form>
 </div>
 

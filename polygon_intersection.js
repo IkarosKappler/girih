@@ -9,44 +9,67 @@ var canvasHeight              = 768;
 var canvas                    = null;
 var context                   = null;
 
+var polyA                     = null;
+var polyB                     = null;
+
 
 function onLoad() {
     
     canvas                    = document.getElementById("polygon_canvas");
     context                   = canvas.getContext( "2d" );
 
+    canvas.onmousedown        = mouseDownHandler;
+
     redraw();
 }
+
+
+var mouseDownHandler = function(e) { 
+
+    var parent = this;
+
+    var rect = parent.getBoundingClientRect();
+    var left = e.clientX - rect.left - parent.clientLeft + parent.scrollLeft;
+    var top  = e.clientY - rect.top  - parent.clientTop  + parent.scrollTop;
+
+    var point = new IKRS.Point2( left, top );
+
+    window.alert( "relativePoint=" + point + "\n" +
+		  "polyA.containsPoint()=" + polyA.containsPoint(point) + "\n" +
+		  "polyB.containsPoint()=" + polyB.containsPoint(point) + "\n" 
+		); 
+  
+};
+
 
 function redraw() {
     
     // Clear screen
     context.fillStyle = "#ffffff";
     context.fillRect( 0, 0, canvasWidth, canvasHeight );
-    //context.fill();
 
     // First: create two polygons
-    var polyA = new IKRS.Polygon();
+    polyA = new IKRS.Polygon();
     polyA.addVertex( new IKRS.Point2( 100, 100 ) );
     polyA.addVertex( new IKRS.Point2( 500, 100 ) );
     polyA.addVertex( new IKRS.Point2( 500, 400 ) );
     polyA.addVertex( new IKRS.Point2( 150, 500 ) );
     polyA.addVertex( new IKRS.Point2(  50, 300 ) );
+    polyA.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
     var boundsA = polyA.computeBoundingBox();
 
-    var polyB = new IKRS.Polygon();
+    polyB = new IKRS.Polygon();
     polyB.addVertex( new IKRS.Point2( 300, 140 ) );
     polyB.addVertex( new IKRS.Point2( 600,  30 ) );
     polyB.addVertex( new IKRS.Point2( 900, 160 ) );
     polyB.addVertex( new IKRS.Point2( 650, 650 ) );
     polyB.addVertex( new IKRS.Point2( 300, 300 ) );
     polyB.addVertex( new IKRS.Point2( 600, 200 ) );
+    polyB.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
     var boundsB = polyB.computeBoundingBox();
     
-    var superBounds = boundsA.computeUnion( boundsB );
-    drawBoundingBox( superBounds, "#888888" );
-    
-
+    // Check if the algorihm still exists if the polygons don't interset at all
+    //polyB.translateXY( 400, 0 );
 
     // Draw them
     if( document.forms["poly_form"].elements["draw_polygon_edges"].checked ) {
@@ -55,32 +78,135 @@ function redraw() {
     }
     drawCrosshairsFromPointList( polyA.vertices, "#00a800" );    
     drawCrosshairsFromPointList( polyB.vertices, "#0000a8" );
+ 
     
-    //drawCrosshairAt( new IKRS.Point2( 200, 200 ) );
+    // A triangle set
+    var superTriangulation = polyA._computeIntersectionTriangulation( polyB );
+    //window.alert( superTriangulation );
     
-    // Then compute the extended polygons
-    //  - extendedA
-    //  - extendedB
-    //  - intersectionGraph
-    var edgeIntersection = polyA.computeIntersectingEdgePolygons( polyB );
-    
-    for( var i = 0; i < edgeIntersection.intersectionList.length; i++ ) {
 
-	var pair = edgeIntersection.intersectionList[i];
-	drawCrosshairAt( edgeIntersection.extendedA.vertices[ pair.a ], "#a80000" );
 
+    if( document.forms["poly_form"].elements["draw_extended_triangulation"].checked ) {
+	drawTriangulation( superTriangulation.triangles, "#ffff00" );
     }
 
 
-    // Make triangle anywhere (just for circum-circle testing)
-    var triangleA     = new IKRS.Triangle( polyA.vertices[1],
-					   polyB.vertices[5],
-					   edgeIntersection.extendedA.vertices[ edgeIntersection.intersectionList[2].a ]
-					 );
-    var circumCircleA = triangleA.computeCircumCircle( 1.0 ); // epsilon: 1 pixel
-    drawCircle( circumCircleA, "#ff8800" );
-    
+    // Finally join the intersecting triangles into new polygons (the intertection
+    // parts are not nececarily connected!)
+    //var adjacencies = superTriangulation.computeAdjacencies();
 
+    // Compute intersection
+    var intersectionSet = new IKRS.TriangleSet();
+    for( var i in superTriangulation.triangles ) {
+
+	var triangle = superTriangulation.triangles[i];
+	// Find any point _inside_ the triangle
+	var centroid = triangle.getCentroid();
+	
+	//drawCrosshairAt( centroid, "#FF00FF" );	    
+
+	// Compute intersection with the AND (&&) operator :)  
+	if( polyA.containsPoint(centroid) && polyB.containsPoint(centroid) ) {
+
+	    intersectionSet.addUnique( triangle );
+
+	    if( document.forms["poly_form"].elements["fill_intersection"].checked ) 
+		fillTriangle(triangle, "#c8c8c8");
+	}
+	
+    }
+
+    var adjacencies = intersectionSet.computeAdjacencies();    
+    
+    window.alert( "intersectionSet.triangles.length=" + intersectionSet.triangles.length + ",\n" +
+		  "adjacencies.outerEdgeList.length=" + adjacencies.outerEdgeList.length + ",\n" +
+		  JSON.stringify( intersectionSet.triangles )
+		);
+    for( i in adjacencies.outerEdgeList ) {
+
+	var pair = adjacencies.outerEdgeList[ i ];
+	
+	if( pair.b == 0 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeA(), "#ff0000" );
+	if( pair.b == 1 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeB(), "#ff0000" );
+	if( pair.b == 2 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeC(), "#ff0000" );
+    }
+
+};
+
+function _computeExtendedGraphFromTriangleIntersection( poly, triangles ) {
+
+    var resultGraph = new IKRS.Graph2();
+
+    for( var i = 0; i < poly.vertices.length; i++ ) {
+    //for( var i in poly.vertices ) {
+
+	var polyEdge = new IKRS.Line2( poly.getVertexAt(i), poly.getVertexAt(i+1) );
+	for( var t in triangles ) {
+	//for( var t = 0; t < triangles.length; t++ ) {
+
+	    var tri    = triangles[t];
+
+	    var edgeA = tri.getEdgeA();
+	    var edgeB = tri.getEdgeB();
+	    var edgeC = tri.getEdgeC();
+
+	    //drawEdge( edgeA, "#ff0000" );
+
+
+
+	    if( poly.hasEdge(edgeA) ||
+		poly.hasEdge(edgeB) || 
+		poly.hasEdge(edgeC) )
+		continue;
+
+	    var added = false;
+	    added = _addToGraphIfEdgesIntersectInside( resultGraph, polyEdge, edgeA ); // tri.getEdgeA() );
+	    //_addToGraphIfEdgesIntersectInside( resultGraph, polyEdge, edgeB ); // tri.getEdgeB() );
+	    //_addToGraphIfEdgesIntersectInside( resultGraph, polyEdge, edgeC ); // tri.getEdgeC() );
+
+	    //if( i == 9 ) // Last edge of graphB
+	//	window.alert( "i=" + i + ", t=" + t + ", added=" + added );
+	}
+	
+	resultGraph.addUniqueVertex( poly.getVertexAt(i) );
+	
+    }
+
+    return resultGraph;
+}
+
+function _addToGraphIfEdgesIntersectInside( graph, edgeA, edgeB ) {
+
+    if( edgeA.equalEdgePoints(edgeB) )
+	return false;
+
+    // Ignore co-linear edges
+    if( edgeA.isColinearWith(edgeB,0.0001) ) // || edgeB.isColinearWith(edgeA,0.0001) ) // epsilon?
+	return false;
+
+	
+    var intersectionPoint = edgeA.computeEdgeIntersection(edgeB);
+    if( !intersectionPoint )
+	return false;
+
+    /*
+    window.alert( "edgeA=" + edgeA + ",\n" +
+		  "edgeB=" + edgeB + ",\n" +
+		  "intersectionPoint=" + intersectionPoint 
+		);
+    */
+    
+    //window.alert( "Adding intersection point=" + intersectionPoint );
+    graph.addUniqueVertex( intersectionPoint );
+    return true;
+}
+
+function _addToUniqueArray( arr, item ) {
+    for( var i in arr ) {
+	if( arr[i] == item )
+	    return;
+    }
+    arrpush( item );
 }
 
 function drawPolygon( poly, color ) {
@@ -172,6 +298,52 @@ function drawBoundingBox( box, color ) {
     context.strokeStyle = color;
     context.stroke();
 
+}
+
+function fillTriangle( triangle, color ) {
+
+    context.beginPath();
+    context.moveTo( triangle.a.x, triangle.a.y );
+    context.lineTo( triangle.b.x, triangle.b.y );
+    context.lineTo( triangle.c.x, triangle.c.y );
+    context.lineTo( triangle.a.x, triangle.a.y );
+    context.fillStyle = color;
+    context.fill();
+
+}
+
+function drawTriangle( triangle, color ) {
+
+    /*
+    context.beginPath();
+    context.moveTo( triangle.a.x, triangle.a.y );
+    context.lineTo( triangle.b.x, triangle.b.y );
+    context.lineTo( triangle.c.x, triangle.c.y );
+    context.lineTo( triangle.a.x, triangle.a.y );
+    context.strokeStyle = color;
+    context.stroke();
+    */
+    //window.alert( "drawing edgeA" );
+    drawEdge( triangle.getEdgeA(), color );
+    //window.alert( "drawing edgeB" );
+    drawEdge( triangle.getEdgeB(), color );
+    //window.alert( "drawing edgeC" );
+    drawEdge( triangle.getEdgeC(), color );
+
+}
+
+function drawTriangulation( triangles, color ) {
+    for( var i in triangles ) {
+	drawTriangle( triangles[i], color );
+    }
+}
+
+function drawEdge( edge, color ) {
+    context.beginPath();
+    context.moveTo( edge.pointA.x, edge.pointA.y );
+    context.lineTo( edge.pointB.x, edge.pointB.y );
+    context.strokeStyle = color;
+    context.stroke();
 }
 
 window.addEventListener( "load", onLoad );

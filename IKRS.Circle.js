@@ -24,6 +24,10 @@ IKRS.Circle.prototype.computeIntersectionPoints = function( circle ) {
 
 }
 
+IKRS.Circle.prototype.containsPoint = function( point ) {
+    return this.center.distanceTo( point ) <= this.radius;
+}
+
 IKRS.Circle.computeIntersectionPoints = function( A, B ) {
 
     // Circles intersect at all?
@@ -41,31 +45,6 @@ IKRS.Circle.computeIntersectionPoints = function( A, B ) {
     var K      = 0.25 * Math.sqrt( ( Math.pow(A.radius + B.radius, 2) - Math.pow(d,2) ) * 
 				   (Math.pow(d,2) - Math.pow( A.radius - B.radius, 2 ) ) 
 				 );
-
-    /*
-      // This already is it ... but lets shorten this up
-    var x1 = 
-	0.5 * (B.center.x + A.center.x) + 
-	0.5 * (B.center.x - A.center.x) * (Math.pow(A.radius,2) - Math.pow(B.radius,2)) / Math.pow(d,2) 
-	+  // -
-	2 * (B.center.y - A.center.y) * K / Math.pow(d,2);
-    var y1 = 
-	0.5 * (B.center.y + A.center.y) + 
-	0.5 * (B.center.y - A.center.y) * (Math.pow(A.radius,2) - Math.pow(B.radius,2)) / Math.pow(d,2) 
-	+  // -
-	-2 * (B.center.x - A.center.x) * K / Math.pow(d,2);
-
-    var x2 = 
-	0.5 * (B.center.x + A.center.x) + 
-	0.5 * (B.center.x - A.center.x) * (Math.pow(A.radius,2) - Math.pow(B.radius,2)) / Math.pow(d,2) 
-	-  // +
-	2 * (B.center.y - A.center.y) * K / Math.pow(d,2);
-    var y2 = 
-	0.5 * (B.center.y + A.center.y) + 
-	0.5 * (B.center.y - A.center.y) * (Math.pow(A.radius,2) - Math.pow(B.radius,2)) / Math.pow(d,2) 
-	-  // +
-	-2 * (B.center.x - A.center.x) * K / Math.pow(d,2);
-	*/
     
     var x_partA = 0.5 * (B.center.x + A.center.x) + 
 	0.5 * (B.center.x - A.center.x) * (Math.pow(A.radius,2) - Math.pow(B.radius,2)) / Math.pow(d,2);

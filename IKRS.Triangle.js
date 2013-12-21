@@ -1,6 +1,7 @@
 /**
  * Some algorithms require triangles.
  *
+ *
  * @author Ikaros Kappler
  * @date 2013-12-17
  * @version 1.0.0
@@ -14,6 +15,71 @@ IKRS.Triangle = function( a, b, c ) {
     this.b = b;
     this.c = c;
 
+}
+
+/**
+ * This function scales the triangle by the given scalar number.
+ **/  
+IKRS.Triangle.prototype.multiplyScalar = function( s ) {
+    this.a.multiplyScalar( s );
+    this.b.multiplyScalar( s );
+    this.c.multiplyScalar( s );
+    return this;  // Allow operator concatenation
+}
+
+/**
+ * This function translates the triangle by the given (amount.x, amount.y).
+ **/  
+IKRS.Triangle.prototype.translate = function( amount ) {
+    this.a.add( amount );
+    this.b.add( amount );
+    this.c.add( amount );
+    return this;  // Allow operator concatenation
+}
+
+IKRS.Triangle.prototype.hasVertex = function( vertex ) {
+    return ( ( this.a == vertex || this.b == vertex || this.c == vertex ) );
+	     //||
+	     // include value equality (epsilon=0?)
+	     //( this.a.equals(vertex,0) || this.b.equals(vertex,0) || this.c.equals(vertex,0) 
+	     //) );
+};
+
+IKRS.Triangle.prototype.equalVertices = function( triangle ) {
+    /*
+    return ( triangle.a == this.a || triangle.a == this.b || triangle.a == this.c ||
+	     triangle.b == this.a || triangle.b == this.b || triangle.b == this.c ||
+	     triangle.c == this.a || triangle.c == this.b || triangle.c == this.c );
+    */
+
+    /*var edgeA = triangle.getEdgeA();
+    var edgeB = triangle.getEdgeB();
+    var edgeC = triangle.getEdgeC();
+    */
+
+    return ( this.hasVertex(triangle.a) && this.hasVertex(triangle.b) && this.hasVertex(triangle.c) );
+};
+
+/*
+IKRS.Triangle.prototype.hasEdge = function( edge ) {
+    return (this.hasVertex(edge.pointA) && this.hasVertex(edge.pointB));
+};
+*/
+
+IKRS.Triangle.prototype.computeBoundingBox = function() {
+    //window.alert( "a=" + this.a + ", b=" + this.b + ", c=" + this.c );
+    return IKRS.BoundingBox2.computeFromPoints( [ this.a, this.b, this.c ] );
+};
+
+IKRS.Triangle.prototype.getCentroid = function() {
+    
+    // The centroid is the point where the three medians (the lines 
+    // connecting the edges' middle point with the opposite vertices)
+    // intersect.
+    
+    return new IKRS.Point2( (this.a.x + this.b.x + this.c.x) / 3,
+			    (this.a.y + this.b.y + this.c.y) / 3
+			  );
 }
 
 IKRS.Triangle.prototype.computeCircumCircle = function( epsilon ) {
@@ -65,7 +131,29 @@ IKRS.Triangle.prototype.computeCircumCircle = function( epsilon ) {
     //this.radius = Math.sqrt( this.radius_squared );
 
     return new IKRS.Circle( center, Math.sqrt( dx*dx + dy*dy ) );
+};
+
+IKRS.Triangle.prototype.getEdgeA = function() {
+    return new IKRS.Line2( this.a, this.b );
+};
+
+IKRS.Triangle.prototype.getEdgeB = function() {
+    return new IKRS.Line2( this.b, this.c );
+};
+
+IKRS.Triangle.prototype.getEdgeC = function() {
+    return new IKRS.Line2( this.c, this.a );
+};
+
+IKRS.Triangle.prototype.toString = function() {
+    return "[IKRS.Triangle]={ a=" + this.a.toString() + ", b=" + this.b.toString() + ", c=" + this.c.toString() + " }";
 }
 
+IKRS.Triangle.permutationComparator = {
+    equal: function( tA, tB ) {
+	// return (tA.hasVertex(tB.a) && tA.hasVertex(tB.b) && tA.hasVertex(tB.c));
+	return (tA == tB || tA.equalVertices(tB));
+    }    
+};
 
 IKRS.Triangle.prototype.constructor = IKRS.Triangle;

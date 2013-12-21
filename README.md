@@ -10,8 +10,8 @@ Girih
 Welcome to my girih tesselation tool.
 
 
-I added the narrow rhombus tile, which is part of the penrose set but _not_ 
-part of the original girih tile set!
+I added the narrow rhombus tile, which is part of the penrose set but 
+_not_ part of the original girih tile set!
 
 
 
@@ -25,4 +25,17 @@ Changelog
 =========
 
 [2013-12-17]
- - 
+ - Basic polygon- and circle-intersection, triangle datastructures for
+   Point sets.
+
+[2013-12-15]
+ - Added narrow Penrose rhombus tile (not part of girihs).
+
+
+
+Thanks to
+=========
+
+[Triangulation algorithms]
+  - http://www.travellermap.com/tmp/delaunay.htm
+

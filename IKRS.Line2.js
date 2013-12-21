@@ -23,10 +23,84 @@ IKRS.Line2 = function( pointA,
     this.pointB = pointB;
 }
 
+IKRS.Line2.prototype.length = function() {
+    return this.pointA.distanceTo( this.pointB );
+}
+
 IKRS.Line2.prototype.determinant = function() {
     //return this.pointA.x * this.pointB.y - this.pointA.y * this.pointB.x;
     return IKRS.Line2.determinant( this.pointA, this.pointB );
-}
+};
+
+
+IKRS.Line2.prototype.dotProduct = function( line ) {
+    // Translate both lines to (0,0) and handle them as vectors
+    var lineA = this._cloneDeep().translate( this.pointA.clone().invert() );
+    var lineB = line._cloneDeep().translate( line.pointA.clone().invert() );
+    
+    // Now return the dot product of both non-zero points
+    return this.pointB.dotProduct( line.pointB );
+};
+
+IKRS.Line2.prototype.isColinearWith = function( line, epsilon ) {
+    return this.isColinearWithPoint(line.pointA,epsilon) && this.isColinearWithPoint(line.pointB,epsilon);
+};
+
+IKRS.Line2.prototype.isColinearWithPoint = function( point, epsilon ) {
+    // See
+    // http://stackoverflow.com/questions/4557840/find-all-collinear-points-in-a-given-set
+    //bool collinear(int x1, int y1, int x2, int y2, int x3, int y3) {
+	//return (y1 - y2) * (x1 - x3) == (y1 - y3) * (x1 - x2);
+    //}
+    
+    var p0 = ((this.pointA.y - this.pointB.y) * (this.pointA.x - point.x));
+    var p1 = ((this.pointA.y - point.y) * (this.pointA.x - this.pointB.x));
+
+    //return p0 == p1;
+    return (Math.abs( p0-p1) <= epsilon);
+};
+
+/*
+IKRS.Line2.prototype.isColinearWith = function( line, epsilon ) {
+    
+    if( epsilon == undefined )
+	epsilon = 0.00001;  // !!! ???
+
+    // See
+    // http://stackoverflow.com/questions/10096930/how-do-i-know-if-two-line-segments-are-near-collinear
+    //
+    //  public bool CloseEnough(Vector a, Vector b, decimal threshold = 0.000027m)
+    //  {
+    //  int dotProduct = a.X*b.X + a.Y*b.Y + a.Z*b.Z;
+    //  decimal magA = sqrt(a.X*a.X + a.Y*a.Y + a.Z*a.Z); //sub your own sqrt
+    //  decimal magB = sqrt(b.X*b.X + b.Y*b.Y + b.Z*b.Z); //sub your own sqrt
+    //  
+    //  decimal angle = acos(dotProduct/(magA*magB)); //sub your own arc-cosine
+    //  
+    //if(angle <= threshold
+    //  }
+    
+
+    var dotProduct = this.dotProduct( line );
+    var magA       = this.length();
+    var magB       = line.length();
+    var angle      = Math.acos( dotProduct / (magA*magB) );
+    
+    return (angle < (1 - epsilon));
+};
+*/
+
+
+IKRS.Line2.prototype.translate = function( amount ) {
+    this.pointA.add( amount );
+    this.pointB.add( amount );
+};
+
+IKRS.Line2.prototype.equalEdgePoints = function( line ) {
+    return ( (this.pointA == line.pointA && this.pointB == line.pointB) || 
+	     (this.pointA == line.pointB && this.pointB == line.pointA) );
+    
+};
 
 /**
  * This function computes the intersection of two edges (not lines).
@@ -133,7 +207,21 @@ IKRS.Line2.prototype.computeLineIntersection = function( line ) {
     float x = (B2*C1 - B1*C2)/delta;
     float y = (A1*C2 - A2*C1)/delta;
     */
-}
+};
+
+IKRS.Line2.prototype.clone = function() {
+    return new IKRS.Line2( this.pointA, this.pointB );
+};
+
+IKRS.Line2.prototype._cloneDeep = function() {
+    return new IKRS.Line2( this.pointA.clone(), this.pointB.clone() );
+};
+
+IKRS.Line2.prototype.toString = function() {
+
+    return "{ " +this.pointA.toString() + ", " + this.pointB.toString() + "}";
+
+};
 
 IKRS.Line2.prototype.constructor = IKRS.Line2;
 

@@ -18,44 +18,62 @@ IKRS.Point2.prototype.add = function( amount ) {
     this.x += amount.x;
     this.y += amount.y;
     return this;  // For operator concatenation
-}
+};
 
 IKRS.Point2.prototype.addXY = function( x, y ) {
-    this.x = x;
-    this.y = y;
+    this.x += x;
+    this.y += y;
     return this;
-}
+};
 
 IKRS.Point2.prototype.sub = function( amount ) {
     this.x -= amount.x;
     this.y -= amount.y;
     return this;  // For operator concatenation
-}
+};
 
 IKRS.Point2.prototype.set = function( position ) {
     this.x = position.x;
     this.y = position.y;
     return this;  // For operator concatenation
-}
+};
 
 IKRS.Point2.prototype.setXY = function( x, y ) {
     this.x = x;
     this.y = y;
-}
+};
+
+IKRS.Point2.prototype.invert = function() {
+    this.x = -this.x;
+    this.y = -this.y;
+    return this;
+};
+
+// Is this correct?
+IKRS.Point2.prototype.dotProduct = function( point ) {
+    return (this.x * point.x + this.y * point.y);
+};
+
 
 IKRS.Point2.prototype.inRange = function( point,
 					  tolerance
 					) {
     return this.distanceTo(point) <= tolerance;
-}
+};
+
+IKRS.Point2.prototype.equals = function( point, epsilon ) {
+    if( epsilon === undefined )
+	epsilon = 0;
+    return this.distanceTo(point) <= epsilon;
+};
 
 IKRS.Point2.prototype.length = function() {
     return Math.sqrt( Math.pow(this.x,2) + Math.pow(this.y,2) );
-}
+};
 
 IKRS.Point2.prototype.distanceTo = function( point ) {
     return Math.sqrt( Math.pow(this.x-point.x,2) + Math.pow(this.y-point.y,2) );
-}
+};
 
 IKRS.Point2.prototype.multiplyScalar = function( s ) {
     this.x *= s;

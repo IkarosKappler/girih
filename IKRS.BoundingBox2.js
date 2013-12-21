@@ -66,6 +66,51 @@ IKRS.BoundingBox2.prototype.getLeftLowerPoint = function() {
     return new IKRS.Point2( this.xMin, this.yMax );
 }
 
+IKRS.BoundingBox2.prototype.getCenterPoint = function() {
+    return new IKRS.Point2( this.xMin + this.getWidth()/2.0,
+			    this.yMin + this.getHeight()/2.0
+			  );
+}
+
+IKRS.BoundingBox2.prototype.computeDiagonalLength = function() {
+    return this.getLeftUpperPoint().distanceTo( this.getRightLowerPoint() );
+}
+
+IKRS.BoundingBox2.prototype.computeBoundingTriangle = function() {
+
+    // Aim: construct a triangle that conains this box in an acceptable
+    //      way.
+    // 'Acceptable' means, the whole box MUST be contained, the
+    // triangle might be larger, but it should _not_ be too large!
+
+    // Idea: first compute the diagonal of this box; it gives us an impression
+    //       of the average size.
+    var diagonal    = this.computeDiagonalLength();
+    
+    // Use the bottom line of the box, but make it diagonal*2 long.
+    var centerPoint = this.getCenterPoint();
+    var leftPoint   = new IKRS.Point2( centerPoint.x - diagonal,
+				       this.yMax 
+				     );
+    var rightPoint  = new IKRS.Point2( centerPoint.x + diagonal,
+				       this.yMax
+				     );
+
+    // Now make two linear interpolation lines from these points (they are left
+    // and right outside of the box) to the upper both left respecive right
+    // box points.
+    var leftLine    = new IKRS.Line2( leftPoint,  this.getLeftUpperPoint() );
+    var rightLine   = new IKRS.Line2( rightPoint, this.getRightUpperPoint() );
+    
+
+    // Where these lines meet is the top point of the triangle ;)
+    
+    return new IKRS.Triangle( leftPoint,
+			      leftLine.computeLineIntersection( rightLine ),  // the top point
+			      rightPoint
+			    );
+}
+
 /**
  * This function computes the 'super-boundingbox' of this box
  * and the passed box.
