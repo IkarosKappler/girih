@@ -34,6 +34,8 @@ IKRS.Girih.rad2deg = function( rad ) {
 
 IKRS.Girih.MINIMAL_ANGLE = IKRS.Girih.deg2rad(18.0); // 18.0 * (Math.PI/180.0);
 
+// IKRS.Girih.EPSILON       = 1.0e-6;
+
 
 IKRS.Girih.TILE_TYPE_UNKNOWN            = -1;
 IKRS.Girih.TILE_TYPE_DECAGON            = 0;

@@ -141,6 +141,7 @@ IKRS.Polygon.prototype._computeIntersectionTriangulation = function( poly ) {
     //  - extendedB
     //  - intersectionGraph
     //  - intersectionList
+    //  - allPoints
     var edgeIntersection = this._computeIntersectingEdgePolygons( poly );
 
         
@@ -151,6 +152,7 @@ IKRS.Polygon.prototype._computeIntersectionTriangulation = function( poly ) {
     var trianglesA = extendedGraphA.triangulate();
     var trianglesB = extendedGraphB.triangulate();
 
+    
     // Now there might be _real_ polygon edges, that do not occur in the respective
     // triangulation. But these edges MUST be inserted. So detect all edges from the
     // extended polygon, that really intersect the triangulation. Add these intersection
@@ -171,22 +173,65 @@ IKRS.Polygon.prototype._computeIntersectionTriangulation = function( poly ) {
     //    (completely outside, only if at least one polygon is not convex)
     // This leads to the fact: 
     //    Each triangle's center point tells if the whole triangle is contained
-    //    in polygon{A,B} or nor ^^
+    //    in polygon{A,B} or nor ^^    
     
-    var superExtendedVertices = new IKRS.ArraySet(); 
-    
+    /*
+    var superExtendedVertices = new IKRS.ArraySet();         
     for( var i in superExtendedGraphA.vertices ) 
 	superExtendedVertices.addUnique( superExtendedGraphA.vertices[i] );
     for( var i in superExtendedGraphB.vertices ) 
-	superExtendedVertices.addUnique( superExtendedGraphB.vertices[i] );
+	superExtendedVertices.addUnique( superExtendedGraphB.vertices[i] );   
+    */
+    
+    var superExtendedVertices = this._computeInnerIntersectionPointsFromTriangulation( trianglesA, trianglesB );
+    //window.alert( "superExtendeVertices.elements.length=" + superExtendedVertices.elements.length + "\n, superExtendeVertices.elements=" + superExtendedVertices.elements );
 
 
     // Triangulate super point set
-    var superExtendedGraph = new IKRS.Graph2( superExtendedVertices.elements );   
+    var superExtendedGraph = new IKRS.Graph2( superExtendedVertices.elements ); // superExtendedVertices.elements );   
     var superTriangulation = superExtendedGraph.triangulate();  // An array of triangles
+
+    //window.alert( "superTriangulation.length=" + superTriangulation.length );
 
     
     return new IKRS.TriangleSet( superTriangulation );
+};
+
+IKRS.Polygon.prototype._computeInnerIntersectionPointsFromTriangulation = function( trianglesA, 
+										    trianglesB 
+										  ) {
+    
+    var result = new IKRS.ArraySet();
+
+    //window.alert( trianglesA.length );
+    for( var a in trianglesA ) {
+
+	var triA = trianglesA[a];
+
+	// Also add triangle vertices
+	result.addUnique( triA.getPointA() );
+	result.addUnique( triA.getPointB() );
+	result.addUnique( triA.getPointC() );
+	
+	for( var b in trianglesB ) {
+
+	    var triB = trianglesB[b];	    
+	    // Each Triangle has three edges
+	    triA.computeTriangleIntersectionPoints( triB, result );
+
+	}
+
+    }
+
+    // Also add vertices from b
+    for( var b in trianglesB ) {
+	var triB = trianglesB[b];
+	result.addUnique( triB.getPointA() );
+	result.addUnique( triB.getPointB() );
+	result.addUnique( triB.getPointC() );
+    }
+
+    return result;
 };
 
 /**
@@ -202,6 +247,7 @@ IKRS.Polygon.prototype._computeIntersectionTriangulation = function( poly ) {
  *                         k[i] are the entry length of the matrix; each entry is
  *                              a list of pairs, containg edge index pairs.
  *  - intersectionList   The matrix in form of a list of tuples (indices in A and B).
+ *  - allPoints          An ArrayList containing all points.
  **/
 // TODO: THE EXTENDED POLYON VERTEX ORDER IS NOT CORRECT!
 //       FORTUNATELY THE ORDER IS NOT CONSIDERED IN THE MAIN TRIANGULATION ALGORITHM,
@@ -213,8 +259,9 @@ IKRS.Polygon.prototype._computeIntersectingEdgePolygons = function( poly ) {
     //var extendedB         = new IKRS.Polygon();
     var extendedSetA        = new IKRS.ArraySet();
     var extendedSetB        = new IKRS.ArraySet();
-    var graph             = [];
-    var list              = [];
+    var graph               = [];
+    var list                = [];
+    var allPoints           = new IKRS.ArraySet(); // [];
 
     var segmentPointSetsA   = []; // new IKRS.LineOrderedPointSet2(...) 
     var segmentPointSetsB   = [];
@@ -223,13 +270,18 @@ IKRS.Polygon.prototype._computeIntersectingEdgePolygons = function( poly ) {
     for( var a = 0; a < this.vertices.length; a++ ) {
 
 	var edgeA              = new IKRS.Line2( this.vertices[a], this.getVertexAt(a+1) );
-	graph[a] = [];
+	graph[a] = [];	
+	//allPoints.push( this.vertices[a] );
+	allPoints.add( this.vertices[a] );
 	//extendedSetA.addUnique( this.vertices[a] );
 	segmentPointSetsA[ a ] = new IKRS.LineOrderedPointSet2( edgeA ); 
 	segmentPointSetsA[ a ].add( this.vertices[a] );
 
 	for( var b = 0; b < poly.vertices.length; b++ ) {
-	   	    
+
+	    if( a == 0 )
+		allPoints.add( poly.vertices[b] );
+ 
 	    // Compute intersection
 	    var edgeB             = new IKRS.Line2( poly.vertices[b], poly.getVertexAt(b+1) );
 	    var intersectionPoint = edgeA.computeEdgeIntersection( edgeB );
@@ -251,6 +303,8 @@ IKRS.Polygon.prototype._computeIntersectingEdgePolygons = function( poly ) {
 		//extendedSetB.addUnique( intersectionPoint );
 		segmentPointSetsA[ a ].add( intersectionPoint );
 		segmentPointSetsB[ b ].add( intersectionPoint );
+		
+		allPoints.add( intersectionPoint );
 
 	    } else {
 		graph[a][b] = false;
@@ -277,7 +331,8 @@ IKRS.Polygon.prototype._computeIntersectingEdgePolygons = function( poly ) {
     return { extendedA: extendedPolygonA, //new IKRS.Polygon( extendedSetA.elements ),
 	     extendedB: extendedPolygonB, //new IKRS.Polygon( extendedSetB.elements ),
 	     intersectionGraph: graph,
-	     intersectionList: list
+	     intersectionList: list,
+	     allPoints: allPoints
 	   };
 
 };
@@ -296,8 +351,11 @@ IKRS.Polygon.prototype.multiplyScalar = function( s ) {
  * This function translates all polygon vertices by the given (amount.x, amount.y).
  **/
 IKRS.Polygon.prototype.translate = function( amount ) {
-    for( var i = 0; i < this.vertices.length; i++ ) {
-	this.vertices[i].translate( amount );
+    //for( var i = 0; i < this.vertices.length; i++ ) {
+    for( var i in this.vertices ) {
+	//if( !this.vertices[i].translate )
+	//    window.alert( "vertice " + i + " has NOT translate entity: " + this.vertices[i] + ", value=" + this.vertices[i] + ", type=" + (typeof this.vertices[i])  );
+	this.vertices[i].add( amount );
     }
     return this; // Allow operator concatenation
 };

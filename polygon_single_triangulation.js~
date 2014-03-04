@@ -16,6 +16,8 @@ var polyB                     = null;
 var mouseDownPoint            = null;
 var mouseMovePoint            = null;
 
+var EPSILON                   = 1.0e-6;
+
 function onLoad() {
     
     canvas                    = document.getElementById("polygon_canvas");
@@ -30,6 +32,9 @@ function onLoad() {
 
     polyA = new IKRS.Polygon();
     polyA.addVertex( new IKRS.Point2( 100, 100 ) );
+     polyA.addVertex( new IKRS.Point2( 200, 0 ) );
+     polyA.addVertex( new IKRS.Point2( 250, 200 ) );
+     polyA.addVertex( new IKRS.Point2( 260, 200 ) );
     polyA.addVertex( new IKRS.Point2( 500, 100 ) );
     polyA.addVertex( new IKRS.Point2( 500, 400 ) );
     polyA.addVertex( new IKRS.Point2( 150, 500 ) );
@@ -37,6 +42,7 @@ function onLoad() {
     polyA.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
     //var boundsA = polyA.computeBoundingBox();
 
+    
     polyB = new IKRS.Polygon();
     polyB.addVertex( new IKRS.Point2( 300, 140 ) );
     polyB.addVertex( new IKRS.Point2( 600,  30 ) );
@@ -44,8 +50,9 @@ function onLoad() {
     polyB.addVertex( new IKRS.Point2( 650, 650 ) );
     polyB.addVertex( new IKRS.Point2( 300, 300 ) );
     polyB.addVertex( new IKRS.Point2( 600, 200 ) );
-    polyB.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
+    polyB.multiplyScalar( 0.5 ).translateXY( 200+200, 300 );  // The polys got a bit too large
     //var boundsB = polyB.computeBoundingBox();
+    
 
     redraw();
 }
@@ -150,32 +157,11 @@ function redraw() {
     context.fillStyle = "#ffffff";
     context.fillRect( 0, 0, canvasWidth, canvasHeight );
 
-    /*
-    // First: create two polygons
-    polyA = new IKRS.Polygon();
-    polyA.addVertex( new IKRS.Point2( 100, 100 ) );
-    polyA.addVertex( new IKRS.Point2( 500, 100 ) );
-    polyA.addVertex( new IKRS.Point2( 500, 400 ) );
-    polyA.addVertex( new IKRS.Point2( 150, 500 ) );
-    polyA.addVertex( new IKRS.Point2(  50, 300 ) );
-    polyA.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
-    var boundsA = polyA.computeBoundingBox();
-
-    polyB = new IKRS.Polygon();
-    polyB.addVertex( new IKRS.Point2( 300, 140 ) );
-    polyB.addVertex( new IKRS.Point2( 600,  30 ) );
-    polyB.addVertex( new IKRS.Point2( 900, 160 ) );
-    polyB.addVertex( new IKRS.Point2( 650, 650 ) );
-    polyB.addVertex( new IKRS.Point2( 300, 300 ) );
-    polyB.addVertex( new IKRS.Point2( 600, 200 ) );
-    polyB.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
-    var boundsB = polyB.computeBoundingBox();
-    */
     
     var boundsA = polyA.computeBoundingBox();
     var boundsB = polyB.computeBoundingBox();
 
-    // Check if the algorihm still exists if the polygons don't interset at all
+    // Check if the algorihm still works if the polygons don't interset at all?
     //polyB.translateXY( 400, 0 );
 
     // Draw them
@@ -187,61 +173,35 @@ function redraw() {
     drawCrosshairsFromPointList( polyB.vertices, "#0000a8" );
  
     
-    // A triangle set
-    var superTriangulation = polyA._computeIntersectionTriangulation( polyB );
-    //window.alert( superTriangulation );
+    var graphA     = new IKRS.Graph2( polyA.vertices );
+    var graphB     = new IKRS.Graph2( polyB.vertices );
+    var trianglesA = graphA.triangulate( false );  // Keep original edges?
+    var trianglesB = graphB.triangulate( false );  // Keep original edges?
+  
     
+    for( var t in trianglesA ) {
 
+	var tri = trianglesA[t];
+	if( !tri )
+	    continue;
 
-    if( document.forms["poly_form"].elements["draw_extended_triangulation"].checked ) {
-	drawTriangulation( superTriangulation.triangles, "#ffff00" );
+	drawTriangle( tri, "#888888" );
+
+    }
+
+    for( var t in trianglesB ) {
+
+	var tri = trianglesB[t];
+	if( !tri )
+	    continue;
+
+	drawTriangle( tri, "#444444" );
+
     }
 
 
-    // Finally join the intersecting triangles into new polygons (the intertection
-    // parts are not nececarily connected!)
-    //var adjacencies = superTriangulation.computeAdjacencies();
 
-    // Compute intersection
-    var intersectionSet = new IKRS.TriangleSet();
-    for( var i in superTriangulation.triangles ) {
-
-	var triangle = superTriangulation.triangles[i];
-	// Find any point _inside_ the triangle
-	var centroid = triangle.getCentroid();
-	
-	//drawCrosshairAt( centroid, "#FF00FF" );	    
-
-	// Compute intersection with the AND (&&) operator :)  
-	if( polyA.containsPoint(centroid) && polyB.containsPoint(centroid) ) {
-
-	    intersectionSet.addUnique( triangle );
-
-	    if( document.forms["poly_form"].elements["fill_intersection"].checked ) 
-		fillTriangle(triangle, "#ff0000");
-	    // window.alert( "Triangle " + i + " is now red." );
-	    if( document.forms["poly_form"].elements["fill_intersection"].checked ) 
-		fillTriangle(triangle, "#c8c8c8");
-	}
-	
-    }
-
-    var adjacencies = intersectionSet.computeAdjacencies();    
     
-    /*
-    window.alert( "intersectionSet.triangles.length=" + intersectionSet.triangles.length + ",\n" +
-		  "adjacencies.outerEdgeList.length=" + adjacencies.outerEdgeList.length + ",\n" +
-		  JSON.stringify( intersectionSet.triangles )
-		  );
-		  */
-    for( i in adjacencies.outerEdgeList ) {
-
-	var pair = adjacencies.outerEdgeList[ i ];
-	
-	if( pair.b == 0 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeA(), "#ff0000" );
-	if( pair.b == 1 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeB(), "#ff0000" );
-	if( pair.b == 2 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeC(), "#ff0000" );
-    }
 
 };
 

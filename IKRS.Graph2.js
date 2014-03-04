@@ -49,9 +49,17 @@ IKRS.Graph2.prototype.addVertex = function( vertex ) {
     this.vertices.push( vertex );
 }
 
-IKRS.Graph2.prototype.addUniqueVertex = function( vertex ) {
+IKRS.Graph2.prototype.addUnique = function( vertex, pointComparator ) {
+
+    this.addUniqueVertex( vertex, pointComparator );
+}
+
+IKRS.Graph2.prototype.addUniqueVertex = function( vertex, pointComparator ) {
+
     //for( var i = 0; i < this.vertices.length; i++ ) { 
     for( var i in this.vertices ) {
+	if( pointComparator && pointComparator.equal(this.vertices[i],vertex) )
+	    return;
 	if( this.vertices[i] == vertex ) // || this.vertices[i].equals(vertex) )
 	    return;
     }
@@ -143,7 +151,7 @@ IKRS.Graph2._addVertex = function( vertex, triangleSet ) {
 	    lambda_isFixedEdge(triangle.b, triangle.c) ||
 	    lambda_isFixedEdge(triangle.c, triangle.a);
 	    */
-	if( triangle.computeCircumCircle(0.01).containsPoint(vertex) ) {
+	if( triangle.computeCircumCircle(EPSILON).containsPoint(vertex) ) {
 	    edges.push( new IKRS.Line2( triangle.a, triangle.b ) );
 	    edges.push( new IKRS.Line2( triangle.b, triangle.c ) );
 	    edges.push( new IKRS.Line2( triangle.c, triangle.a ) );

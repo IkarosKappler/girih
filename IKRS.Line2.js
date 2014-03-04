@@ -15,12 +15,19 @@
 
 IKRS.Line2 = function( pointA,
 		       pointB
+		       
+		       //pointComparator
 		     ) {
 
     IKRS.Object.call( this );
 
+    //if( !pointComparator || typeof pointComparator == "undefined" )
+//	pointComparator = new IKRS.PythagoreanPointComparator(EPSILON);
+
     this.pointA = pointA;
     this.pointB = pointB;
+
+    //this.pointComparator = pointComparator;
 }
 
 IKRS.Line2.prototype.length = function() {

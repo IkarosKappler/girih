@@ -14,6 +14,16 @@ IKRS.Point2 = function( x, y ) {
 
 };
 
+/**
+ * Many objects that use points and have a 'translate' function instead
+ * of 'add'.
+ **/
+/*
+IKRS.Point2.prototype.translate = function( amount ) {
+    return this.add( amount );
+};
+*/
+
 IKRS.Point2.prototype.add = function( amount ) {
     this.x += amount.x;
     this.y += amount.y;
@@ -49,6 +59,10 @@ IKRS.Point2.prototype.invert = function() {
     return this;
 };
 
+IKRS.Point2.prototype.getDifference = function( p ) {
+    return new IKRS.Point2( p.x - this.x, p.y - this.y );
+}
+
 // Is this correct?
 IKRS.Point2.prototype.dotProduct = function( point ) {
     return (this.x * point.x + this.y * point.y);
@@ -63,7 +77,7 @@ IKRS.Point2.prototype.inRange = function( point,
 
 IKRS.Point2.prototype.equals = function( point, epsilon ) {
     if( epsilon === undefined )
-	epsilon = 0;
+	epsilon = EPSILON;
     return this.distanceTo(point) <= epsilon;
 };
 

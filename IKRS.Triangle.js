@@ -85,7 +85,7 @@ IKRS.Triangle.prototype.getCentroid = function() {
 IKRS.Triangle.prototype.computeCircumCircle = function( epsilon ) {
     
     if( typeof epsilon == "undefined" )
-	epsilon = 1.0;
+	epsilon = EPSILON; // 0.000001; // 1.0;
 
     // From: http://www.exaflop.org/docs/cgafaq/cga1.html
 
@@ -131,6 +131,60 @@ IKRS.Triangle.prototype.computeCircumCircle = function( epsilon ) {
     //this.radius = Math.sqrt( this.radius_squared );
 
     return new IKRS.Circle( center, Math.sqrt( dx*dx + dy*dy ) );
+};
+
+IKRS.Triangle.prototype.computeTriangleIntersectionPoints = function( triangle,
+								      result,     // ArraySet (optional)
+								      pointComparator // optional
+								    ) {
+    //var result = [];
+    if( !result || typeof result == "undefined" )
+	result = new IKRS.ArraySet();
+	
+    var edgeA_A = this.getEdgeA();
+    var edgeA_B = this.getEdgeB();
+    var edgeA_C = this.getEdgeC();
+
+    var edgeB_A = triangle.getEdgeA();
+    var edgeB_B = triangle.getEdgeB();
+    var edgeB_C = triangle.getEdgeC();
+   
+    
+    if( !edgeA_A.equalEdgePoints(edgeB_A) && !edgeA_A.isColinearWith(edgeB_A,EPSILON) && (intersectionPoint=edgeA_A.computeEdgeIntersection(edgeB_A)) )
+	result.addUnique( intersectionPoint, pointComparator ); 
+    if( !edgeA_A.equalEdgePoints(edgeB_B) && !edgeA_A.isColinearWith(edgeB_B,EPSILON) && (intersectionPoint=edgeA_A.computeEdgeIntersection(edgeB_B)) )
+	result.addUnique( intersectionPoint, pointComparator );
+    if( !edgeA_A.equalEdgePoints(edgeB_C) && !edgeA_A.isColinearWith(edgeB_C,EPSILON) && (intersectionPoint=edgeA_A.computeEdgeIntersection(edgeB_C)) )
+	result.addUnique( intersectionPoint, pointComparator );
+
+    if( !edgeA_B.equalEdgePoints(edgeB_A) && !edgeA_B.isColinearWith(edgeB_A,EPSILON) && (intersectionPoint=edgeA_B.computeEdgeIntersection(edgeB_A)) )
+	result.addUnique( intersectionPoint, pointComparator ); 
+    if( !edgeA_B.equalEdgePoints(edgeB_B) && !edgeA_B.isColinearWith(edgeB_B,EPSILON) && (intersectionPoint=edgeA_B.computeEdgeIntersection(edgeB_B)) )
+	result.addUnique( intersectionPoint, pointComparator );
+    if( !edgeA_B.equalEdgePoints(edgeB_C) && !edgeA_B.isColinearWith(edgeB_C,EPSILON) && (intersectionPoint=edgeA_B.computeEdgeIntersection(edgeB_C)) )
+	result.addUnique( intersectionPoint, pointComparator );
+
+    if( !edgeA_C.equalEdgePoints(edgeB_A) && !edgeA_C.isColinearWith(edgeB_A,EPSILON) && (intersectionPoint=edgeA_C.computeEdgeIntersection(edgeB_A)) )
+	result.addUnique( intersectionPoint, pointComparator ); 
+    if( !edgeA_C.equalEdgePoints(edgeB_B) && !edgeA_C.isColinearWith(edgeB_B,EPSILON) && (intersectionPoint=edgeA_C.computeEdgeIntersection(edgeB_B)) )
+	result.addUnique( intersectionPoint, pointComparator );
+    if( !edgeA_C.equalEdgePoints(edgeB_C) && !edgeA_C.isColinearWith(edgeB_C,EPSILON) && (intersectionPoint=edgeA_C.computeEdgeIntersection(edgeB_C)) )
+	result.addUnique( intersectionPoint, pointComparator );
+		
+    
+    return result;
+};
+
+IKRS.Triangle.prototype.getPointA = function() {
+    return this.a;
+};
+
+IKRS.Triangle.prototype.getPointB = function() {
+    return this.b;
+};
+
+IKRS.Triangle.prototype.getPointC = function() {
+    return this.c;
 };
 
 IKRS.Triangle.prototype.getEdgeA = function() {

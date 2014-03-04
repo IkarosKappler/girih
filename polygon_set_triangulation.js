@@ -16,6 +16,8 @@ var polyB                     = null;
 var mouseDownPoint            = null;
 var mouseMovePoint            = null;
 
+var EPSILON                   = 1.0e-6;
+
 function onLoad() {
     
     canvas                    = document.getElementById("polygon_canvas");
@@ -150,32 +152,11 @@ function redraw() {
     context.fillStyle = "#ffffff";
     context.fillRect( 0, 0, canvasWidth, canvasHeight );
 
-    /*
-    // First: create two polygons
-    polyA = new IKRS.Polygon();
-    polyA.addVertex( new IKRS.Point2( 100, 100 ) );
-    polyA.addVertex( new IKRS.Point2( 500, 100 ) );
-    polyA.addVertex( new IKRS.Point2( 500, 400 ) );
-    polyA.addVertex( new IKRS.Point2( 150, 500 ) );
-    polyA.addVertex( new IKRS.Point2(  50, 300 ) );
-    polyA.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
-    var boundsA = polyA.computeBoundingBox();
-
-    polyB = new IKRS.Polygon();
-    polyB.addVertex( new IKRS.Point2( 300, 140 ) );
-    polyB.addVertex( new IKRS.Point2( 600,  30 ) );
-    polyB.addVertex( new IKRS.Point2( 900, 160 ) );
-    polyB.addVertex( new IKRS.Point2( 650, 650 ) );
-    polyB.addVertex( new IKRS.Point2( 300, 300 ) );
-    polyB.addVertex( new IKRS.Point2( 600, 200 ) );
-    polyB.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
-    var boundsB = polyB.computeBoundingBox();
-    */
     
     var boundsA = polyA.computeBoundingBox();
     var boundsB = polyB.computeBoundingBox();
 
-    // Check if the algorihm still exists if the polygons don't interset at all
+    // Check if the algorihm still works if the polygons don't interset at all?
     //polyB.translateXY( 400, 0 );
 
     // Draw them
@@ -186,16 +167,31 @@ function redraw() {
     drawCrosshairsFromPointList( polyA.vertices, "#00a800" );    
     drawCrosshairsFromPointList( polyB.vertices, "#0000a8" );
  
-    
+
+    // For testing (not used later)
+    // Then compute the extended polygons
+    //  - extendedA
+    //  - extendedB
+    //  - intersectionGraph
+    //  - intersectionList
+    //  - allPoints
+    var edgeIntersection = polyA._computeIntersectingEdgePolygons( polyB );
+    //window.alert( "edgeIntersection.allPoints.elements.length=" + edgeIntersection.allPoints.elements.length );
+    drawCrosshairsFromPointList( edgeIntersection.allPoints.elements, "#FF0000" );
+    //for( var i in edgeIntersection.intersectionGraph.vertices ) {
+	
+    //}
+
+
     // A triangle set
-    var superTriangulation = polyA._computeIntersectionTriangulation( polyB );
+    //var superTriangulation = polyA._computeIntersectionTriangulation( polyB );
     //window.alert( superTriangulation );
     
 
 
-    if( document.forms["poly_form"].elements["draw_extended_triangulation"].checked ) {
-	drawTriangulation( superTriangulation.triangles, "#ffff00" );
-    }
+    //if( document.forms["poly_form"].elements["draw_extended_triangulation"].checked ) {
+//	drawTriangulation( superTriangulation.triangles, "#ffff00" );
+    //}
 
 
     // Finally join the intersecting triangles into new polygons (the intertection
@@ -203,6 +199,7 @@ function redraw() {
     //var adjacencies = superTriangulation.computeAdjacencies();
 
     // Compute intersection
+    /*
     var intersectionSet = new IKRS.TriangleSet();
     for( var i in superTriangulation.triangles ) {
 
@@ -210,7 +207,13 @@ function redraw() {
 	// Find any point _inside_ the triangle
 	var centroid = triangle.getCentroid();
 	
+	// Draw centroid?
 	//drawCrosshairAt( centroid, "#FF00FF" );	    
+
+	// Draw triangle vertices?
+	//drawCrosshairAt( triangle.getPointA(), "#FF00FF" );
+	//drawCrosshairAt( triangle.getPointB(), "#FF00FF" );
+	//drawCrosshairAt( triangle.getPointC(), "#FF00FF" );
 
 	// Compute intersection with the AND (&&) operator :)  
 	if( polyA.containsPoint(centroid) && polyB.containsPoint(centroid) ) {
@@ -225,8 +228,9 @@ function redraw() {
 	}
 	
     }
+    */
 
-    var adjacencies = intersectionSet.computeAdjacencies();    
+    //var adjacencies = intersectionSet.computeAdjacencies();    
     
     /*
     window.alert( "intersectionSet.triangles.length=" + intersectionSet.triangles.length + ",\n" +
@@ -234,6 +238,7 @@ function redraw() {
 		  JSON.stringify( intersectionSet.triangles )
 		  );
 		  */
+/*
     for( i in adjacencies.outerEdgeList ) {
 
 	var pair = adjacencies.outerEdgeList[ i ];
@@ -242,9 +247,191 @@ function redraw() {
 	if( pair.b == 1 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeB(), "#ff0000" );
 	if( pair.b == 2 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeC(), "#ff0000" );
     }
+*/
+
+
+    // Irgendwas    
+    var edgeIntersection = polyA._computeIntersectingEdgePolygons( polyB );
+
+        
+    // Triangulate each extended polygon by itself
+    var extendedGraphA = new IKRS.Graph2( edgeIntersection.extendedA.vertices );
+    var extendedGraphB = new IKRS.Graph2( edgeIntersection.extendedB.vertices );
+
+    
+    for( var i in extendedGraphA.vertices ) {
+	this.drawCrosshairAt( extendedGraphA.vertices[i], "#008800" );	
+    }
+    for( var i in extendedGraphB.vertices ) {
+	this.drawCrosshairAt( extendedGraphB.vertices[i], "#000088" );	
+    }
+
+    var intersectingVertexGraph   = new IKRS.Graph2( edgeIntersection.allPoints.elements );
+    //window.alert( "edgeIntersection.allPoints=" + JSON.stringify(edgeIntersection.allPoints.elements) );
+    var intersectingTriangulation = intersectingVertexGraph.triangulate();    
+    for( var i in intersectingTriangulation ) {
+	drawTriangulation( intersectingTriangulation, "#a8a800" );
+    }
+
+
+    // Compute intersecion between triangles and real polygon edges                 
+    _computeExtendedGraphFromTriangleIntersection( polyA, intersectingTriangulation, intersectingVertexGraph );
+    _computeExtendedGraphFromTriangleIntersection( polyB, intersectingTriangulation, intersectingVertexGraph );
+    var pointComparator = new IKRS.PythagoreanPointComparator(1.0); // 1 pixel/unit
+    /* 
+    for( var t in intersectingTriangulation ) {
+	var tri = intersectingTriangulation[t];
+	var edgeA    = tri.getEdgeA();
+	var edgeB    = tri.getEdgeA();
+	var edgeC    = tri.getEdgeA();
+	for( var a = 0; a <= polyA.vertices.length; a++ ) {
+	    var polyEdge = polyA.getEdgeAt(a);	    
+	    var intersectionPoint;
+	    if( !polyEdge.equalEdgePoints(edgeA) && !polyEdge.isColinearWith(edgeA,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeA)) ) 
+		intersectingVertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	    if( !polyEdge.equalEdgePoints(edgeB) && !polyEdge.isColinearWith(edgeB,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeB)) ) 
+		intersectingVertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	    if( !polyEdge.equalEdgePoints(edgeC) && !polyEdge.isColinearWith(edgeC,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeC)) ) 
+		intersectingVertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	}
+
+	for( var b = 0; b <= polyB.vertices.length; b++ ) {
+	    var polyEdge = polyB.getEdgeAt(b);
+	    var intersectionPoint;
+	    if( !polyEdge.equalEdgePoints(edgeA) && !polyEdge.isColinearWith(edgeA,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeA)) ) 
+		intersectingVertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	    if( !polyEdge.equalEdgePoints(edgeB) && !polyEdge.isColinearWith(edgeB,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeB)) ) 
+		intersectingVertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	    if( !polyEdge.equalEdgePoints(edgeC) && !polyEdge.isColinearWith(edgeC,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeC)) ) 
+		intersectingVertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	}
+    }
+    */
+
+    //window.alert( "superExtendedVertices.length=" + intersectingVertexGraph.vertices.length );
+    for( var i in intersectingVertexGraph.vertices ) {
+	drawCrosshairAt( intersectingVertexGraph.vertices[i], "#888800" );
+    }
+
+
+    // Now make a new triangulation from the extended set
+    // Note: it's the same graph instance (point set was modified)
+    var tempTriangulation = intersectingVertexGraph.triangulate();
+    if( document.forms["poly_form"].elements["draw_extended_triangulation"].checked )
+	; //drawTriangulation( tempTriangulation, "#a8a8a8" );
+    
+
+    
+    // Now extend the graph a second time (the last time)
+    var before = intersectingVertexGraph.vertices.length;
+    //_computeExtendedGraphFromTriangleIntersection( polyA, tempTriangulation, intersectingVertexGraph );
+    //_computeExtendedGraphFromTriangleIntersection( polyB, tempTriangulation, intersectingVertexGraph );
+    _computeExtendedGraphFromInnerTriangleIntersection( intersectingTriangulation, tempTriangulation, intersectingVertexGraph, pointComparator );
+    // And again add the intersection points with the polygons
+    _computeExtendedGraphFromTriangleIntersection( polyA, tempTriangulation, intersectingVertexGraph );
+    _computeExtendedGraphFromTriangleIntersection( polyB, tempTriangulation, intersectingVertexGraph );
+    //window.alert( "before=" + before + ", after=" + intersectingVertexGraph.vertices.length );
+    var superTriangulation = intersectingVertexGraph.triangulate();
+    
+
+    // Draw points that were newly added
+    for( var i = before; i < intersectingVertexGraph.vertices.length; i++ ) {
+	//window.alert( i );
+	drawCrosshairAt( intersectingVertexGraph.vertices[i], "#FF0000" );
+    }
+    
+    var finalTriangulation = intersectingVertexGraph.triangulate();
+    
+    if( document.forms["poly_form"].elements["draw_extended_triangulation"].checked )
+	drawTriangulation( finalTriangulation, "#a8a8a8" );
+
+    // Draw intersection
+    if( document.forms["poly_form"].elements["fill_intersection"].checked ) {
+	for( var t in finalTriangulation ) {
+	    var tri      = finalTriangulation[t];
+	    var centroid = tri.getCentroid();
+	    if( polyA.containsPoint(centroid) && polyB.containsPoint(centroid) )
+		fillTriangle( tri, "#ffa8a8" );
+	}
+    }
+
+/*
+    var trianglesA = extendedGraphA.triangulate();
+    var trianglesB = extendedGraphB.triangulate();
+    
+    // An ArraySet
+    var superExtendedVertices = polyA._computeInnerIntersectionPointsFromTriangulation( trianglesA, trianglesB );
+    //window.alert( "superExtendedVertices.length=" + superExtendedVertices.length );
+    for( var i in superExtendedVertices.elements ) {
+	this.drawCrosshairAt( superExtendedVertices.elements[i], "#008800" );			      
+    }
+*/
+
+
+    // Draw polygons again above all
+    if( document.forms["poly_form"].elements["draw_polygon_edges"].checked ) {
+	drawPolygon( polyA, "#00a800" );
+	drawPolygon( polyB, "#0000a8" );
+    }
 
 };
 
+
+function _computeExtendedGraphFromInnerTriangleIntersection( trianglesA, 
+							     trianglesB, 
+							     vertexGraph,
+							     pointComparator
+							   ) {
+    
+    //window.alert( vertexGraph );
+    if( !vertexGraph )
+	vertexGraph = new IKRS.Graph2();
+
+    //var pointComparator = new IKRS.PythagoreanPointComparator(1.0); // 1 pixel/unit
+    for( var a in trianglesA ) {
+	var triA = trianglesA[a];
+	for( var b in trianglesB ) {
+	    var triB = trianglesB[b];
+	    triA.computeTriangleIntersectionPoints(triB,vertexGraph,pointComparator);	    // Must just have an 'addUnique' function :)
+	}
+    }
+    
+    return vertexGraph;
+};
+
+
+function _computeExtendedGraphFromTriangleIntersection( poly, 
+							triangles, 
+							vertexGraph 
+						      ) {
+    
+    //window.alert( vertexGraph );
+    if( !vertexGraph )
+	vertexGraph = new IKRS.Graph2();
+
+    var pointComparator = new IKRS.PythagoreanPointComparator(1.0); // 1 pixel/unit
+    for( var t in triangles ) {
+	var tri = triangles[t];
+	var edgeA    = tri.getEdgeA();
+	var edgeB    = tri.getEdgeA();
+	var edgeC    = tri.getEdgeA();
+	for( var a = 0; a <= poly.vertices.length; a++ ) {
+	    var polyEdge = poly.getEdgeAt(a);	    
+	    var intersectionPoint;
+	    if( !polyEdge.equalEdgePoints(edgeA) && !polyEdge.isColinearWith(edgeA,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeA)) ) 
+		vertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	    if( !polyEdge.equalEdgePoints(edgeB) && !polyEdge.isColinearWith(edgeB,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeB)) ) 
+		vertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	    if( !polyEdge.equalEdgePoints(edgeC) && !polyEdge.isColinearWith(edgeC,EPSILON) && (intersectionPoint = polyEdge.computeEdgeIntersection(edgeC)) ) 
+		vertexGraph.addUniqueVertex(intersectionPoint,pointComparator);
+	}
+
+    }
+    
+    return vertexGraph;
+};
+
+/*
 function _computeExtendedGraphFromTriangleIntersection( poly, triangles ) {
 
     var resultGraph = new IKRS.Graph2();
@@ -286,6 +473,7 @@ function _computeExtendedGraphFromTriangleIntersection( poly, triangles ) {
 
     return resultGraph;
 }
+*/
 
 function _addToGraphIfEdgesIntersectInside( graph, edgeA, edgeB ) {
 

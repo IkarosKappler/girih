@@ -122,7 +122,7 @@ IKRS.TriangleSet.prototype.computeAdjacencies = function() {
 	    outerEdgeList.push( new IKRS.Pair(i, 2) );
 	
 	if( !adjacentEdgeA && !adjacentEdgeB && !adjacentEdgeC )
-	    window.alert( "Triangle " + i + " has no adjacent edges." );
+	    ; //window.alert( "Triangle " + i + " has no adjacent edges." );
     } // END for [i]
 	
 	// If the ... Outer edge found?
@@ -137,8 +137,9 @@ IKRS.TriangleSet.prototype.computeAdjacencies = function() {
 
 };
 
+
 IKRS.TriangleSet.prototype.toString = function() {
     return "[TriangleSet]={ " + JSON.stringify( this.triangles ) + " }";
-}
+};
 
 IKRS.TriangleSet.prototype.constructor = IKRS.TriangleSet;

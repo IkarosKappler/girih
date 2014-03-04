@@ -16,6 +16,8 @@ var polyB                     = null;
 var mouseDownPoint            = null;
 var mouseMovePoint            = null;
 
+var EPSILON                   = 1.0e-6;
+
 function onLoad() {
     
     canvas                    = document.getElementById("polygon_canvas");
@@ -150,32 +152,11 @@ function redraw() {
     context.fillStyle = "#ffffff";
     context.fillRect( 0, 0, canvasWidth, canvasHeight );
 
-    /*
-    // First: create two polygons
-    polyA = new IKRS.Polygon();
-    polyA.addVertex( new IKRS.Point2( 100, 100 ) );
-    polyA.addVertex( new IKRS.Point2( 500, 100 ) );
-    polyA.addVertex( new IKRS.Point2( 500, 400 ) );
-    polyA.addVertex( new IKRS.Point2( 150, 500 ) );
-    polyA.addVertex( new IKRS.Point2(  50, 300 ) );
-    polyA.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
-    var boundsA = polyA.computeBoundingBox();
-
-    polyB = new IKRS.Polygon();
-    polyB.addVertex( new IKRS.Point2( 300, 140 ) );
-    polyB.addVertex( new IKRS.Point2( 600,  30 ) );
-    polyB.addVertex( new IKRS.Point2( 900, 160 ) );
-    polyB.addVertex( new IKRS.Point2( 650, 650 ) );
-    polyB.addVertex( new IKRS.Point2( 300, 300 ) );
-    polyB.addVertex( new IKRS.Point2( 600, 200 ) );
-    polyB.multiplyScalar( 0.5 ).translateXY( 200, 300 );  // The polys got a bit too large
-    var boundsB = polyB.computeBoundingBox();
-    */
     
     var boundsA = polyA.computeBoundingBox();
     var boundsB = polyB.computeBoundingBox();
 
-    // Check if the algorihm still exists if the polygons don't interset at all
+    // Check if the algorihm still works if the polygons don't interset at all?
     //polyB.translateXY( 400, 0 );
 
     // Draw them
@@ -186,7 +167,22 @@ function redraw() {
     drawCrosshairsFromPointList( polyA.vertices, "#00a800" );    
     drawCrosshairsFromPointList( polyB.vertices, "#0000a8" );
  
-    
+
+    // For testing (not used later)
+    // Then compute the extended polygons
+    //  - extendedA
+    //  - extendedB
+    //  - intersectionGraph
+    //  - intersectionList
+    //  - allPoints
+    var edgeIntersection = polyA._computeIntersectingEdgePolygons( polyB );
+    //window.alert( "edgeIntersection.allPoints.elements.length=" + edgeIntersection.allPoints.elements.length );
+    drawCrosshairsFromPointList( edgeIntersection.allPoints.elements, "#FF0000" );
+    //for( var i in edgeIntersection.intersectionGraph.vertices ) {
+	
+    //}
+
+
     // A triangle set
     var superTriangulation = polyA._computeIntersectionTriangulation( polyB );
     //window.alert( superTriangulation );
@@ -210,7 +206,13 @@ function redraw() {
 	// Find any point _inside_ the triangle
 	var centroid = triangle.getCentroid();
 	
+	// Draw centroid?
 	//drawCrosshairAt( centroid, "#FF00FF" );	    
+
+	// Draw triangle vertices?
+	//drawCrosshairAt( triangle.getPointA(), "#FF00FF" );
+	//drawCrosshairAt( triangle.getPointB(), "#FF00FF" );
+	//drawCrosshairAt( triangle.getPointC(), "#FF00FF" );
 
 	// Compute intersection with the AND (&&) operator :)  
 	if( polyA.containsPoint(centroid) && polyB.containsPoint(centroid) ) {
@@ -242,6 +244,27 @@ function redraw() {
 	if( pair.b == 1 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeB(), "#ff0000" );
 	if( pair.b == 2 ) drawEdge( superTriangulation.triangles[ pair.a ].getEdgeC(), "#ff0000" );
     }
+
+
+
+    // Irgendwas    
+    var edgeIntersection = polyA._computeIntersectingEdgePolygons( polyB );
+
+        
+    // Triangulate each extended polygon by itself
+    var extendedGraphA = new IKRS.Graph2( edgeIntersection.extendedA.vertices );
+    var extendedGraphB = new IKRS.Graph2( edgeIntersection.extendedB.vertices );
+
+    var trianglesA = extendedGraphA.triangulate();
+    var trianglesB = extendedGraphB.triangulate();
+    
+    // An ArraySet
+    var superExtendedVertices = polyA._computeInnerIntersectionPointsFromTriangulation( trianglesA, trianglesB );
+    //window.alert( "superExtendedVertices.length=" + superExtendedVertices.length );
+    for( var i in superExtendedVertices.elements ) {
+	this.drawCrosshairAt( superExtendedVertices.elements[i], "#008800" );			      
+    }
+
 
 };
 
