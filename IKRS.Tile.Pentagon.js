@@ -1,7 +1,8 @@
 /**
  * @author Ikaros Kappler
  * @date 2013-11-27
- * @version 1.0.0
+ * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
+ * @version 1.0.1
  **/
 
 
@@ -55,6 +56,7 @@ IKRS.Tile.Pentagon = function( size, position, angle ) {
 
 
     this._buildInnerPolygons( size );
+    this._buildOuterPolygons();       // Only call AFTER the inner polygons were built!
 };
 
 IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
@@ -91,17 +93,39 @@ IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
     //window.alert( innerTile.length );
 
     this.innerTilePolygons.push( innerTile );
-}
+};
+
+
+IKRS.Tile.Pentagon.prototype._buildOuterPolygons = function() {
+
+    for( var i = 0; i < this.polygon.vertices.length; i++ ) {
+
+	var indexA     = i; //indicesA[i];
+	var indexB     = i*2; // indicesB[i];
+	// The triangle
+	var outerTileX = new IKRS.Polygon();
+	outerTileX.addVertex( this.getVertexAt(indexA+1).clone() );
+	outerTileX.addVertex( this.innerTilePolygons[0].getVertexAt(indexB).clone() );
+	outerTileX.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+1).clone() );
+	outerTileX.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+2).clone() );
+	this.outerTilePolygons.push( outerTileX );
+	
+    }
+
+};
+
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.Pentagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.Pentagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.Pentagon.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
-IKRS.Tile.Pentagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
-IKRS.Tile.Pentagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
-IKRS.Tile.Pentagon.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
-IKRS.Tile.Pentagon.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.Pentagon.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.Pentagon.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Pentagon.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
+IKRS.Tile.Pentagon.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
+IKRS.Tile.Pentagon.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
+IKRS.Tile.Pentagon.prototype.containsPoint         = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.Pentagon.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.Pentagon.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.Pentagon.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
 
-IKRS.Tile.Pentagon.prototype.constructor         = IKRS.Tile.Pentagon;
+IKRS.Tile.Pentagon.prototype.constructor           = IKRS.Tile.Pentagon;
 

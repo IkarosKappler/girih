@@ -1,7 +1,8 @@
 /**
  * @author Ikaros Kappler
  * @date 2013-11-28
- * @version 1.0.0
+ * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
+ * @version 1.0.1
  **/
 
 
@@ -65,7 +66,7 @@ IKRS.Tile.IrregularHexagon = function( size, position, angle ) {
     };
 
     this._buildInnerPolygons();
-    
+    this._buildOuterPolygons();   // Only call AFTER the inner polygons were created!
 };
 
 
@@ -155,9 +156,6 @@ IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
 	// Use the point that is closer to the center
 	if( intersection.pointA.length() < intersection.pointB.length() ) innerTile.addVertex(intersection.pointA);
 	else                                                              innerTile.addVertex(intersection.pointB);
-	//if( this.containsPoint(intersection.pointA) ) innerTile.push(intersection.pointA);
-	//else                                          innerTile.push(intersection.pointB);
-	//intersection = null;
     } else {
 	console.log( "intersection is null!" );
     }
@@ -167,18 +165,56 @@ IKRS.Tile.IrregularHexagon.prototype._buildInnerPolygons = function() {
     //window.alert( innerTile.length );
 
     this.innerTilePolygons.push( innerTile );	
-}
+};
+
+
+IKRS.Tile.IrregularHexagon.prototype._buildOuterPolygons = function() {
+
+    // First add the two triangles at the 'ends' of the shape.
+    var indicesA = [ 0, 3 ];  //  6:2
+    var indicesB = [ 0, 5 ];  // 10:2
+    for( var i = 0; i < indicesA.length; i++ ) {
+
+	var indexA     = indicesA[i];
+	var indexB     = indicesB[i];
+	// The triangle
+	var outerTileX = new IKRS.Polygon();
+	outerTileX.addVertex( this.getVertexAt(indexA+1).clone() );
+	outerTileX.addVertex( this.innerTilePolygons[0].getVertexAt(indexB).clone() );
+	outerTileX.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+1).clone() );
+	this.outerTilePolygons.push( outerTileX );
+	
+	// The first 'kite'
+	var outerTileY = new IKRS.Polygon();
+	outerTileY.addVertex( this.getVertexAt(indexA+2).clone() );
+	outerTileY.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+1).clone() );
+	outerTileY.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+2).clone() );
+	outerTileY.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+3).clone() );
+	this.outerTilePolygons.push( outerTileY );
+
+	// The second 'kite'
+	var outerTileY = new IKRS.Polygon();
+	outerTileY.addVertex( this.getVertexAt(indexA+3).clone() );
+	outerTileY.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+3).clone() );
+	outerTileY.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+4).clone() );
+	outerTileY.addVertex( this.innerTilePolygons[0].getVertexAt(indexB+5).clone() );
+	this.outerTilePolygons.push( outerTileY );
+    }
+
+};
 
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.IrregularHexagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.IrregularHexagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.IrregularHexagon.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
-IKRS.Tile.IrregularHexagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
-IKRS.Tile.IrregularHexagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
-IKRS.Tile.IrregularHexagon.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
-IKRS.Tile.IrregularHexagon.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.IrregularHexagon.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.IrregularHexagon.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.IrregularHexagon.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
+IKRS.Tile.IrregularHexagon.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
+IKRS.Tile.IrregularHexagon.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
+IKRS.Tile.IrregularHexagon.prototype.containsPoint         = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.IrregularHexagon.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.IrregularHexagon.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.IrregularHexagon.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
 
-IKRS.Tile.IrregularHexagon.prototype.constructor         = IKRS.Tile.IrregularHexagon;
+IKRS.Tile.IrregularHexagon.prototype.constructor           = IKRS.Tile.IrregularHexagon;
 

@@ -1,7 +1,8 @@
 /**
  * @author Ikaros Kappler
  * @date 2013-11-28
- * @version 1.0.0
+ * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
+ * @version 1.0.1
  **/
 
 
@@ -63,27 +64,11 @@ IKRS.Tile.BowTie = function( size, position, angle ) {
     };
     
     this._buildInnerPolygons( size );
+    this._buildOuterPolygons();       // Only call AFTER the inner polygons were created!
   
 };
 
 IKRS.Tile.BowTie.prototype._buildInnerPolygons = function( edgeLength ) {
-
-    /*
-    for( var i = 0; i < 10; i++ ) {
-	var innerTile = [];
-	// Make polygon
-	var topPoint    = this.getVertexAt( i ).clone().scaleTowards( this.getVertexAt(i+1), 0.5 );
-	var bottomPoint = topPoint.clone().multiplyScalar( 0.615 );
-	var leftPoint   = this.getVertexAt( i ).clone().multiplyScalar( 0.69 );
-	var rightPoint  = this.getVertexAt( i+1 ).clone().multiplyScalar( 0.69 );
-	
-	innerTile.push( topPoint );
-	innerTile.push( rightPoint );
-	innerTile.push( bottomPoint );
-	innerTile.push( leftPoint );
-
-	this.innerTilePolygons.push( innerTile );
-    }*/
 
     var indices = [ 1, 4 ];
     for( var i = 0; i < indices.length; i++ ) {
@@ -106,15 +91,54 @@ IKRS.Tile.BowTie.prototype._buildInnerPolygons = function( edgeLength ) {
     }
 };
 
+IKRS.Tile.BowTie.prototype._buildOuterPolygons = function() {
+
+    // Add the outer four 'edges'
+    var indices = [ 0, 3 ];
+    for( var i = 0; i < indices.length; i++ ) {
+
+	var index       = indices[i];
+	
+	// The first/third triangle
+	var outerTileA   = new IKRS.Polygon(); 
+	outerTileA.addVertex( this.innerTilePolygons[i].getVertexAt(0).clone() );
+	outerTileA.addVertex( this.getVertexAt(index+2).clone() );
+	outerTileA.addVertex( this.innerTilePolygons[i].getVertexAt(1).clone()) ;
+	this.outerTilePolygons.push( outerTileA );
+
+	// The second/fourth triangle
+	var outerTileB = new IKRS.Polygon();
+	outerTileB.addVertex( this.innerTilePolygons[i].getVertexAt(0).clone() );
+	outerTileB.addVertex( this.getVertexAt(index+1).clone() );
+	outerTileB.addVertex( this.innerTilePolygons[i].getVertexAt(3).clone()) ;
+	this.outerTilePolygons.push( outerTileB );
+		
+    }
+
+    // Add the center polygon
+    var centerTile = new IKRS.Polygon();
+    centerTile.addVertex( this.getVertexAt(0).clone() );
+    centerTile.addVertex( this.innerTilePolygons[0].getVertexAt(3).clone() );
+    centerTile.addVertex( this.innerTilePolygons[0].getVertexAt(2).clone() );
+    centerTile.addVertex( this.innerTilePolygons[0].getVertexAt(1).clone() );
+    centerTile.addVertex( this.getVertexAt(3).clone() );
+    centerTile.addVertex( this.innerTilePolygons[1].getVertexAt(3).clone() );
+    centerTile.addVertex( this.innerTilePolygons[1].getVertexAt(2).clone() );
+    centerTile.addVertex( this.innerTilePolygons[1].getVertexAt(1).clone() );
+    this.outerTilePolygons.push( centerTile );
+};
+
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.BowTie.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.BowTie.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.BowTie.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
-IKRS.Tile.BowTie.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
-IKRS.Tile.BowTie.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
-IKRS.Tile.BowTie.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
-IKRS.Tile.BowTie.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.BowTie.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.BowTie.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.BowTie.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
+IKRS.Tile.BowTie.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
+IKRS.Tile.BowTie.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
+IKRS.Tile.BowTie.prototype.containsPoint         = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.BowTie.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.BowTie.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.BowTie.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
 
-IKRS.Tile.BowTie.prototype.constructor         = IKRS.Tile.BowTie;
+IKRS.Tile.BowTie.prototype.constructor           = IKRS.Tile.BowTie;
 

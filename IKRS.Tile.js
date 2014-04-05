@@ -6,7 +6,8 @@
  *
  * @author Ikaros Kappler
  * @date 2013-11-27
- * @version 1.0.0
+ * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
+ * @version 1.0.1
  **/
 
 
@@ -29,17 +30,52 @@ IKRS.Tile = function( size,
     if( typeof tileType == "unknown" )
 	tileType = IKRS.Girih.TILE_TYPE_UNKNOWN;
     
-    this.size                = size;
-    this.position            = position;
-    this.angle               = angle;
+    this.size                 = size;
+    this.position             = position;
+    this.angle                = angle;
     //this.vertices            = [];
-    this.polygon             = new IKRS.Polygon(); // Empty vertice array
-    this.innerTilePolygons   = [];   // An array of polygons
-    this.imageProperties     = null;
+    this.polygon              = new IKRS.Polygon(); // Empty vertice array
 
-    this.tileType            = tileType;
+    // An array of polygons.
+    // The inner tile polygons are those that do not share edges with the outer
+    // tile bounds (vertices are OK).
+    this.innerTilePolygons    = []; 
+
+    // A second array of polygons.
+    // The outer tile polygons are those that make up the whole tile area
+    // _together with the inner tile polygons (!)_; the union of the
+    // inner tile polygons and the outer tile polygons covers exactly
+    // the whole tile polygon.
+    // The intersection of both sets is empty.
+    // Outer tile polygon share at least one (partial) edge with the complete
+    // tile polygon (length > 0).
+    this.outerTilePolygons    = [];  
+    this.imageProperties      = null;
+
+    this.tileType             = tileType;
 
 };
+
+/**
+ * This function applies MOD to the index.
+ **/
+IKRS.Tile.prototype.getInnerTilePolygonAt = function( index ) {
+    if( index < 0 ) 
+	return this.innerTilePolygons[ this.innerTilePolygons.length - (Math.abs(index)%this.innerTilePolygons.length) ];
+    else
+	return this.innerTilePolygons[ index % this.innerTilePolygons.length ];
+};
+
+/**
+ * This function applies MOD to the index.
+ **/
+IKRS.Tile.prototype.getOuterTilePolygonAt = function( index ) {
+    if( index < 0 ) 
+	return this.outerTilePolygons[ this.outerTilePolygons.length - (Math.abs(index)%this.outerTilePolygons.length) ];
+    else
+	return this.outerTilePolygons[ index % this.outerTilePolygons.length ];
+};
+
 
 IKRS.Tile.prototype.getTranslatedVertex = function( index ) {
 

@@ -75,7 +75,7 @@ function onLoad() {
 	girihCanvasHandler.drawOffset.setXY( 200, 200 ); //332, 50 );
 	redrawGirih();
     };
-    imageObj.src = "500px-Girih_tiles.Penrose_compatible.png"; // "500px-Girih_tiles.svg.png";
+    imageObj.src = "500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
 
 }
 
@@ -104,7 +104,7 @@ function _angle2constant( angle ) {
 
     if( remainder != 0 ) {
 	if( factor == 0 )        result = "" + remainder;
-	else if( remaindex > 0 ) result += " + " + remainder;
+	else if( remainder > 0 ) result += " + " + remainder;
 	else                     result += " - " + Math.abs(remainder);
     }	
 
@@ -248,14 +248,18 @@ function rotateByAmount( amount ) {
 function redrawGirih() {
     
     // Fetch the form settings and apply them to the handler's draw options
-    girihCanvasHandler.getDrawProperties().drawBoxes         = document.forms["girih_form"].elements["draw_boxes"].checked;
-    girihCanvasHandler.getDrawProperties().drawOutlines      = document.forms["girih_form"].elements["draw_outlines"].checked;
-    girihCanvasHandler.getDrawProperties().drawTextures      = document.forms["girih_form"].elements["draw_textures"].checked;
-    girihCanvasHandler.getDrawProperties().drawInnerPolygons = document.forms["girih_form"].elements["draw_inner_polygons"].checked;
+    girihCanvasHandler.getDrawProperties().drawBoxes             = document.forms["girih_form"].elements["draw_boxes"].checked;
+    girihCanvasHandler.getDrawProperties().drawOutlines          = document.forms["girih_form"].elements["draw_outlines"].checked;
+    girihCanvasHandler.getDrawProperties().drawTextures          = document.forms["girih_form"].elements["draw_textures"].checked;
+    girihCanvasHandler.getDrawProperties().drawInnerPolygons     = document.forms["girih_form"].elements["draw_inner_polygons"].checked;
 
-    girihCanvasHandler.getProperties().allowPenroseTile      = document.forms["girih_form"].elements["allow_penrose_tile"].checked;
+    girihCanvasHandler.getDrawProperties().outerRandomColorFill      = document.forms["girih_form"].elements["outer_random_color_fill"].checked;
+    girihCanvasHandler.getDrawProperties().innerRandomColorFill      = document.forms["girih_form"].elements["inner_random_color_fill"].checked;
 
+    girihCanvasHandler.getProperties().allowPenroseTile          = document.forms["girih_form"].elements["allow_penrose_tile"].checked;    
+    //girihCanvasHandler.getProperties().drawPenroseCenterPolygon  = document.forms["girih_form"].elements["draw_penrose_center_polygon"].checked;
 
+  
     // Then trigger redraw
     girihCanvasHandler.redraw();
 }

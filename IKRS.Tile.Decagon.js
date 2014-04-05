@@ -1,7 +1,8 @@
 /**
  * @author Ikaros Kappler
  * @date 2013-11-27
- * @version 1.0.0
+ * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
+ * @version 1.0.1
  **/
 
 
@@ -47,12 +48,13 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 
 
     this._buildInnerPolygons( size );
+    this._buildOuterPolygons();       // Important: call AFTER inner polygons were created!
   
 };
 
 IKRS.Tile.Decagon.prototype._buildInnerPolygons = function( edgeLength ) {
-
     
+    var centralStar = new IKRS.Polygon();
     for( var i = 0; i < 10; i++ ) {
 	var innerTile = new IKRS.Polygon(); // [];
 	// Make polygon
@@ -67,20 +69,51 @@ IKRS.Tile.Decagon.prototype._buildInnerPolygons = function( edgeLength ) {
 	innerTile.addVertex( leftPoint );
 
 	this.innerTilePolygons.push( innerTile );
+
+
+	centralStar.addVertex( leftPoint.clone() );
+	centralStar.addVertex( bottomPoint.clone() );
     }
-}
+    
+    this.innerTilePolygons.push( centralStar );
+};
+
+
+IKRS.Tile.Decagon.prototype._buildOuterPolygons = function( edgeLength ) {
+
+    // DON'T include the inner star here!
+    for( var i = 0; i < 10; i++ ) {
+
+	//if( i > 0 )
+	//    continue;
+	
+	//window.alert( this.getInnerTilePolygonAt );
+
+	var outerTile = new IKRS.Polygon();
+	outerTile.addVertex( this.getVertexAt(i).clone() );
+	outerTile.addVertex( this.innerTilePolygons[i].getVertexAt(0).clone() );
+	outerTile.addVertex( this.innerTilePolygons[i].getVertexAt(3).clone() );
+	outerTile.addVertex( this.getInnerTilePolygonAt( i==0 ? 9 : i-1 ).getVertexAt(0).clone() );
+	
+
+	this.outerTilePolygons.push( outerTile );
+    }
+    
+};
 
 
 // This is totally shitty. Why object inheritance when I still
 // have to inherit object methods manually??!
-IKRS.Tile.Decagon.prototype.computeBounds       = IKRS.Tile.prototype.computeBounds;
-IKRS.Tile.Decagon.prototype._addVertex          = IKRS.Tile.prototype._addVertex;
-IKRS.Tile.Decagon.prototype.getTranslatedVertex = IKRS.Tile.prototype.getTranslatedVertex;
-IKRS.Tile.Decagon.prototype.containsPoint       = IKRS.Tile.prototype.containsPoint;
-IKRS.Tile.Decagon.prototype.locateEdgeAtPoint   = IKRS.Tile.prototype.locateEdgeAtPoint;
-IKRS.Tile.Decagon.prototype.locateAdjacentEdge  = IKRS.Tile.prototype.locateAdjacentEdge;
-IKRS.Tile.Decagon.prototype.getVertexAt         = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.Decagon.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
+IKRS.Tile.Decagon.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Decagon.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
+IKRS.Tile.Decagon.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
+IKRS.Tile.Decagon.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
+IKRS.Tile.Decagon.prototype.containsPoint         = IKRS.Tile.prototype.containsPoint;
+IKRS.Tile.Decagon.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
+IKRS.Tile.Decagon.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
+IKRS.Tile.Decagon.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
 
 
-IKRS.Tile.Decagon.prototype.constructor         = IKRS.Tile.Decagon;
+IKRS.Tile.Decagon.prototype.constructor           = IKRS.Tile.Decagon;
 
