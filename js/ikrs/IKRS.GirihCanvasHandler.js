@@ -30,7 +30,8 @@ IKRS.GirihCanvasHandler = function( imageObject ) {
 				       drawTexture:              true,
 				       drawInnerPolygons:        true,
 				       innerRandomColorFill:     false, //true
-				       outerRandomColorFill:     false
+				       outerRandomColorFill:     false,
+				       backgroundColor:          "#ffffff" //"#F0F0F0"
 				     };
     this.properties                = { allowPenroseTile:         true,
 				       drawPenroseCenterPolygon: true
@@ -929,7 +930,7 @@ IKRS.GirihCanvasHandler.prototype.getProperties = function() {
 
 IKRS.GirihCanvasHandler.prototype.redraw = function() {  
 
-    this.context.fillStyle = "#F0F0F0";
+    this.context.fillStyle = this.getDrawProperties().backgroundColor; // "#F0F0F0";
     this.context.fillRect( 0, 0, this.canvasWidth, this.canvasHeight );
     
     if( this.getDrawProperties().drawCoordinateSystem )
@@ -937,7 +938,7 @@ IKRS.GirihCanvasHandler.prototype.redraw = function() {
     
     this._drawTiles();
  
-}
+};
 
 // ### BEGIN TESTING ##############################################
 IKRS.GirihCanvasHandler.prototype._drawCircleTest = function() {
