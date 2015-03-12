@@ -6,16 +6,20 @@
 
 var girih = new IKRS.Girih();
 var girihCanvasHandler = null;
-
+var defaultTextureImage = null;
 
 
 function onLoad() {
     
-    // Load girih teplate image
-    var imageObj = new Image();
     
-    imageObj.onload = function() {
-	girihCanvasHandler = new IKRS.GirihCanvasHandler( imageObj );
+    // Load girih teplate image
+    //var imageObj = new Image();
+    defaultTextureImage = new Image();
+    
+    
+    //imageObj.onload = function() {
+    defaultTextureImage.onload = function() {
+	girihCanvasHandler = new IKRS.GirihCanvasHandler( defaultTextureImage );
 	var tileSize = IKRS.Girih.DEFAULT_EDGE_LENGTH;
 	// Make a test decagon
 	/*
@@ -75,9 +79,19 @@ function onLoad() {
 	girihCanvasHandler.drawOffset.setXY( 200, 200 ); //332, 50 );
 	redrawGirih();
     };
-    imageObj.src = "500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
+    //imageObj.src = "500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
+    defaultTextureImage.src = "img/500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
 
 }
+
+/*
+function setTextureURL( url ) {
+    
+    
+    defaultTextureImage.src = url;
+
+}
+*/
 
 function _displayTileAlign( centerTile,
 			    referenceTile
@@ -269,3 +283,5 @@ function DEBUG( msg ) {
 }
 
 window.addEventListener( "load", onLoad );
+
+

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd"> 
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Polygon Intersection Algorithm TEST (point set triangulation)</title>
+  <script src="../js/ikrs/IKRS.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.Object.js" type="text/javascript"></script>
+
+  <script src="../js/ikrs/IKRS.ArraySet.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.LineOrderedPointSet2.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.TriangleSet.js" type="text/javascript"></script>
+
+  <script src="../js/ikrs/IKRS.Pair.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.Triangle.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.Graph2.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.PythagoreanPointComparator.js" type="text/javascript"></script>
+  
+  <script src="../js/ikrs/IKRS.Point2.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.Line2.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.Polygon.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.Circle.js" type="text/javascript"></script>
+  <script src="../js/ikrs/IKRS.BoundingBox2.js" type="text/javascript"></script>
+  
+  <!-- Contains the EPSILON constant -->
+  <!-- <script src="IKRS.Girih.js" type="text/javascript"></script> -->
+  
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+
+<body>
+<script language="Javascript" src="polygon_set_triangulation.js"></script>
+<script language="Javascript">
+  // window.alert( IKRS.ArraySet );
+</script>
+<p>
+<canvas id="polygon_canvas" width="1024" height="768" class="tooltip" title="This is just a test."></canvas>
+
+<div style="position: absolute; top: 10px; left: 1044px;">
+<form name="poly_form">
+  <input type="checkbox" name="draw_polygon_edges" checked="checked" onchange="redraw(); return false;"/> Draw Polygon Edges<br/>
+  <input type="checkbox" name="draw_extended_triangulation" onchange="redraw(); return false;"/> Draw Extended Triangulation<br/>
+  <input type="checkbox" name="fill_intersection" onchange="redraw(); return false;" checked="checked" /> Fill Intersection<br/>
+</form>
+</div>
+
+</p>
+
+</body>
+</html>

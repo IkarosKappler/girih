@@ -55,6 +55,14 @@ IKRS.GirihCanvasHandler = function( imageObject ) {
     window.addEventListener( "keydown",   this.keyDownHandler,   false );
 };
 
+IKRS.GirihCanvasHandler.prototype.setTextureImage = function( imageObject, 
+							      redraw 
+							    ) {
+    this.imageObject = imageObject;
+    if( redraw )
+	this.redraw();
+};
+
 IKRS.GirihCanvasHandler.prototype._translateMouseEventToRelativePosition = function( parent,
 										     e ) {
     var rect = parent.getBoundingClientRect();
@@ -108,15 +116,52 @@ IKRS.GirihCanvasHandler.prototype.mouseDownHandler = function( e ) {
 
     var tileIndex = this.girihCanvasHandler._locateTileAtPoint( point );
     if( tileIndex == -1 )
-	return; // Not found
+	return;  // Hover over blank space
 
-    // Clear all selection
-    this.girihCanvasHandler._clearSelection();
+    
+    // Adjacent tile displayed?
+    var tile             = null;
+    var adjacentTile     = null;
+    var hoveredTileIndex = this.girihCanvasHandler._locateHoveredTile();
+    if( hoveredTileIndex != -1 ) {
+    
+	tile            = this.girihCanvasHandler.girih.tiles[ hoveredTileIndex ]; 
 
-    // Set the tile's 'selected' state
-    this.girihCanvasHandler.girih.tiles[tileIndex]._props.selected = true; 
-    // DEBUG( "[mouseDown] tileIndex=" + tileIndex + ", selected=" + his.girihCanvasHandler.tiles[tileIndex]._props.selected );
-    this.girihCanvasHandler.redraw();
+	// Check if cursor is not directly on center
+	if( tile.position.distanceTo(point) > 5 ) {
+
+	    var tileBounds   = tile.computeBounds();
+
+	    adjacentTile = this.girihCanvasHandler._resolveCurrentAdjacentTilePreset(   tile.tileType,
+											tile.polygon.vertices, 
+											tile.position, 
+											tile.angle,
+											tileBounds, // tile.computeBounds(),  // tileBounds,
+											{ unselectedEdgeColor: "#000000",
+											  selectedEdgeColor:   "#e80088"
+											},
+											tile.imageProperties,
+											this.girihCanvasHandler.imageObject,
+											tile._props.highlightedEdgeIndex,
+											this.girihCanvasHandler.drawProperties.drawOutlines
+										    );
+	}
+    }
+
+    if( !adjacentTile) {
+	// Not adjacent tile found for this location
+	//  -> select tile
+
+	// Clear all selection
+	this.girihCanvasHandler._clearSelection();
+
+	// Set the tile's 'selected' state
+	this.girihCanvasHandler.girih.tiles[tileIndex]._props.selected = true; 
+	// DEBUG( "[mouseDown] tileIndex=" + tileIndex + ", selected=" + his.girihCanvasHandler.tiles[tileIndex]._props.selected );
+	this.girihCanvasHandler.redraw();
+    } else {
+	this.girihCanvasHandler._performAddCurrentAdjacentPresetTile();
+    }
 }
 
 IKRS.GirihCanvasHandler.prototype.mouseUpHandler = function( e ) {
@@ -268,11 +313,9 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
 
     var tileAlign      = presets[optionIndex];
     
-    //if( tileAlign.tileType == 2 ) 
-//	window.alert( "A" + tileAlign.toString() );
+ 
     var tile = tileAlign.createTile();
-    //if( tileAlign.tileType == 2 ) 
-//	window.alert( "B" + tile.toString() );
+
     // Make position relative to the hovered tile
     tile.position.add( position ); 
     tile.position.rotate( position, angle );

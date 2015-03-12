@@ -4,33 +4,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Girih</title>
-  <script src="IKRS.js" type="text/javascript"></script>
-  <script src="IKRS.Object.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Object.js" type="text/javascript"></script>
 
-  <script src="IKRS.Pair.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Pair.js" type="text/javascript"></script>
   
 
-  <script src="IKRS.TileAlign.js" type="text/javascript"></script>
-  <script src="IKRS.Point2.js" type="text/javascript"></script>
-  <script src="IKRS.Line2.js" type="text/javascript"></script>
-  <script src="IKRS.Polygon.js" type="text/javascript"></script>
-  <script src="IKRS.Circle.js" type="text/javascript"></script>
-  <script src="IKRS.BoundingBox2.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.Decagon.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.Pentagon.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.IrregularHexagon.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.Rhombus.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.BowTie.js" type="text/javascript"></script>
-  <script src="IKRS.Tile.PenroseRhombus.js" type="text/javascript"></script>
-  <script src="IKRS.Girih.js" type="text/javascript"></script>
-  <script src="IKRS.GirihCanvasHandler.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.TileAlign.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Point2.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Line2.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Polygon.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Circle.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.BoundingBox2.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.Decagon.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.Pentagon.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.IrregularHexagon.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.Rhombus.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.BowTie.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Tile.PenroseRhombus.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.Girih.js" type="text/javascript"></script>
+  <script src="js/ikrs/IKRS.GirihCanvasHandler.js" type="text/javascript"></script>
+
+
+  <script src="js/ImageFileReader.js" type="text/javascript"></script>
   
-  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
 <body>
-<script language="Javascript" src="main.js"></script>
+<script language="Javascript" src="js/main.js"></script>
 <p>
 <canvas id="girih_canvas" width="1024" height="768" class="tooltip" title="Hover over existing tiles to see possible adjacent tiles.
 
@@ -95,6 +98,12 @@ Press [Enter] to place new tiles onto the canvas."></canvas>
     <!--
     <span style="margin-left: 15px;"><input type="checkbox" name="draw_penrose_center_polygon" id="draw_penrose_center_polygon" onclick="redrawGirih();" checked="checked" /> Draw center penrose polygon</span><br/>
     -->
+    <br/>
+    <br/>
+    [Texture Settings]<br/>
+    <input type="radio" name="texture_type" id="texture_type_default" onclick="document.getElementById('custom_texture_file').disabled = this.checked; if( this.checked ) { girihCanvasHandler.setTextureImage( defaultTextureImage, true ); }" value="default" checked="checked" /> Default Background<br/>
+    <input type="radio" name="texture_type" id="texture_type_custom" onclick="document.getElementById('custom_texture_file').disabled = !this.checked; document.getElementById('custom_texture_file').click();" value="custom" /> Custom:<br/>
+    <span style="margin-left: 32px;"><input type="file" name="custom_texture_file" id="custom_texture_file" onchange="ImageFileReader.readTextureImage();" /></span>
     <br/>
     <br/>
     <br/>
