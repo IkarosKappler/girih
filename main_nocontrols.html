@@ -42,56 +42,20 @@ Press [left arrow] or [right arrow] to navigate through the tile set.
 Press [Enter] or click to place new tiles onto the canvas."></canvas>
 <br/>
 
-<form name="rotation_form">
-  Rotate selected tile:
-  <button onclick="rotateLeft(); return false;" style="font-family: Arial; font-size: 1.2em;">&#x27f2;</button>
-  <button onclick="rotateRight(); return false;" style="font-family: Arial; font-size: 1.2em;">&#x27f3;</button>
-  <input type="checkbox" name="rotate_all" checked="checked" /> Rotate all
-</form>
-<br/>
 
-<div style="position: absolute; left: 1044px; top: 588px;">
 <!--
-<button onclick="decreaseZoom()">zoom(-)</button>
-<button onclick="increaseZoom()">zoom(+)</button>
--->
-<br/>
-<table border="0">
-<tr>
-  <td><button onclick="decreaseZoom()">zoom(-)</button></td>
-  <td></td>
-  <td><button onclick="increaseZoom()">zoom(+)</button></td>
-</tr>
-<tr>
-  <td></td>
-  <td align="center"><button onclick="moveUp()" style="font-size: 1.2em;">&uarr;</button></td>
-  <td></td>
-</tr>
-<tr>
-  <td align="right"><button onclick="moveLeft()" style="font-size: 1.2em;">&larr;</button></td>
-  <td></td>
-  <td><button onclick="moveRight()" style="font-size: 1.2em;">&rarr;</button></td>
-</tr>
-<tr>
-  <td></td>
-  <td><button onclick="moveDown()" style="font-size: 1.2em;">&darr;</button></td>
-  <td></td>
-</tr>
-</table>
-</div>
-
- 
 <br/>
 <div id="debug"></div>
+-->
 <script>
   function DEBUG( msg ) {
-     this.document.getElementById("debug").innerHTML = msg;
+     // this.document.getElementById("debug").innerHTML = msg;
   }
 </script>
 
 <br/>
 
-<div style="position: absolute; left: 1044px; top: 10px;">
+<div style="position: absolute; left: 1044px; top: 10px; visibility: hidden; display: none;">
   <form name="girih_form">
     [Main Settings]<br/>
     <input type="checkbox" name="draw_boxes" onclick="redrawGirih()" /> Draw Boxes<br/>

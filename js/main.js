@@ -21,48 +21,11 @@ function onLoad() {
     defaultTextureImage.onload = function() {
 	girihCanvasHandler = new IKRS.GirihCanvasHandler( defaultTextureImage );
 	var tileSize = IKRS.Girih.DEFAULT_EDGE_LENGTH;
-	// Make a test decagon
-	/*
-	var deca = new IKRS.Tile.Decagon( tileSize, 
-					  new IKRS.Point2(-50,-60),  // position
-					  0.0
-					);
-	
-	// Make a test pentagon
-	var penta = new IKRS.Tile.Pentagon( tileSize,
-					    new IKRS.Point2(-172, -20), // new IKRS.Point2(-171, -20),  // position
-					    0.0
-					  );
 
-	// Make a test irregular hexagon
-	var irHex = new IKRS.Tile.IrregularHexagon( tileSize,
-						    new IKRS.Point2(-123, -159),  // position
-						    0.0 
-						  );
-
-	// Make a test rhombus
-	var rhomb = new IKRS.Tile.Rhombus( tileSize,
-					   new IKRS.Point2(-164, -87),  // position
-					   0.0
-					 );
-
-	// Make a test bow-tie
-	var tie = new IKRS.Tile.BowTie( tileSize,
-					new IKRS.Point2(-18, -159),  // position
-					0.0
-				      );
-		
-	
-	girihCanvasHandler.addTile( deca );
-	girihCanvasHandler.addTile( penta );
-	girihCanvasHandler.addTile( irHex );
-	girihCanvasHandler.addTile( rhomb );
-	girihCanvasHandler.addTile( tie );
-	*/
 
 	// Make a test penrose-rhombus
 	var penrose = new IKRS.Tile.PenroseRhombus( tileSize,
-						    new IKRS.Point2(332, 50),  // position
+						    new IKRS.Point2(276.5385,49.2873), // 332, 50),  // position
 						    0.0
 					  );
 		
@@ -83,15 +46,6 @@ function onLoad() {
     defaultTextureImage.src = "img/500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
 
 }
-
-/*
-function setTextureURL( url ) {
-    
-    
-    defaultTextureImage.src = url;
-
-}
-*/
 
 function _displayTileAlign( centerTile,
 			    referenceTile
@@ -149,7 +103,7 @@ function _makeTest_Decagon_BowTie( tileSize ) {
 				    0 // IKRS.Girih.MINIMAL_ANGLE*6
 				  );
     //tie.position.add( new IKRS.Point2(200, 200) );
-    tie.position.setXY( 100, 150 );
+    tie.position.setXY( 57.7319, 110.9594 ); // 100, 150 );
     girihCanvasHandler.addTile( deca );
     girihCanvasHandler.addTile( tie );
     
@@ -168,7 +122,7 @@ function _makeTest_Pentagon( tileSize ) {
 function _makeTest_IrregularHexagon( tileSize ) {
     // Make a test pentagon
     var hexa = new IKRS.Tile.IrregularHexagon( tileSize,
-						new IKRS.Point2(161.1, -32.2),   // position
+						new IKRS.Point2(151.577, -33.4546 ), //161.1, -32.2),   // position
 						0.0
 					      );
     girihCanvasHandler.addTile( hexa );
@@ -278,9 +232,11 @@ function redrawGirih() {
     girihCanvasHandler.redraw();
 }
 
+/*
 function DEBUG( msg ) {
     this.document.getElementById("debug").innerHTML = msg;
 }
+*/
 
 window.addEventListener( "load", onLoad );
 
