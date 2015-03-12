@@ -97,9 +97,9 @@ IKRS.GirihCanvasHandler.prototype.mouseWheelHandler = function( e ) {
     if (delta) {
 	
 	if( delta < 0 )
-	    ; // this.bezierCanvasHandler.decreaseZoomFactor( true ); // redraw
+	    this.girihCanvasHandler.decreaseZoomFactor( true ); // redraw
 	else
-	    ; // this.bezierCanvasHandler.increaseZoomFactor( true ); // redraw
+	    this.girihCanvasHandler.increaseZoomFactor( true ); // redraw
 	
     }
     // Prevent default actions caused by mouse wheel.
@@ -1022,10 +1022,21 @@ IKRS.GirihCanvasHandler.prototype._drawLine = function( line ) {
 
     this.context.strokeStyle = "#0000FF";
     this.context.stroke();
-}
+};
 
 // ### END TESTING ################################################
 
+IKRS.GirihCanvasHandler.prototype.increaseZoomFactor = function( redraw ) {
+    this.zoomFactor *= 1.2;
+    if( redraw )
+	this.redraw();
+};
 
+IKRS.GirihCanvasHandler.prototype.decreaseZoomFactor = function( redraw ) {
+    this.zoomFactor /= 1.2;
+    if( redraw )
+	this.redraw();
+}
+;
 IKRS.GirihCanvasHandler.prototype.constructor = IKRS.GirihCanvasHandler;
 
