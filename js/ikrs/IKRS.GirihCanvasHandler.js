@@ -206,14 +206,6 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
     
     DEBUG( "[mouseMoved] hoverTileIndex=" + hoverTileIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex + ", hoverTile.position=" + hoverTile.position.toString() + ", hoverTile.angle=" + _angle2constant(hoverTile.angle) );
     
-    // Redraw really required?
-    /*
-    window.alert( "oldHoverTileIndex=" + oldHoverTileIndex + ", newHoverTileIndex=" + hoverTileIndex + ", oldHighlightedEdgeIndex=" + oldHighlightedEdgeIndex + ", highlightedEdgeIndex=" + highlightedEdgeIndex );
-    if( oldHoverTileIndex == hoverTileIndex && 
-	highlightedEdgeIndex == oldHighlightedEdgeIndex ) {
-	return;
-    }
-    */
 
     
     
@@ -230,6 +222,8 @@ IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
     // enter=13
     // delete=46
     // space=32
+    // o=79
+    //window.alert( e.keyCode );
 
     if( e.keyCode == 39 ) {
 	this.girihCanvasHandler.adjacentTileOptionPointer++;
@@ -241,6 +235,9 @@ IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
 	this.girihCanvasHandler._performAddCurrentAdjacentPresetTile();
     } else if( e.keyCode == 46 ) {
 	this.girihCanvasHandler._performDeleteSelectedTile();
+    } else if( e.keyCode == 79 ) {
+	this.girihCanvasHandler.drawProperties.drawOutlines = !this.girihCanvasHandler.drawProperties.drawOutlines;
+	this.girihCanvasHandler.redraw();
     }
   
 }
