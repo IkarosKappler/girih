@@ -485,10 +485,16 @@ IKRS.Girih.prototype.toSVG = function( options,
     if( typeof options != "undefined" && typeof options.indent != "undefined" )
 	buffer.push( options.indent );
     
-    buffer.push( "<svg height=\"" );
+    buffer.push( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
+    buffer.push( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" );
+    
+    buffer.push( "<svg xmlns=\"http://www.w3.org/2000/svg\" \n" );
+    buffer.push( "     xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ev=\"http://www.w3.org/2001/xml-events\" \n" );
+    buffer.push( "     version=\"1.1\" baseProfile=\"full\" \n" );
+    buffer.push( "     height=\"" );
     buffer.push( options.height );
     buffer.push( "\"" );
-    buffer.push( " width=\"" );
+    buffer.push( "     width=\"" );
     buffer.push( options.width );
     buffer.push( "\">\n" );
     var oldIndent = options.indent;
