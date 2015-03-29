@@ -7,7 +7,8 @@
  * @author Ikaros Kappler
  * @date 2013-11-27
  * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
- * @version 1.0.1
+ * @date 2015-03-19 Ikaros Kappler (added toSVG()).
+ * @version 1.0.2
  **/
 
 
@@ -82,10 +83,10 @@ IKRS.Tile.prototype.getTranslatedVertex = function( index ) {
     //return this.vertices[index].clone().rotate( this.position, this.angle ).add( this.position );
     // Rotate around the absolut center!
     // (the position is applied later)
-    var vertex = this.polygon.getVertexAt( index ); // this.getVertexAt( index );
-    return vertex.clone().rotate( IKRS.Point2.ZERO_POINT, this.angle ).add( this.position );
-    
-}
+    //var vertex = this.polygon.getVertexAt( index ); // this.getVertexAt( index );
+    //return vertex.clone().rotate( IKRS.Point2.ZERO_POINT, this.angle ).add( this.position );    
+    return this._translateVertex( this.polygon.getVertexAt(index) );
+};
 
 /**
  * This is a special get* function that modulates the index and also
@@ -230,8 +231,76 @@ IKRS.Tile.prototype.locateAdjacentEdge = function( pointA,
 
 };
 
+IKRS.Tile.prototype.toSVG = function( options,
+				      polygonStyle,
+				      buffer
+				    ) {
+    
+    var returnBuffer = false;
+    if( typeof buffer == "undefined" || !buffer ) {
+	buffer = [];
+	returnBuffer = true;
+    }
+
+    this._polygonToSVG( this.polygon,
+			options,
+			polygonStyle,
+			buffer );
+    for( var i = 0; i < this.innerTilePolygons.length; i++ ) {
+	this._polygonToSVG( this.innerTilePolygons[i],
+			    options,
+			    polygonStyle,
+			    buffer );
+    }
+    for( var i = 0; i < this.outerTilePolygons.length; i++ ) {
+	this._polygonToSVG( this.outerTilePolygons[i],
+			    options,
+			    polygonStyle,
+			    buffer );
+    }
+    
+    
+    if( returnBuffer )
+	return buffer;
+    else
+	return buffer.join( "" );
+};
+
+IKRS.Tile.prototype._polygonToSVG = function( polygon,
+					      options,
+					      polygonStyle,
+					      buffer 
+					      ) {
+    if( typeof options != "undefined" && typeof options.indent != "undefined" )
+	buffer.push( options.indent );
+    
+    buffer.push( "<polygon points=\"" );
+    var vert;
+    for( var i = 0; i < polygon.vertices.length; i++ ) {
+	vert = this._translateVertex( polygon.getVertexAt(i) ); // getTranslatedVertex(i);
+	if( i > 0 )
+	    buffer.push( " " );
+	buffer.push( vert.x );
+	buffer.push( "," );
+	buffer.push( vert.y );
+    }    
+    buffer.push( "\"" );
+    
+    if( typeof polygonStyle != "undefined" ) {
+	buffer.push( " style=\"" );
+	buffer.push( polygonStyle );
+	buffer.push( "\"" );
+    }
+    
+    buffer.push( " />\n" );
+};
+
 IKRS.Tile.prototype.computeBounds = function() {
     return IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
+};
+
+IKRS.Tile.prototype._translateVertex = function( vertex ) {
+    return vertex.clone().rotate( IKRS.Point2.ZERO_POINT, this.angle ).add( this.position );   
 };
 
 IKRS.Tile.prototype._addVertex = function( vertex ) {

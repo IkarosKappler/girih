@@ -471,6 +471,44 @@ for( var t = 0; t < IKRS.Girih.TILE_ALIGN.length; t++ ) {
 */
 
 
+IKRS.Girih.prototype.toSVG = function( options,
+				       polygonStyle,
+				       buffer
+				     ) {
+    
+    var returnBuffer = false;
+    if( typeof buffer == "undefined" || !buffer ) {
+	buffer = [];
+	returnBuffer = true;
+    }
+
+    if( typeof options != "undefined" && typeof options.indent != "undefined" )
+	buffer.push( options.indent );
+    
+    buffer.push( "<svg height=\"" );
+    buffer.push( options.height );
+    buffer.push( "\"" );
+    buffer.push( " width=\"" );
+    buffer.push( options.width );
+    buffer.push( "\">\n" );
+    var oldIndent = options.indent;
+    options.indent += "    ";
+    for( var i = 0; i < this.tiles.length; i++ ) {
+	this.tiles[i].toSVG( options, polygonStyle, buffer );
+    }    
+    
+    options.indent = oldIndent;
+    if( typeof options != "undefined" && typeof options.indent != "undefined" )
+	buffer.push( options.indent );
+
+    buffer.push( "</svg>\n" );
+    
+    if( returnBuffer )
+	return buffer;
+    else
+	return buffer.join( "" );
+};
+
 
 IKRS.Girih.prototype.constructor = IKRS.Girih;
 

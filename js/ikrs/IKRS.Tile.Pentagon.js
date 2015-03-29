@@ -2,7 +2,8 @@
  * @author Ikaros Kappler
  * @date 2013-11-27
  * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
- * @version 1.0.1
+ * @date 2015-03-19 Ikaros Kappler (added toSVG()).
+ * @version 1.0.2
  **/
 
 
@@ -119,6 +120,8 @@ IKRS.Tile.Pentagon.prototype._buildOuterPolygons = function() {
 // have to inherit object methods manually??!
 IKRS.Tile.Pentagon.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.Pentagon.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Pentagon.prototype._translateVertex      = IKRS.Tile.prototype._translateVertex;
+IKRS.Tile.Pentagon.prototype._polygonToSVG         = IKRS.Tile.prototype._polygonToSVG;
 IKRS.Tile.Pentagon.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
 IKRS.Tile.Pentagon.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
 IKRS.Tile.Pentagon.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
@@ -126,6 +129,7 @@ IKRS.Tile.Pentagon.prototype.containsPoint         = IKRS.Tile.prototype.contain
 IKRS.Tile.Pentagon.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
 IKRS.Tile.Pentagon.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
 IKRS.Tile.Pentagon.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.Pentagon.prototype.toSVG                 = IKRS.Tile.prototype.toSVG;
 
 IKRS.Tile.Pentagon.prototype.constructor           = IKRS.Tile.Pentagon;
 

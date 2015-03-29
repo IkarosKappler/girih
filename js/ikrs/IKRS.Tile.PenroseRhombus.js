@@ -6,7 +6,8 @@
  * @author Ikaros Kappler
  * @date 2013-12-11
  * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
- * @version 1.0.1
+ * @date 2015-03-19 Ikaros Kappler (added toSVG()).
+ * @version 1.0.2
  **/
 
 
@@ -168,6 +169,8 @@ IKRS.Tile.PenroseRhombus.prototype.getCenterPolygonIndex = function() {
 // have to inherit object methods manually??!
 IKRS.Tile.PenroseRhombus.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.PenroseRhombus.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.PenroseRhombus.prototype._translateVertex      = IKRS.Tile.prototype._translateVertex;
+IKRS.Tile.PenroseRhombus.prototype._polygonToSVG         = IKRS.Tile.prototype._polygonToSVG;
 IKRS.Tile.PenroseRhombus.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
 IKRS.Tile.PenroseRhombus.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
 IKRS.Tile.PenroseRhombus.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
@@ -175,6 +178,7 @@ IKRS.Tile.PenroseRhombus.prototype.containsPoint         = IKRS.Tile.prototype.c
 IKRS.Tile.PenroseRhombus.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
 IKRS.Tile.PenroseRhombus.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
 IKRS.Tile.PenroseRhombus.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.PenroseRhombus.prototype.toSVG                 = IKRS.Tile.prototype.toSVG;
 
 IKRS.Tile.Rhombus.prototype.constructor                  = IKRS.Tile.Rhombus;
 

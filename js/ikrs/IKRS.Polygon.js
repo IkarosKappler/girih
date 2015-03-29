@@ -19,7 +19,7 @@ IKRS.Polygon = function( vertices ) {
 	vertices = [];
 
     this.vertices = vertices;
-}
+};
 
 
 /**

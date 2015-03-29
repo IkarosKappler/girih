@@ -1,10 +1,11 @@
 Girih
 =====
 
-@author Ikaros Kappler
-@date 2013-12
-@version 0.1.1
-@license GPLv2.0
+@author   Ikaros Kappler
+@date     2013-12
+@modified 2015-03-19 Ikaros Kappler (SVG export added).
+@version  0.1.2
+@license  GPLv2.0
 
 
 Welcome to my girih tesselation tool.
@@ -38,4 +39,5 @@ Thanks to
 
 [Triangulation algorithms]
   - http://www.travellermap.com/tmp/delaunay.htm
-
+[FileSaver.js]
+  - Eli Grey

@@ -2,7 +2,8 @@
  * @author Ikaros Kappler
  * @date 2013-11-28
  * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
- * @version 1.0.1
+ * @date 2015-03-19 Ikaros Kappler (added toSVG()).
+ * @version 1.0.2
  **/
 
 
@@ -208,6 +209,8 @@ IKRS.Tile.IrregularHexagon.prototype._buildOuterPolygons = function() {
 // have to inherit object methods manually??!
 IKRS.Tile.IrregularHexagon.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.IrregularHexagon.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.IrregularHexagon.prototype._translateVertex      = IKRS.Tile.prototype._translateVertex;
+IKRS.Tile.IrregularHexagon.prototype._polygonToSVG         = IKRS.Tile.prototype._polygonToSVG;
 IKRS.Tile.IrregularHexagon.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
 IKRS.Tile.IrregularHexagon.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
 IKRS.Tile.IrregularHexagon.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
@@ -215,6 +218,7 @@ IKRS.Tile.IrregularHexagon.prototype.containsPoint         = IKRS.Tile.prototype
 IKRS.Tile.IrregularHexagon.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
 IKRS.Tile.IrregularHexagon.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
 IKRS.Tile.IrregularHexagon.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.IrregularHexagon.prototype.toSVG                 = IKRS.Tile.prototype.toSVG;
 
 IKRS.Tile.IrregularHexagon.prototype.constructor           = IKRS.Tile.IrregularHexagon;
 

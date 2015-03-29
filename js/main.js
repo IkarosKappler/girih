@@ -241,3 +241,14 @@ function DEBUG( msg ) {
 window.addEventListener( "load", onLoad );
 
 
+
+function exportSVG() {
+
+    var svg = girihCanvasHandler.getSVG( { indent: "" }, // options
+					 null            // style
+				       );
+				      
+    
+    document.getElementById( "svg_preview" ).innerHTML = svg;
+
+}

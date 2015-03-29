@@ -217,18 +217,19 @@ IKRS.GirihCanvasHandler.prototype.mouseMoveHandler = function( e ) {
 
 IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
 
-    // right=39
-    // left=37
+    // right=39,  d=68
+    // left=37,   a=65
     // enter=13
     // delete=46
     // space=32
     // o=79
-    //window.alert( e.keyCode );
+    // e=69
+    // window.alert( e.keyCode );
 
-    if( e.keyCode == 39 ) {
+    if( e.keyCode == 39 || e.keyCode == 68 ) {
 	this.girihCanvasHandler.adjacentTileOptionPointer++;
 	this.girihCanvasHandler.redraw();
-    } else if( e.keyCode == 37 ) {
+    } else if( e.keyCode == 37 || e.keyCode == 65) {
 	this.girihCanvasHandler.adjacentTileOptionPointer--;
 	this.girihCanvasHandler.redraw();
     } else if( e.keyCode == 13 || e.keyCode == 32 ) {
@@ -238,6 +239,8 @@ IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
     } else if( e.keyCode == 79 ) {
 	this.girihCanvasHandler.drawProperties.drawOutlines = !this.girihCanvasHandler.drawProperties.drawOutlines;
 	this.girihCanvasHandler.redraw();
+    } else if( e.keyCode == 69 ) {
+	this.girihCanvasHandler._exportSVG();
     }
   
 }
@@ -288,16 +291,14 @@ IKRS.GirihCanvasHandler.prototype._resolveCurrentAdjacentTilePreset = function( 
 	return;
 
     // Adjacent tile presets available for this tile/edge/option?
-    //window.alert( "tileType=" + tileType + ", highlightedEdgeIndex=" + highlightedEdgeIndex );
     if( !IKRS.Girih.TILE_ALIGN[tileType] )
 	return;
 
-    //window.alert( "IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]=" + IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex] );
     if( !IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex] )
 	return;
     
     
-    var presets = IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]; //[presetTileType];
+    var presets = IKRS.Girih.TILE_ALIGN[tileType][highlightedEdgeIndex]; 
 
     // Has any adjacent tiles at all?
     // (should, but this prevents the script from raising unwanted exceptions)
@@ -335,7 +336,7 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
 								 tile.polygon.vertices, 
 								 tile.position, 
 								 tile.angle,
-								 tileBounds, // tile.computeBounds(),  // tileBounds,
+								 tileBounds, 
 								 { unselectedEdgeColor: "#000000",
 								   selectedEdgeColor:   "#e80088"
 								 },
@@ -367,15 +368,15 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
     // Swap edge points?
     if( adjacentEdgeIndex != -1 ) {
 
-	//window.alert( "even" );
-	adjacentEdgePointA = adjacentTile.getTranslatedVertex( adjacentEdgeIndex ); // getVertexAt( adjacentEdgeIndex );
-	adjacentEdgePointB = adjacentTile.getTranslatedVertex( adjacentEdgeIndex+1 ); // getVertexAt( adjacentEdgeIndex+1 );
+	// An even edge.
+	adjacentEdgePointA = adjacentTile.getTranslatedVertex( adjacentEdgeIndex ); 
+	adjacentEdgePointB = adjacentTile.getTranslatedVertex( adjacentEdgeIndex+1 );
 
     } else if( (adjacentEdgeIndex = adjacentTile.locateAdjacentEdge(currentEdgePointB,currentEdgePointA,tolerance)) != -1 ) {
-	// Swapped points (reverse edge)
-	//window.alert( "odd; adjacentEdgeIndex=" +  adjacentEdgeIndex );
-	adjacentEdgePointA = adjacentTile.getTranslatedVertex( adjacentEdgeIndex+1 ); // getVertexAt( adjacentEdgeIndex+1 );
-	adjacentEdgePointB = adjacentTile.getTranslatedVertex( adjacentEdgeIndex ); // getVertexAt( adjacentEdgeIndex );
+	
+	// An odd edge: Swapped points (reverse edge)
+	adjacentEdgePointA = adjacentTile.getTranslatedVertex( adjacentEdgeIndex+1 ); 
+	adjacentEdgePointB = adjacentTile.getTranslatedVertex( adjacentEdgeIndex ); 
     } 
 
     if( adjacentEdgeIndex != -1 ) {
@@ -1034,7 +1035,38 @@ IKRS.GirihCanvasHandler.prototype.decreaseZoomFactor = function( redraw ) {
     this.zoomFactor /= 1.2;
     if( redraw )
 	this.redraw();
-}
-;
+};
+
+IKRS.GirihCanvasHandler.prototype.getSVG = function( options,
+						     polygonStyle
+						     ) {
+
+    var buffer  = [];
+    if( typeof options == "undefined" )
+	options = {};
+
+    if( typeof options.indent == "undefined" )
+	options.indent = "";
+
+    options.width  = this.canvasWidth;
+    options.height = this.canvasHeight;
+    polygonStyle = "fill-opacity:0.0; fill:white; stroke:green; stroke-width:1;";
+    
+    this.girih.toSVG( options,
+		      polygonStyle,
+		      buffer
+		    );
+    return buffer.join( "" );
+};
+
+IKRS.GirihCanvasHandler.prototype._exportSVG = function( options,
+							 polygonStyle
+							 ) {
+    var svg = this.getSVG();
+
+    saveTextFile( svg, "girih.svg", "image/svg+xml" );
+
+};
+
 IKRS.GirihCanvasHandler.prototype.constructor = IKRS.GirihCanvasHandler;
 

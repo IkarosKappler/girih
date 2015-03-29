@@ -2,7 +2,8 @@
  * @author Ikaros Kappler
  * @date 2013-11-28
  * @date 2014-04-05 Ikaros Kappler (member array outerTilePolygons added).
- * @version 1.0.1
+ * @date 2015-03-19 Ikaros Kappler (added toSVG()).
+ * @version 1.0.2
  **/
 
 
@@ -136,6 +137,8 @@ IKRS.Tile.Rhombus.prototype._buildOuterPolygons = function() {
 // have to inherit object methods manually??!
 IKRS.Tile.Rhombus.prototype.computeBounds         = IKRS.Tile.prototype.computeBounds;
 IKRS.Tile.Rhombus.prototype._addVertex            = IKRS.Tile.prototype._addVertex;
+IKRS.Tile.Rhombus.prototype._translateVertex      = IKRS.Tile.prototype._translateVertex;
+IKRS.Tile.Rhombus.prototype._polygonToSVG         = IKRS.Tile.prototype._polygonToSVG;
 IKRS.Tile.Rhombus.prototype.getInnerTilePolygonAt = IKRS.Tile.prototype.getInnerTilePolygonAt;
 IKRS.Tile.Rhombus.prototype.getOuterTilePolygonAt = IKRS.Tile.prototype.getOuterTilePolygonAt;
 IKRS.Tile.Rhombus.prototype.getTranslatedVertex   = IKRS.Tile.prototype.getTranslatedVertex;
@@ -143,6 +146,7 @@ IKRS.Tile.Rhombus.prototype.containsPoint         = IKRS.Tile.prototype.contains
 IKRS.Tile.Rhombus.prototype.locateEdgeAtPoint     = IKRS.Tile.prototype.locateEdgeAtPoint;
 IKRS.Tile.Rhombus.prototype.locateAdjacentEdge    = IKRS.Tile.prototype.locateAdjacentEdge;
 IKRS.Tile.Rhombus.prototype.getVertexAt           = IKRS.Tile.prototype.getVertexAt;
+IKRS.Tile.Rhombus.prototype.toSVG                 = IKRS.Tile.prototype.toSVG;
 
 IKRS.Tile.Rhombus.prototype.constructor           = IKRS.Tile.Rhombus;
 
