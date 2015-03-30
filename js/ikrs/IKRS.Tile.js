@@ -242,22 +242,29 @@ IKRS.Tile.prototype.toSVG = function( options,
 	returnBuffer = true;
     }
 
+    // Export outer shape?
+    /*
     this._polygonToSVG( this.polygon,
 			options,
 			polygonStyle,
 			buffer );
+    */
     for( var i = 0; i < this.innerTilePolygons.length; i++ ) {
 	this._polygonToSVG( this.innerTilePolygons[i],
 			    options,
 			    polygonStyle,
 			    buffer );
     }
+    
+    // Export outer tile polygons?
+    /*
     for( var i = 0; i < this.outerTilePolygons.length; i++ ) {
 	this._polygonToSVG( this.outerTilePolygons[i],
 			    options,
 			    polygonStyle,
 			    buffer );
     }
+    */
     
     
     if( returnBuffer )
