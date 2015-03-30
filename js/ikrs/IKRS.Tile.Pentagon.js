@@ -68,26 +68,33 @@ IKRS.Tile.Pentagon.prototype._buildInnerPolygons = function( edgeLength ) {
     //innerTile.push( this.vertices[0].scaleTowards( this.vertices[1], 0.5 ) );
     //innerTile.push( this.vertices[1].scaleTowards( this.vertices[2], 0.5 ) );
 
+    var center = new IKRS.Point2( 0, 0 );
     for( var i = 0; i < this.polygon.vertices.length; i++ ) {
 
 	innerTile.addVertex( this.getVertexAt(i).scaleTowards( this.getVertexAt(i+1), 0.5 ) );
-	// Compute the next inner polygon vertex by the intersection of two circles
-	var circleA = new IKRS.Circle( innerTile.vertices[ innerTile.vertices.length-1 ], edgeLength*0.425 ); //*0.425 ); 
-	var circleB = new IKRS.Circle( this.getVertexAt(i+1).clone().scaleTowards( this.getVertexAt(i+2), 0.5 ), 
-				       circleA.radius );
+
+	// This algorithm using circles to detect the intersection point
+	// does not work as expected:
+	/*
+	  // Compute the next inner polygon vertex by the intersection of two circles
+	  var circleA = new IKRS.Circle( innerTile.vertices[ innerTile.vertices.length-1 ], edgeLength*0.425 ); //*0.425 ); 
+	  var circleB = new IKRS.Circle( this.getVertexAt(i+1).clone().scaleTowards( this.getVertexAt(i+2), 0.5 ), 
+	  			         circleA.radius );
     
-	// There is definitely an intersection
-	var intersection = circleA.computeIntersectionPoints( circleB );
-	// One of the two points is inside the tile, the other is outside.
-	// Locate the inside point.
-	if( intersection ) {
-	    if( this.containsPoint(intersection.pointA) ) innerTile.addVertex(intersection.pointA);
-	    else                                          innerTile.addVertex(intersection.pointB);
-	} else {
-	    console.log( "intersection is null!" );
-	}
-	
-	//innerTile.push( circleB.center );
+	  // There is definitely an intersection
+	  var intersection = circleA.computeIntersectionPoints( circleB );
+	  // One of the two points is inside the tile, the other is outside.
+	  // Locate the inside point.
+	  if( intersection ) {
+	      if( this.containsPoint(intersection.pointA) ) innerTile.addVertex(intersection.pointA);
+	      else                                          innerTile.addVertex(intersection.pointB);
+	  } else {
+	      console.log( "intersection is null!" );
+	  }	
+	*/
+
+	// ... make linear approximation instead
+	innerTile.addVertex( this.getVertexAt(i+1).scaleTowards( center, 0.5 ) );
 
     }
 
