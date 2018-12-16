@@ -79,8 +79,6 @@ IKRS.Tile.prototype.getOuterTilePolygonAt = function( index ) {
 
 
 IKRS.Tile.prototype.getTranslatedVertex = function( index ) {
-
-    //return this.vertices[index].clone().rotate( this.position, this.angle ).add( this.position );
     // Rotate around the absolut center!
     // (the position is applied later)
     //var vertex = this.polygon.getVertexAt( index ); // this.getVertexAt( index );
@@ -115,10 +113,7 @@ IKRS.Tile.prototype.getVertexAt = function( index ) {
  * @param point The point to be checked.
  * @retrn true|false
  **/
-IKRS.Tile.prototype.containsPoint = function( point ) {
-
-    // window.alert( this._getTranslatedPoint );
-    
+IKRS.Tile.prototype.containsPoint = function( point ) {    
     // Thanks to
     // http://stackoverflow.com/questions/2212604/javascript-check-mouse-clicked-inside-the-circle-or-polygon/2212851#2212851
     var i, j = 0;

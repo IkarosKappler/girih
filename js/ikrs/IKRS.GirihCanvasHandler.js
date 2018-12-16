@@ -223,6 +223,7 @@ IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
     // delete=46
     // space=32
     // o=79
+    // t=84
     // e=69
     // window.alert( e.keyCode );
 
@@ -238,6 +239,9 @@ IKRS.GirihCanvasHandler.prototype.keyDownHandler = function( e ) {
 	this.girihCanvasHandler._performDeleteSelectedTile();
     } else if( e.keyCode == 79 ) {
 	this.girihCanvasHandler.drawProperties.drawOutlines = !this.girihCanvasHandler.drawProperties.drawOutlines;
+	this.girihCanvasHandler.redraw();
+    } else if( e.keyCode == 84 ) {
+	this.girihCanvasHandler.drawProperties.drawTextures = !this.girihCanvasHandler.drawProperties.drawTextures;
 	this.girihCanvasHandler.redraw();
     } else if( e.keyCode == 69 ) {
 	this.girihCanvasHandler._exportSVG();

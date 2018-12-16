@@ -25,6 +25,9 @@ Thanks to Cronholm144 for the gireh tile template image.
 Changelog
 =========
 
+[2015-10-26]
+ - Added the 't' key handling for toggling textures on/off.
+
 [2013-12-17]
  - Basic polygon- and circle-intersection, triangle datastructures for
    Point sets.

@@ -27,7 +27,7 @@ IKRS.Tile.Decagon = function( size, position, angle ) {
 
     // Move to center
     var bounds = IKRS.BoundingBox2.computeFromPoints( this.polygon.vertices );
-    var move   = new IKRS.Point2( size/2.0, // bounds.getWidth()/2.0 - size, // *1.1,   // ???
+    var move   = new IKRS.Point2( size/2.0, 
 				  -bounds.getHeight()/2.0
 				);
     for( var i = 0; i < this.polygon.vertices.length; i++ ) {
