@@ -862,7 +862,7 @@ IKRS.GirihCanvasHandler.prototype._drawTiles = function() {
     }
 
     // Finally draw the selected tile's hovering edge
-    var hoveredTileIndex = this._locateHoveredTile();;
+    var hoveredTileIndex = this._locateHoveredTile();
     if( hoveredTileIndex != -1 ) {
 	var tile = this.girih.tiles[ hoveredTileIndex ]; 
 	var tileBounds       = tile.computeBounds()
@@ -957,12 +957,8 @@ IKRS.GirihCanvasHandler.prototype._drawCircleIntersections = function( circleA, 
 
 }
 
-IKRS.GirihCanvasHandler.prototype._drawCircle = function( circle ) {
-
-    //window.alert( "circle=" + circle.toString() );
-    
+IKRS.GirihCanvasHandler.prototype._drawCircle = function( circle ) {    
     this.context.strokeStyle = "#FF0000";
-    //this.context.line
     this.context.beginPath();
     this.context.arc( circle.center.x * this.zoomFactor + this.drawOffset.x,
 		      circle.center.y * this.zoomFactor + this.drawOffset.y,
@@ -970,7 +966,6 @@ IKRS.GirihCanvasHandler.prototype._drawCircle = function( circle ) {
 		      0,
 		      Math.PI*2
 		    );
-    //this.context.endPath();
     this.context.stroke();
 
 }
@@ -983,12 +978,8 @@ IKRS.GirihCanvasHandler.prototype._drawLineIntersectionTest = function() {
     var lineB = new IKRS.Line2( new IKRS.Point2(100, 30),
 				new IKRS.Point2(10, 150)
 			      );
-
-
     this._drawLine( lineA );
     this._drawLine( lineB );
-    
-    //var intersectionPoint = lineA.computeLineIntersection( lineB );
     var intersectionPoint = lineA.computeEdgeIntersection( lineB );
     if( intersectionPoint )
 	this._drawCrosshairAt( intersectionPoint, false );
