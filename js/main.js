@@ -10,14 +10,9 @@ var defaultTextureImage = null;
 
 
 function onLoad() {
-    
-    
     // Load girih teplate image
-    //var imageObj = new Image();
     defaultTextureImage = new Image();
     
-    
-    //imageObj.onload = function() {
     defaultTextureImage.onload = function() {
 	girihCanvasHandler = new IKRS.GirihCanvasHandler( defaultTextureImage );
 	var tileSize = IKRS.Girih.DEFAULT_EDGE_LENGTH;
@@ -25,25 +20,22 @@ function onLoad() {
 
 	// Make a test penrose-rhombus
 	var penrose = new IKRS.Tile.PenroseRhombus( tileSize,
-						    new IKRS.Point2(276.5385,49.2873), // 332, 50),  // position
+						    new IKRS.Point2(276.5385,49.2873), 
 						    0.0
 					  );
-		
-	
 	girihCanvasHandler.addTile( penrose );
-	
-
 	_makeTest_Decagon_BowTie( tileSize );
 	_makeTest_Pentagon( tileSize );
 	_makeTest_IrregularHexagon( tileSize );
 	_makeTest_Rhombus( tileSize );
-	
+
+	// THIS DOES NOT WORK OUT (just a test)
+	// _makeTest_Octagon( tileSize );
 			
-	girihCanvasHandler.drawOffset.setXY( 200, 200 ); //332, 50 );
+	girihCanvasHandler.drawOffset.setXY( 200, 200 ); 
 	redrawGirih();
     };
-    //imageObj.src = "500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
-    defaultTextureImage.src = "img/500px-Girih_tiles.Penrose_compatible_extended.png"; // "500px-Girih_tiles.svg.png";
+    defaultTextureImage.src = "img/500px-Girih_tiles.Penrose_compatible_extended.png";
 
 }
 
@@ -55,7 +47,7 @@ function _displayTileAlign( centerTile,
 					   referenceTile.position.y - centerTile.position.y
 					 );
     var totalAngle      = centerTile.angle + referenceTile.angle;
-    DEBUG( "[tileAlign] new IKRS.TileAlign( IKRS.Girih.DEFAULT_EDGE_LENGTH,\n" + // " + centerTile.size + ",\n" +
+    DEBUG( "[tileAlign] new IKRS.TileAlign( IKRS.Girih.DEFAULT_EDGE_LENGTH,\n" + 
 	   "                                new IKRS.Point2( " + differencePoint.x + ", " + differencePoint.y + "),\n" +
 	   "                                " + _angle2constant(totalAngle) + " );\n"
 	 );
@@ -135,6 +127,16 @@ function _makeTest_Rhombus( tileSize ) {
 					0.0
 				      );
     girihCanvasHandler.addTile( rhomb );
+}
+
+// THIS IS NOT PART OF A PROPER GIRIH.
+function _makeTest_Octagon( tileSize ) {
+    // Make a test octagon
+    var octa = new IKRS.Tile.Octagon( tileSize,
+					new IKRS.Point2(18.2+600, 328-130),   // position
+					0.0
+				      );
+    girihCanvasHandler.addTile( octa );
 }
 
 function increaseZoom() {

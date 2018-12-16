@@ -19,10 +19,6 @@ IKRS.Girih.prototype.addTile = function( tile ) {
     this.tiles.push( tile );
 }
 
-//IKRS.Girih.protoype.x = function() {
-//    
-//}
-
 IKRS.Girih.deg2rad = function( deg ) {
     return deg * (Math.PI/180.0);
 }
@@ -32,7 +28,8 @@ IKRS.Girih.rad2deg = function( rad ) {
 }
 
 
-IKRS.Girih.MINIMAL_ANGLE = IKRS.Girih.deg2rad(18.0); // 18.0 * (Math.PI/180.0);
+// 18.0 * (Math.PI/180.0);
+IKRS.Girih.MINIMAL_ANGLE = IKRS.Girih.deg2rad(18.0); 
 
 // IKRS.Girih.EPSILON       = 1.0e-6;
 
@@ -45,22 +42,7 @@ IKRS.Girih.TILE_TYPE_RHOMBUS            = 3;
 IKRS.Girih.TILE_TYPE_BOW_TIE            = 4;
 // This is not part of the actual girih tile set!
 IKRS.Girih.TILE_TYPE_PENROSE_RHOMBUS    = 5;
-
-/*
-IKRS.Girih.EDGE_COUNT_DECAGON           = 10;
-IKRS.Girih.EDGE_COUNT_PENTAGON          = 5;
-IKRS.Girih.EDGE_COUNT_IRREGULAR_HEXAGON = 6;
-IKRS.Girih.EDGE_COUNT_RHOMBUS           = 4;
-IKRS.Girih.EDGE_COUNT_BOW_TIE           = 6;
-
-IKRS.Girih.EDGE_COUNT = [
-    IKRS.Girih.EDGE_COUNT_DECAGON,
-    IKRS.Girih.EDGE_COUNT_PENTAGON, 
-    IKRS.Girih.EDGE_COUNT_IRREGULAR_HEXAGON,
-    IKRS.Girih.EDGE_COUNT_RHOMBUS, 
-    IKRS.Girih.EDGE_COUNT_BOW_TIE
-];
-*/
+IKRS.Girih.TILE_TYPE_OCTAGON            = 6;
 
 
 // Prepare the tile alignment matrix:

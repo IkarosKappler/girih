@@ -388,17 +388,6 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
 	pointDifferences = [ adjacentEdgePointA.clone().sub( currentEdgePointA ),
 			     adjacentEdgePointB.clone().sub( currentEdgePointB ) 
 			   ];
-	/*
-	window.alert( "adjacentEdgePointA=" + adjacentEdgePointA.toString() + ",\n" +
-		      "adjacentEdgePointB=" + adjacentEdgePointB.toString() + ",\n" +
-		      "currentEdgePointA=" + currentEdgePointA.toString() + ",\n" +
-		      "currentEdgePointB=" + currentEdgePointB.toString() + ",\n" +
-		      "highlightedEdgeIndex=" + tile._props.highlightedEdgeIndex + ",\n" +
-		      "adjacentEdgeIndex=" + adjacentEdgeIndex + ",\n" +
-		      "adjacentTile.angle=" + adjacentTile.angle
-		    );		      
-		    */
-
 	// Calculate average difference
 	var avgDifference = IKRS.Point2.ZERO_POINT.clone();
 	for( var i = 0; i < pointDifferences.length; i++ ) {
@@ -406,9 +395,6 @@ IKRS.GirihCanvasHandler.prototype._performAddCurrentAdjacentPresetTile = functio
 	}
 	avgDifference.x /= pointDifferences.length;
 	avgDifference.y /= pointDifferences.length;
-	
-	//window.alert( "avgDifference=" + avgDifference.toString() );
-
 	adjacentTile.position.sub( avgDifference );
     }
 
